@@ -130,7 +130,7 @@ dmypy.json
 
 ##################
 # For this project
-/data
+#/data
 
 
 ##################

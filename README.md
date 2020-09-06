@@ -4,7 +4,7 @@ This is a exercise following [Vincent Tatan's blog at Medium](https://towardsdat
 
 The goal of this application is to help you retrieve and display the right financial insights quickly about a certain company ticker.
 
-Tool list:
+Package list:
 - Beautiful Soup as the Web Scraping Tool
 - Pandas data-reader API to get the financial stocks price
 - Flask/Dash for Web Application Framework (not used in jupyter notebook mode)
