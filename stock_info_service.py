@@ -45,7 +45,8 @@ def get_stocks_ipywidgets_options():
     return  options
 
 def get_stocks_dash_options():
-    df =  save_sp500_stocks_info()
+    #df =  save_sp500_stocks_info()
+    df = get_taiwan_stocks_info()
     dictlist = []
     for index, row in df.iterrows():
         dictlist.append({'value':row['tickers'], 'label':row['labels']})
