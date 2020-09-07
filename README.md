@@ -1,30 +1,15 @@
-# InvestmentDashboard
+## Simple Value Investing , using python (proof of concept)
 
-This is a exercise following [Vincent Tatan's blog at Medium](https://towardsdatascience.com/value-investing-dashboard-with-python-beautiful-soup-and-dash-python-43002f6a97ca).
+This application refer [Vincent Tatan's blog at Medium](https://towardsdatascience.com/value-investing-dashboard-with-python-beautiful-soup-and-dash-python-43002f6a97ca)  to help user to make profitable trading decision base on stock price history , financial summary , basic value analysis and infered reasonable share price. 
 
-The goal of this application is to help you retrieve and display the right financial insights quickly about a certain company ticker.
+Most codes are based on Vincent's github project and do some modification in order to run in Jupyter notebook and  my prefered UI.  You can go to Vincent's blog to get complete explanation. 
 
-Package list:
-- Beautiful Soup as the Web Scraping Tool
-- Pandas data-reader API to get the financial stocks price
-- Flask/Dash for Web Application Framework (not used in jupyter notebook mode)
-- ipywidgets for interactive widgets in jupyter notebook , follow [Semi Koen's ](https://towardsdatascience.com/bring-your-jupyter-notebook-to-life-with-interactive-widgets-bc12e03f0916) and [Will Koehrsen's](https://towardsdatascience.com/interactive-controls-for-jupyter-notebooks-f5c94829aee6) blogs at Medium
+### This application has not been rigorously tested and its domain rules are very simple which are hard to cover the complexity of real stock market. There may be also some bugs cause wrong information.
+## <span style='color:#800000'>Don't use this application to make your trading decision. </span>
 
 
-Install follow packages to start using Dash :
-- The core dash backend.
-- Dash front-end
-- Dash HTML components
-- Dash core components
-- Plotly
+-------
 
-```
-    !pip install dash
-    !pip install dash-renderer
-    !pip install dash-html-components
-    !pip install dash-core-components
-    !pip install plotly
-```
 
 
 Main process :
@@ -64,3 +49,28 @@ Decision making from each company in terms of return rate given the value invest
    - Margin calculation rate is the toleration for error. You add on additional safety net in the case of calculation error. The more the margin calculation rate, the more risk averse you are or vice versa.
 6. Buy if market price is lower than the marginal price
 7. Sell if market price is higher than the marginal price
+
+
+
+
+Package list:
+- Beautiful Soup as the Web Scraping Tool
+- Pandas data-reader API to get the financial stocks price
+- Flask/Dash for Web Application Framework (not used in jupyter notebook mode)
+- ipywidgets for interactive widgets in jupyter notebook , follow [Semi Koen's ](https://towardsdatascience.com/bring-your-jupyter-notebook-to-life-with-interactive-widgets-bc12e03f0916) and [Will Koehrsen's](https://towardsdatascience.com/interactive-controls-for-jupyter-notebooks-f5c94829aee6) blogs at Medium
+
+
+Install follow packages to start using Dash :
+- The core dash backend.
+- Dash front-end
+- Dash HTML components
+- Dash core components
+- Plotly
+
+```
+    !pip install dash
+    !pip install dash-renderer
+    !pip install dash-html-components
+    !pip install dash-core-components
+    !pip install plotly
+```

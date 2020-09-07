@@ -152,17 +152,18 @@ def plot_stock_chart(ticker,title,stockprice_df):
     plt.show()
 
 ### Draw classic stock K chart
-def plot_stock_k_chart(ticker):
-    title=''
+def plot_stock_k_chart(ticker,stockprice_df,asFigure=False):
+    #title=''
     if (ticker==None or ticker.strip()==''):
         return None
-    stockprice_df=get_stock_price(ticker,dt(2020,1,1),end_date=dt.now())  
+    
+    # stockprice_df=get_stock_price(ticker,dt(2020,1,1),end_date=dt.now())  
     quotes = stockprice_df[['Open','High','Low','Close','Volume']]
     qf = cf.QuantFig(
         quotes,
-        title=title,
+        title=ticker,
         legend='top',
-        name='K線圖',
+        name='K',
         up_color='red',
         down_color='green'
     )
@@ -170,14 +171,20 @@ def plot_stock_k_chart(ticker):
         periods=5,
         column='Close',
         name='sma-5',
-        str='5日線',
+        str='sma-5',
         color='red'
     )
     qf.add_sma(
         periods=20,
         column='Close',
         name='sma-20',
-        str='20日線'
+        str='sma-20'
+    )
+    qf.add_sma(
+        periods=60,
+        column='Close',
+        name='sma-60',
+        str='sma-60'
     )
     #qf.add_volume()
     qf.add_macd()
@@ -189,7 +196,7 @@ def plot_stock_k_chart(ticker):
   #  )
     #return qf.iplot(asFigure=True,    dimensions=(800,600))
     #return qf.iplot()
-    return qf.iplot()
+    return qf.iplot(asFigure=asFigure)
 
 
 
