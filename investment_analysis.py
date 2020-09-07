@@ -3,13 +3,27 @@ from pandas_datareader import data as pdr
 import numpy as np
 import numpy_financial as npf
 
-### Check stock's financial health and prospect
-def eligibilitycheck(dfformatted):
-    
+def eligibilitycheck(ticker, dfformatted):
+    """
+    Given list of the companies, find out the feasibility to invest
+
+    Check stock's financial health and prospect
+    Warning Signs List based on value investing logic ###
+
+    1. Been in market minimal 10 years
+    2. Have the track records (EPS per year)
+    3. Have efficiency (ROE > 15%) — Net income / shareholder equity
+    4. Determine manipulation (ROA > 7%) — Net income / Total Asset
+    5. Have small long term debt (Long term debt <5* total income)
+    6. Low Debt to Equity
+    7. Ability to pay interest: (Interest Coverage Ratio >3) — EBIT / Interest expenses
+
+    return : array
+    """    
     legiblestock = True
     reasonlist=[]
 
-    # print (dfformatted)
+    print (dfformatted)
     # EPS increases over the year (consistent)
     for growth in dfformatted.epsgrowth:
         if growth<0:
@@ -35,7 +49,7 @@ def eligibilitycheck(dfformatted):
 #     print ticker,legiblestock,reasonlist
     return reasonlist
 
-def generate_price_df(ticker,financialreportingdf,stockpricedf,discountrate,marginrate,after_years=10):
+def infer_reasonable_share_price(ticker,financialreportingdf,stockpricedf,discountrate,marginrate,after_years=10):
 	dfprice = pd.DataFrame(columns =['ticker','annualgrowthrate','lasteps','futureeps'])
 	pd.options.display.float_format = '{:20,.2f}'.format
 
@@ -66,7 +80,7 @@ def generate_price_df(ticker,financialreportingdf,stockpricedf,discountrate,marg
 	dfprice.set_index('ticker',inplace=True)
 
 	#conservative
-	dfprice['peratio'] = findMinimumEPS(stockpricedf,financialreportingdf)
+	dfprice['peratio'] = findMinimumPER(stockpricedf,financialreportingdf)
     
     # future stock price
 	dfprice['FV'] = dfprice['futureeps']*dfprice['peratio']
@@ -84,15 +98,18 @@ def generate_price_df(ticker,financialreportingdf,stockpricedf,discountrate,marg
 
 	return dfprice
 
-
-def findMinimumEPS (stockpricedf,financialreportingdf):
-    # Given the share price
+def findMinimumPER (stockpricedf,financialreportingdf):
+    """ 
+        Given the share price and eps of per year , calculate PE ration of each year then return the minimum one.
+    """
     #finrepdf = financialreportingdf.set_index('index')
+    print(financialreportingdf)
     finrepdf = financialreportingdf
     stockpricedf['year'] = pd.DatetimeIndex(stockpricedf.index).year
     gframe = stockpricedf.groupby('year').head(1).set_index('year')
     pricebyyear = pd.DataFrame()
     pricebyyear['Close']  = gframe['Close']
+    print(finrepdf)
     pricebyyear['eps'] = finrepdf['eps']
     pricebyyear['peratio'] = pricebyyear['Close']/pricebyyear['eps']
     print("PE ration %f"%pricebyyear['peratio'].min())

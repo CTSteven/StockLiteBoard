@@ -6,6 +6,8 @@ from datetime import datetime as dt
 import matplotlib.pyplot as plt
 import cufflinks as cf
 import plotly.offline as plyo
+import utils
+from utils import *
 
 ### Extract lists of the stocks with their tickers
 def save_sp500_stocks_info():  
@@ -45,8 +47,8 @@ def get_stocks_ipywidgets_options():
     return  options
 
 def get_stocks_dash_options():
-    #df =  save_sp500_stocks_info()
-    df = get_taiwan_stocks_info()
+    df =  save_sp500_stocks_info()
+    #df = get_taiwan_stocks_info()
     dictlist = []
     for index, row in df.iterrows():
         dictlist.append({'value':row['tickers'], 'label':row['labels']})
@@ -188,3 +190,83 @@ def plot_stock_k_chart(ticker):
     #return qf.iplot(asFigure=True,    dimensions=(800,600))
     #return qf.iplot()
     return qf.iplot()
+
+
+
+
+### 
+#  Get stock's financial information by parsing web page in MarketWatch website.
+###
+def get_stock_financial_report(ticker):
+    ticker = ticker.strip()
+    financial_url = 'https://www.marketwatch.com/investing/stock/%s/financials'%ticker
+    balancesheet_url = 'https://www.marketwatch.com/investing/stock/%s/financials/balance-sheet'%ticker
+    print(financial_url)
+    text_soup_financials = BeautifulSoup(requests.get(financial_url).text,"lxml")
+    text_soup_balancesheet = BeautifulSoup(requests.get(balancesheet_url).text,"lxml")
+
+    # Income Statement
+    titlesfinancials = text_soup_financials.findAll('td',{'class':'rowTitle'})
+
+    epslist = []
+    netincomelist = []
+    longtermdebtlist = []
+    interestexpenselist = []
+    ebitdalist = []
+
+    for title in titlesfinancials:
+        if 'EPS (Basic)' in title.text:
+            epslist.append ([td.text for td in title.findNextSiblings(attrs={'class': 'valueCell'}) if td.text])
+        if 'Net Income' in title.text:
+            netincomelist.append ([td.text for td in title.findNextSiblings(attrs={'class': 'valueCell'}) if td.text])
+        if 'Interest Expense' in title.text:
+            interestexpenselist.append ([td.text for td in title.findNextSiblings(attrs={'class': 'valueCell'}) if td.text])
+        if 'EBITDA' in title.text:
+            ebitdalist.append ([td.text for td in title.findNextSiblings(attrs={'class': 'valueCell'}) if td.text])
+
+
+    # Balance sheet
+    titlesbalancesheet = text_soup_balancesheet.findAll('td', {'class': 'rowTitle'})
+    equitylist=[]
+    for title in titlesbalancesheet:
+        if 'Total Shareholders\' Equity' in title.text:
+            equitylist.append( [td.text for td in title.findNextSiblings(attrs={'class': 'valueCell'}) if td.text])
+        if 'Long-Term Debt' in title.text:
+            longtermdebtlist.append( [td.text for td in title.findNextSiblings(attrs={'class': 'valueCell'}) if td.text])
+
+    eps = getelementinlist(epslist,0)
+    epsgrowth = getelementinlist(epslist,1)
+    netincome = getelementinlist(netincomelist,0)
+    shareholderequity = getelementinlist(equitylist,0)
+    roa = getelementinlist(equitylist,1)
+
+    longtermdebt = getelementinlist(longtermdebtlist,0)
+    interestexpense =  getelementinlist(interestexpenselist,0)
+    ebitda = getelementinlist(ebitdalist,0)
+    # Don't forget to add in roe, interest coverage ratio
+
+    ## Make it into Dataframes
+
+    df= pd.DataFrame({'eps': eps,'epsgrowth': epsgrowth,'netincome': netincome,'shareholderequity':shareholderequity,'roa': roa,'longtermdebt': longtermdebt,'interestexpense':interestexpense,'ebitda': ebitda},index=range(dt.today().year-5,dt.today().year))
+    
+    # convert financial report money format to numeric
+    #dfformatted = df.apply(financial_report_format)
+
+    # Adding roe, interest coverage ratio
+    #dfformatted['roe'] = dfformatted.netincome/dfformatted.shareholderequity
+    #dfformatted['interestcoverageratio'] = dfformatted.ebitda/dfformatted.interestexpense
+    #print(dfformatted)
+    return df  
+
+
+def get_stock_financial_info_from_report(stock_financial_report):
+
+    # Format all the number in dataframe
+    dfformatted = stock_financial_report.apply(financial_report_format)
+
+    # Adding roe, interest coverage ratio
+    dfformatted['roe'] = dfformatted.netincome/dfformatted.shareholderequity
+    dfformatted['interestcoverageratio'] = dfformatted.ebitda/dfformatted.interestexpense
+
+#     Insert ticker and df
+    return dfformatted
