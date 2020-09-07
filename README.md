@@ -10,7 +10,11 @@ Most codes are based on Vincent's github project and do some modification in ord
 
 -------
 
+### Screenshots : 
 
+![](data/../assets/dashboard-s1.png)
+
+![](data/../assets/dashboard-s2.png)
 
 Main process :
 1. Get stock ticker and name to be data source of dropdown control

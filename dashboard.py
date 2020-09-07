@@ -17,13 +17,13 @@ stockpricedf = pd.DataFrame()
 financial_info_df = pd.DataFrame()
 discountrate = 0.2
 margin = 0.15
-logger = logging.getLogger(__name__)
+
 
 def dashboard_layout():
     layout = html.Div([
         html.Div([
             html.H1('Simple Value Investing', className='text-center'),
-            html.H6('(This is a POC application which should not be used for real trading reference)', className='text-center'),
+            html.H6('(This is a POC application, should not be used for real trading reference)', className='text-center'),
             # First let users choose stocks
             html.H2('Choose a stock'),
             dcc.Dropdown(
@@ -160,16 +160,16 @@ def register_callbacks(app):
         ticker = selected_dropdown_value.strip( )
         #logger.warning(financial_info_df)
         #logger.warning(stockpricedf)
-        #if (not financial_info_df.empty and not stockpricedf.empty):
-        pricedf = infer_reasonable_share_price(ticker, financial_info_df, stockpricedf, discountrate, marginrate)
+        if (not financial_info_df.empty and not stockpricedf.empty):
+            pricedf = infer_reasonable_share_price(ticker, financial_info_df, stockpricedf, discountrate, marginrate)
 
             # Header
-        return [html.Thead([html.Tr([html.Th(col) for col in pricedf.columns], className='rounded')], className='bg-info text-white')] + [html.Tbody([html.Tr([
+            return [html.Thead([html.Tr([html.Th(col) for col in pricedf.columns], className='rounded')], className='bg-info text-white')] + [html.Tbody([html.Tr([
                 html.Td(html.B(pricedf.iloc[i][col]), className='bg-warning') if col == 'decision' else html.Td(
                     round(pricedf.iloc[i][col], 2))
                 for col in pricedf.columns
             ]) for i in range(min(len(pricedf), max_rows))])]
 
-      #  else:
+        else:
             
-#            return None
+            return None

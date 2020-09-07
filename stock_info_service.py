@@ -171,20 +171,20 @@ def plot_stock_k_chart(ticker,stockprice_df,asFigure=False):
         periods=5,
         column='Close',
         name='sma-5',
-        str='sma-5',
+        str='SMA-5',
         color='red'
     )
     qf.add_sma(
         periods=20,
         column='Close',
         name='sma-20',
-        str='sma-20'
+        str='SMA-20'
     )
     qf.add_sma(
         periods=60,
         column='Close',
         name='sma-60',
-        str='sma-60'
+        str='SMA-60'
     )
     #qf.add_volume()
     qf.add_macd()
