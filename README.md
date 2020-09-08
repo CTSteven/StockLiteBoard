@@ -23,7 +23,7 @@ It's great to design a system could auto collect and read information then give 
 .
 
 ## Warning : ##
-This application has not been rigorously tested and its domain rules are very simple which are hard to cover the complexity of real stock market. There may be also wrong information introduced by some not found some bugs.
+This application has not been rigorously tested and its domain rules are very simple which are hard to cover the complexity of real stock market. There may be also wrong information introduced by some not found bugs.
 ## <span style='color:#a00000'>This application is not mature enough and risky to be your decision tool in real stock market !</span>
 
 
