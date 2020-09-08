@@ -11,6 +11,7 @@ Python has lots of packages for data processing and visualization, it is easy to
 Following are some changes I make from that project :
 - Change UI layout and apply Bootstrap 4
 - Could execute in Jupyter notebook
+- Change share price graph to K chart , add SMA , MACD , RSI 
 - File name are also changed and do some code refactoring
 - Get data through API from stock market data company is more reliable and efficient than parsing web page from website , but this part left no modification.
 
