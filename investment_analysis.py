@@ -71,7 +71,7 @@ def infer_reasonable_share_price(ticker, financialreportingdf, stockpricedf, dis
         # parameter:  periods , payment, present value, future value
         annualgrowthrate = npf.rate(len(financialreportingdf.eps), 0, -1 *
                                     financialreportingdf.eps.iloc[0], financialreportingdf.eps.iloc[-1])
-        print("Annual Growth Rate %f" % annualgrowthrate)
+        #print("Annual Growth Rate %f" % annualgrowthrate)
 
         # Non Conservative
         lasteps = financialreportingdf.eps.tail(1).values[0]  # presentvalue
