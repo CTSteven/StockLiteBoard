@@ -138,7 +138,7 @@ def get_stock_price(ticker,start_date,end_date=dt.now()):
         #ticker='2330.tw'
         #ticker='GOOG'
         return pdr.DataReader(
-            ticker.strip(),data_source='yahoo',start=dt(2020,1,1),end=end_date
+            ticker.strip(),data_source='yahoo',start=start_date,end=end_date
         )
     else:
         print('Need stock ticker parameter')
@@ -267,13 +267,13 @@ def get_stock_financial_report(ticker):
 
 
 def get_stock_financial_info_from_report(stock_financial_report):
-
+    print('stock_financial_report : \n',stock_financial_report)
     # Format all the number in dataframe
     dfformatted = stock_financial_report.apply(financial_report_format)
 
     # Adding roe, interest coverage ratio
     dfformatted['roe'] = dfformatted.netincome/dfformatted.shareholderequity
     dfformatted['interestcoverageratio'] = dfformatted.ebitda/dfformatted.interestexpense
-
+    print('dfformatted:\n',dfformatted)
 #     Insert ticker and df
     return dfformatted
