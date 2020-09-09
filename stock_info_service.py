@@ -208,7 +208,7 @@ def get_stock_financial_report(ticker):
     ticker = ticker.strip()
     financial_url = 'https://www.marketwatch.com/investing/stock/%s/financials'%ticker
     balancesheet_url = 'https://www.marketwatch.com/investing/stock/%s/financials/balance-sheet'%ticker
-    print(financial_url)
+    #print(financial_url)
     text_soup_financials = BeautifulSoup(requests.get(financial_url).text,"lxml")
     text_soup_balancesheet = BeautifulSoup(requests.get(balancesheet_url).text,"lxml")
 
@@ -267,13 +267,13 @@ def get_stock_financial_report(ticker):
 
 
 def get_stock_financial_info_from_report(stock_financial_report):
-    print('stock_financial_report : \n',stock_financial_report)
+    #print('stock_financial_report : \n',stock_financial_report)
     # Format all the number in dataframe
     dfformatted = stock_financial_report.apply(financial_report_format)
 
     # Adding roe, interest coverage ratio
     dfformatted['roe'] = dfformatted.netincome/dfformatted.shareholderequity
     dfformatted['interestcoverageratio'] = dfformatted.ebitda/dfformatted.interestexpense
-    print('dfformatted:\n',dfformatted)
+    #print('dfformatted:\n',dfformatted)
 #     Insert ticker and df
     return dfformatted
