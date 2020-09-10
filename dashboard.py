@@ -44,7 +44,7 @@ def dashboard_layout():
                 html.Div([
                     html.Div([
                         html.Div([
-                            html.Label('Discount Rate',
+                            html.Label('Predicted Inflation',
                                        className='font-weight-bold '),
                         ], className='col-2'),
                         html.Div([
@@ -60,7 +60,7 @@ def dashboard_layout():
                     ], className='row col-12'),
                     html.Div([
                         html.Div([
-                            html.Label('Margin Rate',
+                            html.Label('Margin Tolerance',
                                     className='font-weight-bold '),
                         ],className='col-2'),
                         html.Div([

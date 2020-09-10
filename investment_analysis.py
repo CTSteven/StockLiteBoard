@@ -108,22 +108,13 @@ def findMinimumPER(stockpricedf, financialreportingdf):
     """ 
         Given the share price and eps of per year , calculate PE ration of each year then return the minimum one.
     """
-    # finrepdf = financialreportingdf.set_index('index')
-    # print('stocjpricedf : \n',stockpricedf)
-    # print('financialreportdf:\n',financialreportingdf)
     finrepdf = financialreportingdf.set_index('index')
     finrepdf.rename(columns={"index": "year"})
     stockpricedf['year'] = pd.DatetimeIndex(stockpricedf.index).year
     gframe = stockpricedf.groupby('year').head(1).set_index('year')
-    # print('gframe :\n',gframe)
     pricebyyear = pd.DataFrame()
     pricebyyear['Close'] = gframe['Close']
-    # print('finrepdf:\n',finrepdf)
     pricebyyear['eps'] = finrepdf['eps']
-    # print('Close:\n',gframe['Close'])
-    # print('eps:\n',finrepdf['eps'])
     pricebyyear['peratio'] = pricebyyear['Close']/pricebyyear['eps']
-    # print('peratio:\n',pricebyyear['peratio'])
-    # print("PE ration %f"%pricebyyear['peratio'].min())
-    # print('pricebyyear:\n',pricebyyear)
+    
     return pricebyyear['peratio'].min()
