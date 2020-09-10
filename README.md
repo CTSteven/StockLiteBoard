@@ -2,13 +2,13 @@
 
 This application , refer [Vincent Tatan's blog and project at GitHub ](https://towardsdatascience.com/value-investing-dashboard-with-python-beautiful-soup-and-dash-python-43002f6a97ca) , collect company's stock price history , financial summary information from professional financial website ( MarketWatch) and yahoo ( pandas' datareader) to do simple rule-based analysis and infer reasonable share price then give user a hint about sell or buy decision .
 
-Value investment and technical analysis are two mainstream in stock market. To increase probability of winning , investors now should know more than that in this rapid change era . Maybe buy good funds is better idea for general investors.  Even professional fund managers face big challenge in collecting and interpreting information to make good decision , as soon as possible , in investment portfolio and when to buy or sell share . 
+Value investment and technical analysis are two mainstream in stock market. To increase probability of winning , investors now should know more than that in this rapid change era . Maybe choose good funds to buy is better idea for general investors.  Even professional fund managers face big challenge to fast collecting and interpreting information for making good trading decision and quick enough before market change to another condition . Information system could help practitioners do their job easier. 
 
-Python has lots of packages for data processing and visualization, and is easy to use if there are good examples.   I have learned a lot through reading the codes , developing new function and refactoring to another style . Thanks Vincent share his idea and project. 
+Python is hot and popular in data science community. Many experts contribute lots of data processing and visualization packages to Python, make it is easy to use and learn if there are good examples. This application show how Python can process web resources and organize information with friendly tabular and chart web page offering a easy to use simple stock investment analysis tool.  I have learned a lot through reading codes , developing new function and refactoring part of UI and code to another style . Thanks Vincent share his idea and project. 
 
 Following are some changes I make from that project :
 - Change UI layout and apply Bootstrap 4
-- Could execute in Jupyter notebook
+- Direct run in Jupyter notebook
 - Change share price graph to K chart , add SMA , MACD , RSI 
 - File name are also changed and do some code refactoring
 - Get data through API from stock market data company is more reliable and efficient than parsing web page from website , but this part left no modification.
