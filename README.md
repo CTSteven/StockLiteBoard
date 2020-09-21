@@ -1,6 +1,6 @@
 ## Simple Value Investing Dashboard, using python 
 
-This application , refer [Vincent Tatan's blog and project at GitHub ](https://towardsdatascience.com/value-investing-dashboard-with-python-beautiful-soup-and-dash-python-43002f6a97ca) , collect company's stock price history , financial summary information from professional financial website ( MarketWatch) and yahoo ( pandas' datareader) to do simple rule-based analysis and infer reasonable share price then give user a hint about sell or buy decision .
+This application , refer [Vincent Tatan's blog and project at GitHub ](https://towardsdatascience.com/value-investing-dashboard-with-python-beautiful-soup-and-dash-python-43002f6a97ca) , collect company's stock price history , financial summary information from professional financial website ( MarketWatch) and yahoo ( pandas' datareader) to do simple rule-based analysis then infer reasonable share price to give suggestion on sell or buy decision .
 
 Value investment and technical analysis are two mainstream in stock market. To increase probability of winning , investors now should know more than that in this rapid change era . Maybe choose good funds to buy is better idea for general investors.  Even professional fund managers face big challenge to fast collecting and interpreting information for making good trading decision and quick enough before market change to another condition . Information system could help practitioners do their job easier. 
 
