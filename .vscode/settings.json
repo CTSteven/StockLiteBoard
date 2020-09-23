@@ -1,0 +1,20 @@
+{
+    "cSpell.ignoreWords": [
+        "absl",
+        "absl py ansi html apache beam appnope astor astunparse attrs autopep avro python backcall",
+        "ansi",
+        "apache",
+        "appnope",
+        "astor",
+        "astunparse",
+        "attrs",
+        "autopep",
+        "avro",
+        "backcall",
+        "beam",
+        "html",
+        "py",
+        "python"
+    ],
+    "python.pythonPath": "/Users/steven/GIT/ml/my_env/bin/python3"
+}

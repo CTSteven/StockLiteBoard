@@ -156,7 +156,6 @@ def plot_stock_k_chart(ticker,stockprice_df,asFigure=False):
     #title=''
     if (ticker==None or ticker.strip()==''):
         return None
-    
     # stockprice_df=get_stock_price(ticker,dt(2020,1,1),end_date=dt.now())  
     quotes = stockprice_df[['Open','High','Low','Close','Volume']]
     qf = cf.QuantFig(
@@ -165,8 +164,10 @@ def plot_stock_k_chart(ticker,stockprice_df,asFigure=False):
         legend='top',
         name='K',
         up_color='red',
-        down_color='green'
+        down_color='green',
+        
     )
+    
     qf.add_sma(
         periods=5,
         column='Close',
@@ -189,6 +190,7 @@ def plot_stock_k_chart(ticker,stockprice_df,asFigure=False):
     #qf.add_volume()
     qf.add_macd()
     qf.add_rsi(periods=14, showbands=False)
+    
     #print(ticker)
   #  fig = plyo.iplot(
   #      qf.iplot(asFigure=True,    dimensions=(800,600)),

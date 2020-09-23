@@ -1,0 +1,55 @@
+{
+    "configurations": [
+        {
+            "name": "Cloud Run: Run/Debug Locally",
+            "type": "cloudcode.cloudrun",
+            "request": "launch",
+            "build": {
+                "docker": {
+                    "path": "Dockerfile"
+                }
+            },
+            "image": "stock-dashboard",
+            "service": {
+                "name": "stock-dashboard",
+                "containerPort": 8090,
+                "env": [
+                    {
+                        "name": "PORT",
+                        "value": "8090"
+                    }
+                ],
+                "resources": {
+                    "limits": {
+                        "memory": "256Mi"
+                    }
+                }
+            },
+            "target": {
+                "minikube": {}
+            },
+            "watch": true,
+            "debug": {
+                "sourceFileMap": {
+                    "${workspaceFolder}": "/app"
+                }
+            }
+        },
+        {
+            "name": "Python: Flask",
+            "type": "python",
+            "request": "launch",
+            "module": "flask",
+            "env": {
+                "FLASK_APP": "app.py",
+                "FLASK_ENV": "development",
+                "FLASK_DEBUG": "0",
+                "FLASK_RUN_PORT": "8090"
+            },
+            "args": [
+                "run"
+            ],
+            "jinja": true
+        }
+    ]
+}

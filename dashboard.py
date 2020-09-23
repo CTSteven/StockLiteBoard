@@ -1,6 +1,6 @@
 import pandas as pd
 import plotly.express as px
-from jupyter_dash import JupyterDash
+#from jupyter_dash import JupyterDash
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
@@ -12,6 +12,7 @@ import stock_info_service
 from stock_info_service import *
 from investment_analysis import *
 import sys
+import threading
 import logging
 
 discountrate = 0.2
@@ -82,7 +83,7 @@ def dashboard_layout():
                 ], className='col-12'),
                 html.H3('5 years share price'),
                 html.Div([
-                    dcc.Graph(id='stock-graph'),
+                    dcc.Graph(id='stock-graph',style={'height':700}),
                 ], className='col-12 bg-white',style={'paddingLeft':'0','paddingRight':'0'}),
                 html.P('')
                 # style={'width': '40%', 'display': 'inline-block'}
@@ -115,14 +116,9 @@ def dashboard_layout():
 
 
 def register_callbacks(app):
-    app.logger.info('call register')
+    #app.logger.info('call register')
     #cache = Cache(config={'CACHE_TYPE': 'simple'})
     # cache.init_app(app)
-    #global logger
-    #logger = main_logger
-    #logger = logging.getLogger('werkzeug')
-    # logger.setLevel(logging.DEBUG)
-    # logging.debug("test")
     # @cache.memoize(timeout=TIMEOUT)
 
     def query_share_price_history(ticker):
@@ -131,22 +127,25 @@ def register_callbacks(app):
         # logger.debug(share_price_df)
         if (share_price_df is None):
             last_2_year = dt.now() + relativedelta(years=-5)
+            dt_start = dt.now()
             share_price_df = pdr.DataReader(
                 ticker, data_source='yahoo',
                 start=last_2_year, end=dt.now())
+            app.logger.debug('get stock history take %s' %( str( dt.now() - dt_start) ) )
             share_price_df_dict[ticker] = share_price_df
         # return df.to_json(date_format='iso', orient='split')
         return share_price_df
 
     def get_share_price_history(ticker):
         # return pd.read_json(query_share_price_history(ticker),orient='split')
-        return query_share_price_history(ticker)
+        return  query_share_price_history(ticker) 
 
     # @cache.memoize(timeout=TIMEOUT)
     def query_financial_report(ticker):
         stock_financial_df = stock_financial_df_dict.get(ticker)
         if (stock_financial_df is None):
             stock_financial_df = {}  # pd.DataFrame()
+            dt_start = dt.now()
             financial_report = get_stock_financial_report(ticker).reset_index()
             financial_info_df = get_stock_financial_info_from_report(
                 financial_report)
@@ -155,32 +154,47 @@ def register_callbacks(app):
             stock_financial_df["financial_report"] = financial_report
             stock_financial_df["financial_info_df"] = financial_info_df
             stock_financial_df_dict[ticker] = stock_financial_df
+            app.logger.debug('process financial report take %s' %( str( dt.now() - dt_start) ) )
         return stock_financial_df
         # return stock_financial_df.to_json(date_format='iso', orient='split')
 
     def get_financial_report(ticker):
-        return query_financial_report(ticker)
+        return  query_financial_report(ticker) 
         # return pd.read_json(query_financial_report(ticker),orient='split')
 
     # @cache.memoize(timeout=TIMEOUT)
     def query_eligibilitycheck(ticker):
         stock_financial_df = get_financial_report(ticker)
         financial_info_df = stock_financial_df["financial_info_df"]
+        dt_start = dt.now()
         reasonlist = eligibilitycheck(ticker, financial_info_df)
+        app.logger.debug('process eligibilitycheck take %s' %( str( dt.now() - dt_start) ) )
         # return reasonlist.to_json(date_format='iso', orient='split')
         return reasonlist
 
     def get_eligibilitycheck(ticker):
         # return pd.read_json(query_eligibilitycheck(ticker),orient='split')
-        return query_eligibilitycheck(ticker)
+        return query_eligibilitycheck(ticker) 
 
     @app.callback(
         Output('ticker-changed', 'children'),
         [Input('stock-dropdown', 'value')]
     )
-    def get_stock_price(value):
+    def get_stock_price_and_financial_report(value):
+        dt_start = dt.now()
         ticker = value.strip()
-        query_share_price_history(ticker)
+        tasks = []
+        t1 = threading.Thread(target=query_share_price_history, args=(ticker,))
+        tasks.append(t1)
+        t2 = threading.Thread(target=query_financial_report, args=(ticker,))
+        tasks.append(t2)
+        for t in tasks:
+            t.start()
+        for t in tasks:
+            t.join()
+
+        app.logger.debug('get stock price and financial report  take %s' %( str( dt.now() - dt_start) ) )
+
         return ticker
 
     # For the stocks graph
@@ -190,7 +204,9 @@ def register_callbacks(app):
     )
     def update_stock_graph(ticker):
         stockprice_df = get_share_price_history(ticker)
+        dt_start = dt.now()
         fig = plot_stock_k_chart(ticker, stockprice_df, asFigure=True)
+        app.logger.debug('process stock chart take %s' %( str( dt.now() - dt_start) ) )
         return fig
 
     # for financial report table
@@ -221,15 +237,13 @@ def register_callbacks(app):
          Input('discountrate-slider', 'value'),
          Input('marginrate-slider', 'value')])
     def generate_future_price_table(ticker, discountrate, marginrate, max_rows=10):
+        dt_start = dt.now()
         stockprice_df = get_share_price_history(ticker)
         stock_financial_df = get_financial_report(ticker)
         financial_info_df = stock_financial_df["financial_info_df"]
-        # logger.warning(financial_info_df)
-        # logger.warning(stockprice_df)
-        app.logger.info('test...')
         pricedf = infer_reasonable_share_price(
             ticker, financial_info_df, stockprice_df, discountrate, marginrate,3) # future 3 years
-        app.logger.debug(pricedf)
+        app.logger.debug('process future_price take %s' %( str( dt.now() - dt_start) ) )
         return [html.Thead([html.Tr([html.Th(col) for col in pricedf.columns], className='rounded')], className='bg-info text-white')] + [html.Tbody([html.Tr([
             html.Td(html.B(pricedf.iloc[i][col]), className='bg-warning') if col == 'decision' else html.Td(
                 round(pricedf.iloc[i][col], 2))
