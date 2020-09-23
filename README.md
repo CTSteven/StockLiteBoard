@@ -1,6 +1,7 @@
 ## Simple Value Investing Dashboard, using python 
 
-Go head to [ demo site ](https://stock-dashboard-c2s6b2cyea-de.a.run.app)
+
+### Go to [ demo site ](https://stock-dashboard-c2s6b2cyea-de.a.run.app)
 
 This application , refer [Vincent Tatan's blog and project at GitHub ](https://towardsdatascience.com/value-investing-dashboard-with-python-beautiful-soup-and-dash-python-43002f6a97ca) , collect company's stock price history , financial summary information from professional financial website ( MarketWatch) and yahoo ( pandas' datareader) to do simple rule-based analysis then infer reasonable share price to give suggestion on sell or buy decision .
 
