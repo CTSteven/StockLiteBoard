@@ -31,7 +31,7 @@ def dashboard_layout():
         html.Div([
             html.H2('Stock Investment Dashboard', className='text-center'),
             html.H6([
-                '(This POC should not be used for real decision making, ',
+                '(This POC application should not be used for real decision making, ',
                 html.A( 'go to GitHub for more information' , href='https://github.com/CTSteven/InvestmentDashboard', target='MyGitHub' ),
                 ')'
             ],className='text-center'),
