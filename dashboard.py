@@ -29,9 +29,12 @@ share_price_df_dict = dict()
 def dashboard_layout():
     layout = html.Div([
         html.Div([
-            html.H2('Simple Value Investing', className='text-center'),
-            html.H6('(This POC application should not be used for real trading reference)',
-                    className='text-center'),
+            html.H2('Stock Investment Dashboard', className='text-center'),
+            html.H6([
+                '(This POC should not be used for real decision making, ',
+                html.A( 'go to GitHub for more information' , href='https://github.com/CTSteven/InvestmentDashboard', target='MyGitHub' ),
+                ')'
+            ],className='text-center'),
             # First let users choose stocks
             html.H3('Choose a stock'),
             dcc.Dropdown(
@@ -81,7 +84,7 @@ def dashboard_layout():
                                    className='table table-hover text-center')
                     ], className='col-12 p-2')
                 ], className='col-12'),
-                html.H3('5 years share price'),
+                html.H3('Share Price History of 5 years '),
                 html.Div([
                     dcc.Graph(id='stock-graph',style={'height':700}),
                 ], className='col-12 bg-white',style={'paddingLeft':'0','paddingRight':'0'}),
@@ -90,7 +93,7 @@ def dashboard_layout():
             ], className='row p-3'),
             html.Div([
                 html.Div([
-                    html.H3('Critical Variables and Ratios'),
+                    html.H3('Critical Financial Information in 5 years'),
                     html.Table(id='financial-report-table',
                                className='table table-hover text-center'),
                     html.P(''),
