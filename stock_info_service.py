@@ -35,6 +35,7 @@ def save_sp500_stocks_info():
     stocks_info_df = pd.DataFrame(stocks_info).T
     stocks_info_df.columns=['tickers','security','gics_industry','gics_sub_industry']
     stocks_info_df['seclabels'] = 'SP500'
+
     stocks_info_df['labels'] = stocks_info_df[['tickers','security', 'gics_industry','gics_sub_industry','seclabels']].apply(lambda x: ' '.join(x), axis=1)
 
     return stocks_info_df

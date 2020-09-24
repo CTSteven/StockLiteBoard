@@ -1,0 +1,174 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static "pages/stock-chart.css" %}">
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="text-center">
+                <h2>Stock Investment Dashboard</h2>
+                <h6>(This POC application should not be used for real decision making, <a
+                        href='https://github.com/CTSteven/InvestmentDashboard' target='MyGitHub'>go to GitHub for more
+                        information</a></h6>
+            </div>
+            <div class="mt-4">
+                <form>
+                    <div class="form-group row">
+                        <label for="select-stock" class='col-sm-2 col-form-label'>Choose a Stock</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" id="select-stock">
+                                <option></option>
+                                {% for _, stock in stock_list.iterrows %}
+                                <option value='{{ stock.tickers }}'> {{ stock.labels }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group row">
+                                <label for="select-pir" class='col-sm-4 col-form-label'>Predicted Inflation</label>
+                                <div class="col-sm-4">
+                                    <select class="form-control" id="select-pir">
+                                        {% for i in step_range %}
+                                        <option value='{{ i|floatformat:"-2" }}'> {{ i|floatformat:"-2" }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group row">
+                                <label for="select-mtr" class='col-sm-4 col-form-label'>Margin Tolerance</label>
+                                <div class="col-sm-4">
+                                    <select class="form-control" id="select-mtr">
+                                        {% for i in step_range %}
+                                        <option value='{{ i|floatformat:"-2" }}'> {{ i|floatformat:"-2" }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <h3>Investment Suggestion</h3>
+        <table class="table table-hover text-center" id='expected-future-price-table'>
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">First</th>
+                    <th scope="col">Last</th>
+                    <th scope="col">Handle</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div classo='col-12'>
+        {% include 'pages/stock-chart.html' %}
+    </div>
+
+    <div>
+        <h3>Critical Financial Information in 5 years</h3>
+        <table class="table table-hover text-center" id='financial-report-table'>
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">First</th>
+                    <th scope="col">Last</th>
+                    <th scope="col">Handle</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div>
+        <h3>Warning Flags</h3>
+        <table class="table table-hover table-borderless" id='reason-list'>
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">First</th>
+                    <th scope="col">Last</th>
+                    <th scope="col">Handle</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+</div>
+</div>
+
+<script type="text/javascript">
+    $('#select-stock').click(function() {
+        var tickers;
+        tickers = $(this).val();
+        $.ajax({
+            type: "GET",
+            url: "getStockPriceHistory",
+            dataType: 'json',
+            data: {
+                tickers: tickers
+            },
+            success: function(result) {
+                // todo: update stock chart
+                // $( '#like'+ catid ).remove();
+                // $( '#message' ).text(data);
+            },
+            error: function(request, status, error) {
+                console.log("ajax call went wrong:" + request.responseText);
+            }
+        })
+    });
+</script>
+
+<script src="https://code.highcharts.com/stock/highstock.js"></script>
+<script src="https://code.highcharts.com/stock/modules/data.js"></script>
+
+<script src="https://code.highcharts.com/stock/modules/drag-panes.js"></script>
+
+<script src="https://code.highcharts.com/stock/indicators/indicators.js"></script>
+<script src="https://code.highcharts.com/stock/indicators/bollinger-bands.js"></script>
+<script src="https://code.highcharts.com/stock/indicators/ema.js"></script>
+
+<script src="https://code.highcharts.com/stock/modules/annotations-advanced.js"></script>
+
+<script src="https://code.highcharts.com/stock/modules/full-screen.js"></script>
+<script src="https://code.highcharts.com/stock/modules/price-indicator.js"></script>
+<script src="https://code.highcharts.com/stock/modules/stock-tools.js"></script>
+
+<script src="{% static "pages/stock-chart.js" %}"></script>
+
+{% endblock content %}

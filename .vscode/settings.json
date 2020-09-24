@@ -16,5 +16,5 @@
         "py",
         "python"
     ],
-    "python.pythonPath": "/Users/steven/GIT/ml/my_env/bin/python3"
+    "python.pythonPath": "/Users/steven/.local/share/virtualenvs/InvestmentDashboard-mnF3Ity0/bin"
 }
