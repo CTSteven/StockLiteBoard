@@ -14,6 +14,18 @@ import os
 #%matplotlib inline
 cf.offline.go_offline() # with execute this command will cause QuantFig.iplot() run into error
 
+
+# external JavaScript files
+external_scripts = [
+    'https://www.google-analytics.com/analytics.js',
+    {'src': 'https://cdn.polyfill.io/v2/polyfill.min.js'},
+    {
+        'src': 'https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.10/lodash.core.js',
+        'integrity': 'sha256-Qqd/EfdABZUcAxjOkMi8eGEivtdTkh3b65xCZL4qAQA=',
+        'crossorigin': 'anonymous'
+    }
+]
+
 app = dash.Dash(__name__,external_stylesheets=[dbc.themes.BOOTSTRAP])
 application = app.server
 app.layout = dashboard_layout()
