@@ -6,22 +6,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
     integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="https://code.highcharts.com/css/stocktools/gui.css">
   <link rel="stylesheet" type="text/css" href="https://code.highcharts.com/css/annotations/popup.css">
-
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css">
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
     integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
   </script>
 </head>
-<header>
+<!--header>
   <a href="{% url 'home' %}">Home</a> | <a href="{% url 'dashboard' %}">Dashboard</a> | <a
     href="{% url 'about' %}">About</a>
-</header>
+</header-->
 
 <body>
 
   {% block content %}
 
   {% endblock %}
+
+<div class=" p-1 bg-warning text-center">
+
+<p class="text-monospace">
+ <h5 class="pr-3">By Steven , &nbsp; &nbsp;  <a
+                href='https://github.com/CTSteven/InvestmentDashboard' target='MyGitHub'
+                style="color:black;" aria-label="GitHub"><i class="fab fa-github"></i></a></h5> 
+<div class="text-center">
+<span>@ 2020 All Right Reserved</span>
+</div>
+</p>
+</div>
 
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 

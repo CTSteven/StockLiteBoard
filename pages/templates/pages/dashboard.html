@@ -2,30 +2,38 @@
 
 {% block content %}
 {% load static %}
-<link rel="stylesheet" href="{% static "pages/stock-chart.css" %}">
-
+<!--link rel="stylesheet" href="{% static "pages/stock-chart.css" %}"-->
+<div class="sticky-top shadow bg-info" style="opacity:0.95">
+    <div class="text-center pb-3 pt-2 text-white">
+        <h2>Stock Investment Dashboard</h2>
+        <h6>( This POC application should not be used for real decision making, <a
+                href='https://github.com/CTSteven/InvestmentDashboard' target='MyGitHub'
+                style="color:white; text-decoration:underline ">go to GitHub for more
+                information</a> )</h6>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="form-group row">
+                <label for="select-stock" class='col-sm-2 col-form-label text-white font-weight-bold'>Choose a Stock
+                    :</label>
+                <div class="col-sm-10">
+                    <select class="form-control" id="select-stock">
+                        <option></option>
+                        {% for _, stock in stock_list.iterrows %}
+                        <option value='{{ stock.tickers }}'> {{ stock.labels }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <div class="text-center">
-                <h2>Stock Investment Dashboard</h2>
-                <h6>(This POC application should not be used for real decision making, <a
-                        href='https://github.com/CTSteven/InvestmentDashboard' target='MyGitHub'>go to GitHub for more
-                        information</a></h6>
-            </div>
             <div class="mt-4">
                 <form>
-                    <div class="form-group row">
-                        <label for="select-stock" class='col-sm-2 col-form-label'>Choose a Stock</label>
-                        <div class="col-sm-10">
-                            <select class="form-control" id="select-stock">
-                                <option></option>
-                                {% for _, stock in stock_list.iterrows %}
-                                <option value='{{ stock.tickers }}'> {{ stock.labels }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
+
                     <div class="row">
                         <div class="col-6">
                             <div class="form-group row">
@@ -132,41 +140,70 @@
 </div>
 
 <script type="text/javascript">
-    $('#select-stock').click(function() {
-        var tickers;
-        tickers = $(this).val();
-        $.ajax({
-            type: "GET",
-            url: "getStockPriceHistory",
-            dataType: 'json',
-            data: {
-                tickers: tickers
-            },
-            success: function(result) {
-                // todo: update stock chart
-                // $( '#like'+ catid ).remove();
-                // $( '#message' ).text(data);
-            },
-            error: function(request, status, error) {
-                console.log("ajax call went wrong:" + request.responseText);
+    $('#select-stock').change(function() {
+        var ticker;
+        ticker = $(this).val();
+        Highcharts.getJSON('/pages/stockPriceHistory?ticker=' + ticker, function(data) {
+            // split the data set into ohlc and volume
+            ohlc = [],
+                volume = [],
+                dataLength = data.length,
+                i = 0;
+            for (i; i < dataLength; i += 1) {
+                ohlc.push([
+                    data[i][0], // the date
+                    data[i][1], // open
+                    data[i][2], // high
+                    data[i][3], // low
+                    data[i][4] // close
+                ]);
+                volume.push([
+                    data[i][0], // the date
+                    data[i][5] // the volume
+                ]);
             }
+            /*
+            stockChart.setTitle( {
+                text: ticker+', Stock Price'
+            });*/
+            stockChart.series[0].update({
+                data: ohlc
+            }, false);
+            stockChart.series[4].update({
+                data: volume
+            }, false);
+            stockChart.redraw();
+            /*
+            $.ajax({
+                type: "GET",
+                url: "getStockPriceHistory",
+                dataType: 'json',
+                data: {
+                    tickers: tickers
+                },
+                success: function(result) {
+                    
+                    // todo: update stock chart
+                    // $( '#like'+ catid ).remove();
+                    // $( '#message' ).text(data);
+                },
+                error: function(request, status, error) {
+                    console.log("ajax call went wrong:" + request.responseText);
+                }
+            })
+            */
+            $('#stock-chart-title').text(ticker + ',Stock Price History');
         })
     });
 </script>
 
 <script src="https://code.highcharts.com/stock/highstock.js"></script>
 <script src="https://code.highcharts.com/stock/modules/data.js"></script>
-
+<script src="https://code.highcharts.com/stock/indicators/indicators-all.js"></script>
 <script src="https://code.highcharts.com/stock/modules/drag-panes.js"></script>
-
-<script src="https://code.highcharts.com/stock/indicators/indicators.js"></script>
-<script src="https://code.highcharts.com/stock/indicators/bollinger-bands.js"></script>
-<script src="https://code.highcharts.com/stock/indicators/ema.js"></script>
-
 <script src="https://code.highcharts.com/stock/modules/annotations-advanced.js"></script>
-
-<script src="https://code.highcharts.com/stock/modules/full-screen.js"></script>
 <script src="https://code.highcharts.com/stock/modules/price-indicator.js"></script>
+<script src="https://code.highcharts.com/stock/modules/full-screen.js"></script>
 <script src="https://code.highcharts.com/stock/modules/stock-tools.js"></script>
 
 <script src="{% static "pages/stock-chart.js" %}"></script>

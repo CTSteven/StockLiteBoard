@@ -8,6 +8,7 @@ import json
 from datetime import datetime , date
 import time
 from dateutil.relativedelta import relativedelta
+import decimal
 
 # Create your views here.
 
@@ -29,16 +30,7 @@ def dashboardView(request):
 def stockPriceHistoryView(request):
     ticker=request.query_params.get('ticker')
     stock_price_df = get_stock_price(ticker,start_date=datetime.now() + relativedelta(years=-5)).reset_index()
-    stock_price_df['Date']=stock_price_df['Date'].apply(lambda x: x.timestamp()*1000)
-    #日期轉換成 1970 秒差 timestamp
-    json_data = json.dumps(stock_price_df[['Date','Open','High','Low','Close','Volume']].to_numpy().tolist(), default=json_serial)
+    json_data = stock_price_df[['Date','Open','High','Low','Close','Volume']].to_json(orient="values",date_format="epoch",double_precision=5)
     return HttpResponse(json_data, content_type="application/json")
 
-
-def json_serial(obj):
-    """JSON serializer for objects not serializable by default json code"""
-
-    if isinstance(obj, (datetime, date)):
-        return obj.isoformat()
-    raise TypeError ("Type %s not serializable" % type(obj))
 

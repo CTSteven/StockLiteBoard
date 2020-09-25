@@ -1,3 +1,4 @@
+/*
 function addPopupEvents(chart) {
     var closePopupButtons = document.getElementsByClassName('highcharts-close-popup');
     // Close popup button:
@@ -102,6 +103,8 @@ function addPopupEvents(chart) {
         }
     );
 }
+*/
+var stockChart = null;
 
 //stockPriceHistory(request,ticker,start_date,end_date=dt.now()) 
 //https://demo-live-data.highcharts.com/aapl-ohlcv.json
@@ -128,30 +131,78 @@ Highcharts.getJSON('/pages/stockPriceHistory?ticker=GOOG', function (data) {
         ]);
     }
 
-    Highcharts.stockChart('container', {
+    stockChart= Highcharts.stockChart('stock-chart-container', {
+        /*
         chart: {
             events: {
                 load: function () {
                     addPopupEvents(this);
                 }
             }
+        },*/
+        /* stock tools will overlap with title
+        title:{
+            text: 'GOOG, Stock Price',
+            align: 'left',
+            style:{
+                "fontSize":"1.75rem",
+                "fontWeight":500
+            }
         },
+        */
         yAxis: [{
             labels: {
                 align: 'left'
             },
-            height: '80%',
+            height: '60%',
             resize: {
                 enabled: true
             }
         }, {
+            top: '60%',
+            height: '10%',
             labels: {
-                align: 'left'
+                align: 'right',
+                x: -3
             },
-            top: '80%',
-            height: '20%',
-            offset: 0
-        }],
+            offset: 0,
+            title: {
+                text: 'VOLUME'
+            }
+        }, {
+            top: '70%',
+            height: '17%',
+            labels: {
+                align: 'right',
+                x: -3
+            },
+            offset: 0,
+            title: {
+                text: 'MACD'
+            }
+        }, {
+            top: '87%',
+            height: '13%',
+            labels: {
+                align: 'right',
+                x: -3
+            },
+            offset: 0,
+            title: {
+                text: 'RSI'
+            },
+            plotLines: [{
+                value: 70,
+                color: 'lightgray',
+                width: 1
+            }, {
+                value: 30,
+                color: 'lightgray',
+                width: 1
+            }],
+        }       
+        ],
+        /*
         navigationBindings: {
             events: {
                 selectButton: function (event) {
@@ -206,23 +257,79 @@ Highcharts.getJSON('/pages/stockPriceHistory?ticker=GOOG', function (data) {
                 }
             }
         },
+        */
+        /*
         stockTools: {
             gui: {
-                enabled: false
+                enabled: true
             }
+        },*/
+        plotOptions: {
+            candlestick: {
+                color: '#6ba887',
+                lineColor: '#6ba887',
+                upLineColor: '#db5f5f', 
+                upColor: '#db5f5f'
+            }
+
         },
         series: [{
             type: 'candlestick', // ohlc
-            id: 'goog-candlestick',
+            id: 'stock-data',
             name: 'GOOG Stock Price',
             data: ohlc
         }, {
+            type: 'sma',
+            linkedTo: 'stock-data',
+            color:'#dd6666',
+            params: {
+                period: 5
+            },
+            marker: {
+                enabled: false
+            }
+        }, {
+            type: 'sma',
+            linkedTo: 'stock-data',
+            params: {
+                period: 20
+            },
+            marker: {
+                enabled: false
+            }
+        }, {
+            type: 'sma',
+            linkedTo: 'stock-data',
+            color:'orange',
+            params: {
+                period: 60
+            },
+            marker: {
+                enabled: false
+            }
+        },{
             type: 'column',
             id: 'aapl-volume',
             name: 'AAPL Volume',
             data: volume,
+            color: '#38c',
             yAxis: 1
-        }],
+        },
+        {
+            type: 'macd',
+            yAxis: 2,
+            color:'orange',
+            linkedTo: 'stock-data'
+        },
+        {
+            type: 'rsi',
+            yAxis: 3,
+            linkedTo: 'stock-data',
+            marker: {
+                enabledThreshold: 5
+            }
+        }
+    ],
         responsive: {
             rules: [{
                 condition: {
