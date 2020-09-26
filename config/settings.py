@@ -9,11 +9,12 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -27,6 +28,44 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+DJANGO_LOG_LEVEL = 'INFO'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {asctime} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'WARNING',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': ('INFO' if DJANGO_LOG_LEVEL == None else DJANGO_LOG_LEVEL) ,
+            'propagate': False,
+        },
+        'pages':{
+            'handlers': ['console'],
+            'level': ('DEBUG' if DEBUG else 'INFO'),
+            #'formatter':'simple',
+            'propagate': False,
+        }
+    },
+}
 
 # Application definition
 
@@ -133,3 +172,17 @@ CORS_ALLOWED_ORIGINS = [
 STATICFILES_DIRS = [
     BASE_DIR / "static"
 ]
+
+# In order to use Memcached in Mac , install memcached first: 
+# brew install memcached
+# brew services start memcached
+
+CACHES = {
+    'default': {
+        #'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        #'LOCATION': '127.0.0.1:11211',
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'investment-dashboard',
+        'TIMEOUT': 12*60*60,
+    }
+}

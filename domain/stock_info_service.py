@@ -6,8 +6,7 @@ from datetime import datetime as dt
 import matplotlib.pyplot as plt
 import cufflinks as cf
 import plotly.offline as plyo
-import utils
-from utils import *
+from .utils import *
 
 ### Extract lists of the stocks with their tickers
 def save_sp500_stocks_info():  
@@ -22,7 +21,7 @@ def save_sp500_stocks_info():
         gics_industry = row.findAll('td')[3].text
         gics_sub_industry = row.findAll('td')[4].text
         
-        tickers.append(ticker.replace(r"\n"," "))
+        tickers.append(ticker.replace(r"\n","").strip())
         securities.append(security)
         gics_industries.append(gics_industry)
         gics_sub_industries.append(gics_sub_industry)
@@ -36,7 +35,7 @@ def save_sp500_stocks_info():
     stocks_info_df.columns=['tickers','security','gics_industry','gics_sub_industry']
     stocks_info_df['seclabels'] = 'SP500'
 
-    stocks_info_df['labels'] = stocks_info_df[['tickers','security', 'gics_industry','gics_sub_industry','seclabels']].apply(lambda x: ' '.join(x), axis=1)
+    stocks_info_df['labels'] = stocks_info_df[['tickers','security', 'gics_industry','gics_sub_industry','seclabels']].apply(lambda x: ',  '.join(x), axis=1)
 
     return stocks_info_df
 
@@ -70,7 +69,7 @@ def save_russell_info():
         dfrussel['gics_sub_industry'] = dfrussel.Industry.str.lower()
         dfrussel['seclabels'] = 'RUSSELL'
 
-        dfrussel['labels'] = dfrussel[['tickers','security','gics_industry','gics_sub_industry','seclabels']].apply(lambda x: ' '.join(x), axis=1)
+        dfrussel['labels'] = dfrussel[['tickers','security','gics_industry','gics_sub_industry','seclabels']].apply(lambda x: ' - '.join(x), axis=1)
 
         for index, row in dfrussel.iterrows():
             dictlist.append({'value':row['tickers'], 'label':row['labels']})
@@ -109,7 +108,7 @@ def get_taiwan_stocks_info():
     stocks_info_df = pd.DataFrame(stocks_info).T
     stocks_info_df.columns=['tickers','security','gics_industry','gics_sub_industry']
     stocks_info_df['seclabels'] = 'TWSE'
-    stocks_info_df['labels'] = stocks_info_df[['tickers','security', 'gics_industry','gics_sub_industry','seclabels']].apply(lambda x: ' '.join(x), axis=1)
+    stocks_info_df['labels'] = stocks_info_df[['tickers','security', 'gics_industry','gics_sub_industry','seclabels']].apply(lambda x: ' - '.join(x), axis=1)
 
     return stocks_info_df
 
@@ -268,7 +267,7 @@ def get_stock_financial_report(ticker):
     #print(dfformatted)
     return df  
 
-
+# Convert report formatted currency to number and add row , interestcoverageratio
 def get_stock_financial_info_from_report(stock_financial_report):
     #print('stock_financial_report : \n',stock_financial_report)
     # Format all the number in dataframe

@@ -2,8 +2,8 @@
 
 {% block content %}
 {% load static %}
-<!--link rel="stylesheet" href="{% static "pages/stock-chart.css" %}"-->
-<div class="sticky-top shadow bg-info" style="opacity:0.95">
+<link rel="stylesheet" href="{% static "pages/dashboard.css" %}">
+<div class="sticky-top shadow bg-info mb-2" style="opacity:0.95">
     <div class="text-center pb-3 pt-2 text-white">
         <h2>Stock Investment Dashboard</h2>
         <h6>( This POC application should not be used for real decision making, <a
@@ -11,135 +11,178 @@
                 style="color:white; text-decoration:underline ">go to GitHub for more
                 information</a> )</h6>
     </div>
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
-            <div class="form-group row">
-                <label for="select-stock" class='col-sm-2 col-form-label text-white font-weight-bold'>Choose a Stock
-                    :</label>
-                <div class="col-sm-10">
-                    <select class="form-control" id="select-stock">
-                        <option></option>
-                        {% for _, stock in stock_list.iterrows %}
-                        <option value='{{ stock.tickers }}'> {{ stock.labels }}</option>
-                        {% endfor %}
-                    </select>
+            <div class="col-12">
+                <div class="form-group row">
+                    <label for="select-stock"
+                        class='col-sm-12 col-lg-2 col-form-label text-white font-weight-bold'>Choose a Stock :</label>
+                    <div class="col-sm-12 col-lg-9 col-12">
+                        <select class="form-control" id="select-stock">
+                            <option></option>
+                            {% for _, stock in stock_list.iterrows %}
+                            <option value='{{ stock.tickers }}' {% if stock.tickers == 'GOOG' %}selected{% endif %}>
+                                {{ stock.labels }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <div class="mt-4">
-                <form>
-
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="form-group row">
-                                <label for="select-pir" class='col-sm-4 col-form-label'>Predicted Inflation</label>
-                                <div class="col-sm-4">
-                                    <select class="form-control" id="select-pir">
-                                        {% for i in step_range %}
-                                        <option value='{{ i|floatformat:"-2" }}'> {{ i|floatformat:"-2" }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="form-group row">
-                                <label for="select-mtr" class='col-sm-4 col-form-label'>Margin Tolerance</label>
-                                <div class="col-sm-4">
-                                    <select class="form-control" id="select-mtr">
-                                        {% for i in step_range %}
-                                        <option value='{{ i|floatformat:"-2" }}'> {{ i|floatformat:"-2" }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
+    <div class="row mt-4">
+        <div class="col-12 col-lg-5 ">
+            <form>
+                <div class="col-12">
+                    <div class="form-group row ">
+                        <label for="select-pir" class='col-sm-6 col-form-label'>Predicted Inflation</label>
+                        <div class="col-sm-6">
+                            <select class="form-control" id="select-pir">
+                                {% for i in step_range %}
+                                <option value='{{ i|floatformat:"-2" }}'> {{ i|floatformat:"-2" }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
                     </div>
-                </form>
+                </div>
+                <div class="col-12">
+                    <div class="form-group row">
+                        <label for="select-mtr" class='col-sm-6 col-form-label'>Margin Tolerance</label>
+                        <div class="col-sm-6">
+                            <select class="form-control" id="select-mtr">
+                                {% for i in step_range %}
+                                <option value='{{ i|floatformat:"-2" }}'> {{ i|floatformat:"-2" }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="col-12">
+                <h3>Warning Flags</h3>
+                <table class="table table-hover table-borderless" id='reason-list'>
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">First</th>
+                            <th scope="col">Last</th>
+                            <th scope="col">Handle</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Mark</td>
+                            <td>Otto</td>
+                            <td>@mdo</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-7">
+            <h3 class="mb-3"><i class="fas fa-cubes text-info"></i><span class="ml-2" id="investment-suggestion-title">GOOG, Predicting Future Value</span>
+            <span style='font-size:1.2rem' class="text-danger">( inaccuracy ! )</span></h3>
+            <div class="row">
+
+                <div class="col-sm-6 col-12">
+                    <table class="table table-borderless table-striped text-right"
+                        id='expected-future-price-table-1'>
+                        <tbody>
+                            <tr>
+                                <th scope="col">Annual Growth Rate</th>
+                                <td id="annual-growth-rate" class="text-monospace"></td>
+                            </tr>
+                            <tr>
+                                <th scope="col">Last EPS</th>
+                                <td id='last-eps' class="text-monospace"></td>
+                            </tr>
+                            <tr>
+                                <th scope="col">Future EPS</th>
+                                <td id='future-eps' class="text-monospace"></td>
+                            </tr>
+                            <tr>
+                                <th scope="col">PE Ration</th>
+                                <td id='pe-ratio' class="text-monospace"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-sm-6 col-12">
+                    <table class="table table-borderless table-striped text-right"
+                        id='expected-future-price-table-2'>
+                        <tbody>
+                            <tr>
+                                <th scope="col">Future Value</th>
+                                <td id='FV' class="text-monospace"></td>
+                            </tr>
+                            <tr>
+                                <th scope="col">Present Value</th>
+                                <td id='PV' class="text-monospace"></td>
+                            </tr>
+                            <tr>
+                                <th scope="col">Margin Price</th>
+                                <td id='margin-price' class="text-monospace"></td>
+                            </tr>
+                            <tr>
+                                <th scope="col">Latest Price</th>
+                                <td id='last-price' class="text-monospace"></td>
+                            </tr>
+                            <tr>
+                                <th scope="col" class="bg-info text-white text-center">Suggestion</th>
+                                <td id='suggestion' class="bg-warning font-weight-bold text-center">?</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row  mt-5">
+        <div class='col-12'>
+            <h3 class="mb-3"><i class="fas fa-chart-line text-info"></i><span class="ml-2"
+                    id="stock-chart-title">GOOG, Stock
+                    Price History </span></h3>
+            <div id="stock-chart-container" class="chart" style="max-height: 800px; height: 75vh;"></div>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-12">
+            <h3 class="mb-3"><i class="fas fa-chart-bar text-info"></i><span class="ml-2" id="financial-info-title">GOOG, Financial Information</span></h3>
+            <div class="table-responsive">
+                <table class="table table-hover text-center" id='financial-report-table'>
+                    <thead class=" bg-info text-white">
+                        <tr>
+                            <th scope="col" class=" align-middle">Year</th>
+                            <th scope="col" class=" align-middle">EPS</th>
+                            <th scope="col" class=" align-middle">EPS Growth</th>
+                            <th scope="col" class=" align-middle">Net Income</th>
+                            <th scope="col" class=" align-middle">Shareholder Equity</th>
+                            <th scope="col" class=" align-middle">ROA</th>
+                            <th scope="col" class=" align-middle">Longterm Debt</th>
+                            <th scope="col" class=" align-middle">Interest Expense</th>
+                            <th scope="col" class=" align-middle">EBITDA</th>
+                            <th scope="col" class=" align-middle">ROE</th>
+                            <th scope="col" class=" align-middle">Interest Coverage Ratio</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 
-    <div>
-        <h3>Investment Suggestion</h3>
-        <table class="table table-hover text-center" id='expected-future-price-table'>
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">First</th>
-                    <th scope="col">Last</th>
-                    <th scope="col">Handle</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <div classo='col-12'>
-        {% include 'pages/stock-chart.html' %}
-    </div>
-
-    <div>
-        <h3>Critical Financial Information in 5 years</h3>
-        <table class="table table-hover text-center" id='financial-report-table'>
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">First</th>
-                    <th scope="col">Last</th>
-                    <th scope="col">Handle</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <div>
-        <h3>Warning Flags</h3>
-        <table class="table table-hover table-borderless" id='reason-list'>
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">First</th>
-                    <th scope="col">Last</th>
-                    <th scope="col">Handle</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-</div>
-</div>
 </div>
 
 <script type="text/javascript">
+    $(function() {
+        updateFinancialReport('GOOG');
+        updateInvestmentSuggestion('GOOG');
+    });
     $('#select-stock').change(function() {
         var ticker;
         ticker = $(this).val();
@@ -167,34 +210,85 @@
                 text: ticker+', Stock Price'
             });*/
             stockChart.series[0].update({
-                data: ohlc
+                data: ohlc,
+                name: ticker + ' Stock Price'
             }, false);
             stockChart.series[4].update({
-                data: volume
+                data: volume,
+                name: ticker + ' Volume '
             }, false);
             stockChart.redraw();
-            /*
-            $.ajax({
-                type: "GET",
-                url: "getStockPriceHistory",
-                dataType: 'json',
-                data: {
-                    tickers: tickers
-                },
-                success: function(result) {
-                    
-                    // todo: update stock chart
-                    // $( '#like'+ catid ).remove();
-                    // $( '#message' ).text(data);
-                },
-                error: function(request, status, error) {
-                    console.log("ajax call went wrong:" + request.responseText);
-                }
-            })
-            */
-            $('#stock-chart-title').text(ticker + ',Stock Price History');
+            $('#stock-chart-title').text(ticker + ', Stock Price History');
+            updateFinancialReport(ticker);
+            updateInvestmentSuggestion(ticker);
         })
     });
+
+    function updateInvestmentSuggestion(ticker) {
+        post_data = JSON.stringify({
+            'ticker': ticker
+        })
+        $.ajax({
+            type: "POST",
+            url: "/pages/investmentSuggestion",
+            dataType: 'json',
+            data: post_data,
+            success: function(data) {
+                obj = data[0];
+                $('#annual-growth-rate').text(obj.annualgrowthrate);
+                $('#last-eps').text(obj.lasteps);
+                $('#future-eps').text(obj.futureeps);
+                $('#pe-ratio').text(obj.peratio);
+                $('#FV').text(obj.FV);
+                $('#PV').text(obj.PV);
+                $('#margin-price').text(obj.marginprice);
+                $('#last-price').text(obj.lastprice);
+                $('#suggestion').text(obj.suggestion);
+
+                $('#investment-suggestion-title').text(ticker + ', Predicting Future Value');
+            },
+            error: function(request, status, error) {
+                console.log("ajax call went wrong:" + request.responseText);
+            }
+        })
+    }
+
+    function updateFinancialReport(ticker) {
+        post_data = JSON.stringify({
+            'ticker': ticker
+        })
+        $.ajax({
+            type: "POST",
+            url: "/pages/financialReport",
+            dataType: 'json',
+            data: post_data,
+            success: function(data) {
+                tbody = $('#financial-report-table > tbody');
+                tbody.empty();
+                row_list = "";
+                $.each(data, function(idx, obj) {
+                    row = "<tr><td>" +
+                        obj.index + "</td><td>" +
+                        obj.eps + "</td><td>" +
+                        obj.epsgrowth + "</td><td>" +
+                        obj.netincome + "</td><td>" +
+                        obj.shareholderequity + "</td><td>" +
+                        obj.roa + "</td><td>" +
+                        obj.longtermdebt + "</td><td>" +
+                        obj.interestexpense + "</td><td>" +
+                        obj.ebitda + "</td><td>" +
+                        obj.roe + "</td><td>" +
+                        obj.interestcoverageratio + "</td></tr>";
+                    row_list = row_list + row;
+                });
+                tbody.append(row_list);
+                $('#financial-info-title').text(ticker + ', Financial Information');
+            },
+            error: function(request, status, error) {
+                console.log("ajax call went wrong:" + request.responseText);
+            }
+        })
+    }
 </script>
 
 <script src="https://code.highcharts.com/stock/highstock.js"></script>

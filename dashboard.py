@@ -9,8 +9,8 @@ from flask import Flask
 from flask_caching import Cache
 from dateutil.relativedelta import relativedelta
 import stock_info_service
-from stock_info_service import *
-from investment_analysis import *
+from domain.stock_info_service import *
+from domain.investment_analysis import *
 import sys
 import threading
 import logging

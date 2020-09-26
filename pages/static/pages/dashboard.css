@@ -1,0 +1,12 @@
+.block-title {
+    font-size:1.75rem;
+    margin-bottom: .5rem;
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+.block-title span {
+    background-color: #ddd;
+    border: solid thin #eee;
+    border-radius: 0.5rem;
+}

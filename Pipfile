@@ -17,6 +17,8 @@ matplotlib = "*"
 cufflinks = "*"
 plotly = "*"
 pymongo = "*"
+python-memcached = "*"
+numpy-financial = "*"
 
 [requires]
 python_version = "3.8"

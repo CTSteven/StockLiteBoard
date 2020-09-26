@@ -1,5 +1,7 @@
 from django.urls import path
-from .views import HomePageView, AboutPageView, dashboardView, stockPriceHistoryView
+from .views import HomePageView, AboutPageView, \
+     dashboardView, stockPriceHistoryView, investmentSuggestionView, \
+     financialReportView
 
 urlpatterns = [
     #path('',homePageView, name='home') # function view
@@ -7,6 +9,8 @@ urlpatterns = [
     path('about/',AboutPageView.as_view(), name='about'),
     path('dashboard/',dashboardView, name='dashboard'),
     path('pages/stockPriceHistory',stockPriceHistoryView, name='stockPriceHistory'),
-    path('',stockPriceHistoryView, name='stockPriceHistory')
+    path('',dashboardView, name='default'),
+    path('pages/investmentSuggestion',investmentSuggestionView, name='investmentSuggestion'),
+    path('pages/financialReport',financialReportView, name='financialReport'),
 ]
 

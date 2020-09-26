@@ -56,7 +56,8 @@ def eligibilitycheck(ticker, dfformatted):
 
 def infer_reasonable_share_price(ticker, financialreportingdf, stockpricedf, discountrate, marginrate, after_years=10):
     years = after_years  # period
-    futureeps_column_name = 'futureeps(%d)' % (years)
+    #futureeps_column_name = 'futureeps(%d)' % (years)
+    futureeps_column_name = 'futureeps'
     dfprice = pd.DataFrame(
         columns=['ticker', 'annualgrowthrate', 'lasteps', futureeps_column_name])
     pd.options.display.float_format = '{:20,.2f}'.format
@@ -84,7 +85,6 @@ def infer_reasonable_share_price(ticker, financialreportingdf, stockpricedf, dis
         dfprice.loc[0] = [ticker, annualgrowthrate, lasteps, futureeps]
     except:
         print('eps does not exist')
-
     dfprice.set_index('ticker', inplace=True)
     # conservative
     dfprice['peratio'] = findMinimumPER(stockpricedf, financialreportingdf)
@@ -96,11 +96,10 @@ def infer_reasonable_share_price(ticker, financialreportingdf, stockpricedf, dis
         dfprice['marginprice'] = dfprice['PV']*(1-marginrate)
     else:
         dfprice['marginprice'] = 0
-    dfprice['lastshareprice'] = stockpricedf.Close.tail(1).values[0]
+    dfprice['lastprice'] = stockpricedf.Close.tail(1).values[0]
 
-    dfprice['decision'] = np.where(
-        (dfprice['lastshareprice'] < dfprice['marginprice']), 'BUY', 'SELL')
-
+    dfprice['suggestion'] = np.where(
+        (dfprice['lastprice'] < dfprice['marginprice']), 'BUY', 'SELL')
     return dfprice
 
 
