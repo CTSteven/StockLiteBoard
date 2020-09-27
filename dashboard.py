@@ -245,7 +245,7 @@ def register_callbacks(app):
         stock_financial_df = get_financial_report(ticker)
         financial_info_df = stock_financial_df["financial_info_df"]
         pricedf = infer_reasonable_share_price(
-            ticker, financial_info_df, stockprice_df, discountrate, marginrate,3) # future 3 years
+            ticker, financial_info_df, stockprice_df, discountrate / 100.0 , marginrate) # future 3 years
         app.logger.debug('process future_price take %s' %( str( dt.now() - dt_start) ) )
         return [html.Thead([html.Tr([html.Th(col) for col in pricedf.columns], className='rounded')], className='bg-info text-white')] + [html.Tbody([html.Tr([
             html.Td(html.B(pricedf.iloc[i][col]), className='bg-warning') if col == 'decision' else html.Td(

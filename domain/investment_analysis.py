@@ -2,7 +2,9 @@ import pandas as pd
 from pandas_datareader import data as pdr
 import numpy as np
 import numpy_financial as npf
+import logging
 
+logger = logging.getLogger(__name__)
 
 def eligibilitycheck(ticker, dfformatted):
     """
@@ -54,12 +56,10 @@ def eligibilitycheck(ticker, dfformatted):
     return reasonlist
 
 
-def infer_reasonable_share_price(ticker, financialreportingdf, stockpricedf, discountrate, marginrate, after_years=10):
-    years = after_years  # period
-    #futureeps_column_name = 'futureeps(%d)' % (years)
-    futureeps_column_name = 'futureeps'
+def infer_reasonable_share_price(ticker, financialreportingdf, stockpricedf, discountrate, marginrate):
+    years = 2  # period
     dfprice = pd.DataFrame(
-        columns=['ticker', 'annualgrowthrate', 'lasteps', futureeps_column_name])
+        columns=['ticker', 'annualgrowthrate', 'lasteps', 'futureeps'])
     pd.options.display.float_format = '{:20,.2f}'.format
 
     # Find EPS Annual Compounded Growth Rate
@@ -68,9 +68,9 @@ def infer_reasonable_share_price(ticker, financialreportingdf, stockpricedf, dis
     # print('financialreportdf:\n',financialreportingdf)
     try:
 
-        # Calcuate interest rate per period
+        # Calcuate the rate per period
         # parameter:  periods , payment, present value, future value
-        annualgrowthrate = npf.rate(len(financialreportingdf.eps), 0, -1 *
+        annualgrowthrate = npf.rate(len(financialreportingdf.eps)-1, 0, -1 *
                                     financialreportingdf.eps.iloc[0], financialreportingdf.eps.iloc[-1])
         #print("Annual Growth Rate %f" % annualgrowthrate)
 
@@ -89,8 +89,9 @@ def infer_reasonable_share_price(ticker, financialreportingdf, stockpricedf, dis
     # conservative
     dfprice['peratio'] = findMinimumPER(stockpricedf, financialreportingdf)
     # future stock price
-    dfprice['FV'] = dfprice[futureeps_column_name] * dfprice['peratio']
-    # print('dfprice:\n',dfprice)
+    dfprice['FV'] = dfprice['futureeps'] * dfprice['peratio']
+    print('dfprice:\n',dfprice)
+    print('discountrate: %s' % discountrate)
     dfprice['PV'] = abs(npf.pv(discountrate, years, 0, fv=dfprice['FV']))
     if dfprice['FV'].values[0] > 0:
         dfprice['marginprice'] = dfprice['PV']*(1-marginrate)
@@ -107,13 +108,15 @@ def findMinimumPER(stockpricedf, financialreportingdf):
     """ 
         Given the share price and eps of per year , calculate PE ration of each year then return the minimum one.
     """
-    finrepdf = financialreportingdf.set_index('index')
-    finrepdf.rename(columns={"index": "year"})
+    #finrepdf = financialreportingdf.set_index('index')
+  #  finrepdf.rename(columns={"index": "year"})
     stockpricedf['year'] = pd.DatetimeIndex(stockpricedf.index).year
-    gframe = stockpricedf.groupby('year').head(1).set_index('year')
+    # base on yearly mean close price 
+    #gframe = stockpricedf.groupby('year').head(1).set_index('year')
+    gframe = stockpricedf.groupby('year')['Close'].agg(['mean'])
     pricebyyear = pd.DataFrame()
-    pricebyyear['Close'] = gframe['Close']
-    pricebyyear['eps'] = finrepdf['eps']
+    pricebyyear['Close'] = gframe['mean']
+    pricebyyear['eps'] = financialreportingdf['eps']
     pricebyyear['peratio'] = pricebyyear['Close']/pricebyyear['eps']
     
     return pricebyyear['peratio'].min()
