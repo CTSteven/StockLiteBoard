@@ -2,14 +2,11 @@
 
 {% block content %}
 {% load static %}
-<link rel="stylesheet" href="{% static "pages/dashboard.css" %}">
+
 <div class="bg-info" style="opacity:0.95">
-    <div class="text-center pb-3 pt-2 text-white">
-        <h2>Stock Investment Dashboard</h2>
-        <h6>( Warning, this POC application should not be used for real decision making, <a
-                href='https://github.com/CTSteven/InvestmentDashboard' target='MyGitHub'
-                style="color:white; text-decoration:underline ">go to GitHub for more
-                information</a> )</h6>
+    <div class="text-center pb-2 pt-2 text-white">
+        <h2>Stock Investment Dashboard</h2><div id ="warning-label">POC<br>Demo Site</div>
+        <h6>( Warning, this POC application may contain incorrect data and should not be used for real market trading )</h6>
     </div>
 
 </div>
@@ -35,113 +32,144 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12 col-lg-7 mt-4">
-            <h4 class="mb-3"><i class="fas fa-cubes text-info"></i><span class="ml-2"
-                    id="investment-suggestion-title">GOOG,
-                    Predicting Future Value</span>
-                <span style='font-size:1.2rem' class="text-secondary">( after 2 years )</span></h4>
-            <div class="row">
+            <div class="rounded-lg shadow-sm p-2 bg-light">
+                <h4 class="mb-3"><i class="fas fa-cubes text-info"></i><span class="ml-2"
+                        id="investment-suggestion-title">GOOG,
+                        Predicting Future Value</span>
+                    <span style='font-size:1.2rem' class="text-secondary">( after 2 years )</span></h4>
+                <div class="row">
 
-                <div class="col-sm-6 col-12">
-                    <table class="table bg-white table-borderless table-striped text-right"
-                        id='expected-future-price-table-1'>
-                        <tbody>
-                            <tr>
-                                <th scope="col" class="text-nowrap" style="width:55%" data-toggle="tooltip" data-placement="top" title="Annual growth of EPS, base on  1st and last year's EPS of 5 years period. ">Annual Growth Rate</th>
-                                <td id="annual-growth-rate" class="text-monospace" style="width:45%"></td>
-                            </tr>
-                            <tr>
-                                <th scope="col">Last EPS</th>
-                                <td id='last-eps' class="text-monospace"></td>
-                            </tr>
-                            <tr>
-                                <th scope="col"  data-toggle="tooltip" data-placement="top" title="Base on Last EPS & Annual Growth Rate.">Future EPS</th>
-                                <td id='future-eps' class="text-monospace"></td>
-                            </tr>
-                            <tr>
-                                <th scope="col" data-toggle="tooltip" data-placement="top" title="Minimum PE Ration of 5 years period">PE Ration</th>
-                                <td id='pe-ratio' class="text-monospace"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    
-                </div>
-                <div class="col-sm-6 col-12">
-                    <table class="table bg-white table-borderless table-striped text-right"
-                        id='expected-future-price-table-2'>
-                        <tbody>
-                            <tr>
-                                <th scope="col" style="width:55%"  data-toggle="tooltip" data-placement="top" title="Future * PE Ratio ">Future Value</th>
-                                <td id='FV' class="text-monospace" style="width:45%"></td>
-                            </tr>
-                            <tr>
-                                <th scope="col" data-toggle="tooltip" data-placement="top" title=" Base on  Future Value & Discount Rate." >Present Value</th>
-                                <td id='PV' class="text-monospace"></td>
-                            </tr>
-                            <tr>
-                                <th scope="col" data-toggle="tooltip" data-placement="top" title="Present Value * ( 1 - Margin Error)  ">Margin Price</th>
-                                <td id='margin-price' class="text-monospace"></td>
-                            </tr>
-                            <tr>
-                                <th scope="col"data-toggle="tooltip" data-placement="top" title="Stock's latest price. ">Latest Price</th>
-                                <td id='last-price' class="text-monospace"></td>
-                            </tr>
-                            <tr data-toggle="tooltip" data-placement="top" title="Warning , Don't use this suggestion to make decision in real marking !">
-                                <th scope="col" class=" text-center text-white bg-info rounded-left ">Suggestion</th>
-                                <td id='suggestion' class=" font-weight-bold bg-warning text-center rounded-right"
-                                   ></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="col-sm-6 col-12">
+                        <table class="table bg-white table-borderless table-striped text-right"
+                            id='expected-future-price-table-1'>
+                            <tbody>
+                                <tr>
+                                    <th scope="col" class="text-nowrap" style="width:55%" data-toggle="tooltip"
+                                        data-placement="top"
+                                        title="Annual growth of EPS, base on  1st and last year's EPS of 5 years period. ">
+                                        Annual Growth Rate</th>
+                                    <td id="annual-growth-rate" class="text-monospace" style="width:45%"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="col">Last EPS</th>
+                                    <td id='last-eps' class="text-monospace"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="col" data-toggle="tooltip" data-placement="top"
+                                        title="Base on Last EPS & Annual Growth Rate.">Future EPS</th>
+                                    <td id='future-eps' class="text-monospace"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="col" data-toggle="tooltip" data-placement="top"
+                                        title="Minimum PE Ration of 5 years period">PE Ration</th>
+                                    <td id='pe-ratio' class="text-monospace"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div id="price-compare-slider" ></div>
+                    </div>
+                    <div class="col-sm-6 col-12">
+                        <table class="table bg-white table-borderless table-striped text-right"
+                            id='expected-future-price-table-2'>
+                            <tbody>
+                                <tr>
+                                    <th scope="col" style="width:55%" data-toggle="tooltip" data-placement="top"
+                                        title="Future * PE Ratio ">Future Value</th>
+                                    <td id='FV' class="text-monospace" style="width:45%"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="col" data-toggle="tooltip" data-placement="top"
+                                        title=" Base on  Future Value & Discount Rate.">Present Value</th>
+                                    <td id='PV' class="text-monospace"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="col" data-toggle="tooltip" data-placement="top"
+                                        title="Present Value * ( 1 - Margin Error)  ">Margin Price</th>
+                                    <td id='margin-price' class="text-monospace"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="col" data-toggle="tooltip" data-placement="top"
+                                        title="Stock's latest price. ">Latest Price</th>
+                                    <td id='last-price' class="text-monospace"></td>
+                                </tr>
+                                <tr data-toggle="tooltip" data-placement="top"
+                                    title="Warning , Don't use this suggestion to make decision in real market !">
+                                    <th scope="col" class=" text-center text-white bg-info rounded-left ">Suggestion
+                                    </th>
+                                    <td id='suggestion' class=" font-weight-bold bg-warning text-center rounded-right">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-       <div class="col-12 col-lg-5 mt-4">
-            <h4 class="mb-2"><i class="fas fa-sliders-h text-info"></i><span class="ml-2">Future Value Factors</span>
-            </h4>
-            <form>
-                <div class="col-12">
-                    <div class="form-group row ">
-                        <label for="select-discount" class='col-sm-6 col-form-label'>Discount Rate (%) &nbsp;<a target='YCHARTS' class="text-success" href="https://ycharts.com/indicators/us_discount_rate" data-toggle="tooltip" data-placement="top" title="Have a look about Discount Rate suggestion at YCHARTS web site ."><i class="fas fa-info-circle"></i></a></label>
-                        <div class="col-sm-6">
-                            <select class="form-control" id="select-discount">
-                                {% for discount in discount_range %}
-                                <option value='{{ discount }}' {% if discount == "2.5" %}selected{% endif %}>{{ discount }}
-                                </option>
-                                {% endfor %}
-                            </select>
+        <div class="col-12 col-lg-5 mt-4">
+            <div class="rounded-lg shadow-sm bg-light p-2">
+                <h4 class="mb-2"><i class="fas fa-sliders-h text-info"></i><span class="ml-2">Future Value
+                        Factors</span>
+                </h4>
+                <form>
+                    <div class="col-12">
+                        <div class="form-group row ">
+                            <label for="select-discount" class='col-6 col-form-label'>Discount Rate (%) &nbsp;<a
+                                    target='YCHARTS' class="text-success"
+                                    href="https://ycharts.com/indicators/us_discount_rate" data-toggle="tooltip"
+                                    data-placement="top"
+                                    title="Have a look about Discount Rate suggestion at YCHARTS web site ."><i
+                                        class="fas fa-info-circle"></i></a></label>
+                            <label id="select-discount-value" for="select-margin"
+                                class='col-6 col-form-label'>2.5</label>
+                            <div class="col-12 mt-4">
+                                <input id="select-discount" style="display:none" type="text" data-provide="slider"
+                                    data-slider-min="0.0" data-slider-max="10.0" data-slider-step="0.5"
+                                    data-slider-value="2.5" data-slider-tooltip="show" />
+                                <div style="width:100%">
+                                    <span style="float:left">0.0</span>
+                                    <span style="float:right">10.0</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-12">
-                    <div class="form-group row">
-                        <label for="select-margin" class='col-sm-6 col-form-label' data-toggle="tooltip" data-placement="top" title="Choose a prediction margin range.">Prediction Margin</label>
-                        <div class="col-sm-6">
-                            <select class="form-control" id="select-margin">
-                                {% for margin in margin_range %}
-                                <option value='{{ margin }}' {% if margin == "0.15" %}selected{% endif %}> {{ margin }}
-                                </option>
-                                {% endfor %}
-                            </select>
+                    <div class="col-12">
+                        <div class="form-group row" style="padding-bottom:11px">
+                            <label for="select-margin" class='col-6 col-form-label' data-toggle="tooltip"
+                                data-placement="top" title="Choose a prediction margin range.">Prediction Margin</label>
+                            <label id="select-margin-value" for="select-margin"
+                                class='col-6 col-form-label'>0.15</label>
+                            <div class="col-12 mt-4">
+                                <input id="select-margin" style="display:none" type="text" data-provide="slider"
+                                    data-slider-min="0.00" data-slider-max="1.00" data-slider-step="0.05"
+                                    data-slider-value="0.15" data-slider-tooltip="show" />
+                                <div style="width:100%">
+                                    <span style="float:left">0.0</span>
+                                    <span style="float:right">1.0</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
         <div class='col-lg-7 col-12 mt-4'>
-            <div id="eps-chart-container" class="chart" style="max-height: 400px; height: 26vh;"></div>
+            <div id="eps-chart-container" class="chart" style="max-height: 400px; height: 280px;"></div>
         </div>
         <div class="col-lg-5 col-12 mt-4">
-            <h4 class="mb-3"><i class="fas fa-clipboard-list text-info"></i><span class="ml-2"
-                    id="financial-warning-list-title">GOOG, Wrrning List</span></h4>
-            <table class="table table-hover table-striped table-borderless bg-white" id='financial-warning-list-table'>
-                <thead>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td></td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="rounded bg-light shadow-sm p-2" style="min-height:280px">
+                <h4 class="mb-2"><i class="fas fa-clipboard-list text-info"></i><span class="ml-2"
+                        id="financial-warning-list-title">GOOG, Wrrning List</span></h4>
+                <table class="table table-hover table-striped table-borderless bg-white"
+                    id='financial-warning-list-table'>
+                    <thead>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -149,41 +177,47 @@
 <div class="container-fluid">
     <div class="row  mt-5">
         <div class='col-12'>
-            <h4 class="mb-3"><i class="fas fa-chart-line text-info"></i><span class="ml-2" id="stock-chart-title">GOOG,
-                    Stock
-                    Price History <a target="YahooFinancial" class="text-success ml-3"
-                        style="font-size:1rem; text-decoration:underline"
-                        href="https://finance.yahoo.com/quote/GOOG/">Yahoo Financial</a></span></h4>
-            <div id="stock-chart-container" class="chart" style="max-height: 800px; height: 70vh;"></div>
+            <div class="rounded-lg shadow-sm p-2 bg-light clearfix">
+                <h4 class="mb-3"><i class="fas fa-chart-line text-info"></i><span class="ml-2"
+                        id="stock-chart-title">GOOG,
+                        Stock
+                        Price History <a target="YahooFinancial" class="text-success ml-3"
+                            style="font-size:1rem; text-decoration:underline"
+                            href="https://finance.yahoo.com/quote/GOOG/">Yahoo Financial</a></span></h4>
+                <div id="stock-chart-container" class="chart" style="max-height: 800px; height: 70vh;"></div>
+            </div>
         </div>
     </div>
     <div class="row mt-5">
         <div class="col-12">
-            <h4 class="mb-3"><i class="fas fa-chart-bar text-info"></i><span class="ml-2"
-                    id="financial-info-title">GOOG,
-                    Financial Information <a target="MarketWatch" class="text-success ml-3"
-                        style="font-size:1rem; text-decoration:underline"
-                        href="https://www.marketwatch.com/investing/stock/GOOG/financials">MarketWatch</a></span></h4>
-            <div class="table-responsive">
-                <table class="table table-hover bg-white text-center" id='financial-report-table'>
-                    <thead class=" bg-info text-white">
-                        <tr>
-                            <th scope="col" class=" align-middle">Year</th>
-                            <th scope="col" class=" align-middle">EPS</th>
-                            <th scope="col" class=" align-middle">EPS Growth</th>
-                            <th scope="col" class=" align-middle">Net Income</th>
-                            <th scope="col" class=" align-middle">Shareholder Equity</th>
-                            <th scope="col" class=" align-middle">ROA</th>
-                            <th scope="col" class=" align-middle">Longterm Debt</th>
-                            <th scope="col" class=" align-middle">Interest Expense</th>
-                            <th scope="col" class=" align-middle">EBITDA</th>
-                            <th scope="col" class=" align-middle">ROE</th>
-                            <th scope="col" class=" align-middle">Interest Coverage Ratio</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
+            <div class="rounded bg-light shadow-sm p-2">
+                <h4 class="mb-3"><i class="fas fa-chart-bar text-info"></i><span class="ml-2"
+                        id="financial-info-title">GOOG,
+                        Financial Information <a target="MarketWatch" class="text-success ml-3"
+                            style="font-size:1rem; text-decoration:underline"
+                            href="https://www.marketwatch.com/investing/stock/GOOG/financials">MarketWatch</a></span>
+                </h4>
+                <div class="table-responsive">
+                    <table class="table table-hover bg-white text-center" id='financial-report-table'>
+                        <thead class=" bg-info text-white">
+                            <tr>
+                                <th scope="col" class=" align-middle">Year</th>
+                                <th scope="col" class=" align-middle">EPS</th>
+                                <th scope="col" class=" align-middle">EPS Growth</th>
+                                <th scope="col" class=" align-middle">Net Income</th>
+                                <th scope="col" class=" align-middle">Shareholder Equity</th>
+                                <th scope="col" class=" align-middle">ROA</th>
+                                <th scope="col" class=" align-middle">Longterm Debt</th>
+                                <th scope="col" class=" align-middle">Interest Expense</th>
+                                <th scope="col" class=" align-middle">EBITDA</th>
+                                <th scope="col" class=" align-middle">ROE</th>
+                                <th scope="col" class=" align-middle">Interest Coverage Ratio</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -201,8 +235,6 @@
 <script src="https://code.highcharts.com/stock/modules/price-indicator.js"></script>
 <script src="https://code.highcharts.com/stock/modules/full-screen.js"></script>
 <script src="https://code.highcharts.com/stock/modules/stock-tools.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/bootstrap-slider.min.js" integrity="sha512-f0VlzJbcEB6KiW8ZVtL+5HWPDyW1+nJEjguZ5IVnSQkvZbwBt2RfCBY0CBO1PsMAqxxrG4Di6TfsCPP3ZRwKpA==" crossorigin="anonymous"></script>
 
 <script src="{% static "pages/dashboard.js" %}"></script>
 

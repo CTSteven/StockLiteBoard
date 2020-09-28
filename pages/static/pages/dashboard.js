@@ -1,17 +1,64 @@
 
 var stockChart = null;
 var epsChart = null;
+var priceCompareSlider = null;
+
+$(function () {
 
 
-$(function() {
+    $('[data-toggle="tooltip"]').tooltip();
+
+    $("#select-discount").slider({
+        tooltip: 'always'
+    });
+
+    $("#select-margin").slider({
+        tooltip: 'always'
+    });
+
+    $('#select-discount').on('slideStop', function (e) {
+        var ticker;
+        ticker = $('#select-stock').val();
+        if ($('#select-discount-value').text() == e.value)
+            return false;
+        $('#select-discount-value').text(e.value);
+        updateInvestmentSuggestion(ticker);
+        $('#PV').fadeOut(500).fadeIn(500);
+        $('#margin-price').fadeOut(500).fadeIn(500);
+    });
+
+    $('#select-margin').on('slideStop', function (e) {
+        var ticker;
+        ticker = $('#select-stock').val();
+        if ($('#select-margin-value').text() == e.value)
+            return false;
+        $('#select-margin-value').text(e.value);
+        updateInvestmentSuggestion(ticker);
+        $('#margin-price').fadeOut(500).fadeIn(500);
+    });
+
+    $("#price-compare-slider").ionRangeSlider({
+        type: "double",
+        min: 0,
+        max: 10,
+        from: 2,
+        to: 8,
+        grid: true,
+        grid_snap: true,
+        from_fixed: true,  // fix position of FROM handle
+        to_fixed: false     // fix position of TO handle
+    });
+
+
     updateFinancialReport('GOOG');
     updateInvestmentSuggestion('GOOG');
+
 });
 
-$('#select-stock').change(function() {
+$('#select-stock').change(function () {
     var ticker;
     ticker = $(this).val();
-    Highcharts.getJSON('/pages/stockPriceHistory?ticker=' + ticker, function(data) {
+    Highcharts.getJSON('/pages/stockPriceHistory?ticker=' + ticker, function (data) {
         // split the data set into ohlc and volume
         ohlc = [],
             volume = [],
@@ -47,40 +94,28 @@ $('#select-stock').change(function() {
             '<a target="YahooFinancial" class="text-success ml-3" style="font-size:1rem; text-decoration:underline" href="https://finance.yahoo.com/quote/' +
             ticker + '/">Yahoo Financial</a>';
         $('#stock-chart-title').html(ticker + ', Stock Price History' + yahooFinancial_url);
+        $('#stock-chart-title').fadeOut(500).fadeIn(500);
         updateFinancialReport(ticker);
         updateInvestmentSuggestion(ticker);
     })
-});
-
-
-$('#select-discount').change(function() {
-    var ticker;
-    ticker = $('#select-stock').val();
-    updateInvestmentSuggestion(ticker);
-});
-
-$('#select-margin').change(function() {
-    var ticker;
-    ticker = $('#select-stock').val();
-    updateInvestmentSuggestion(ticker);
 });
 
 function updateInvestmentSuggestion(ticker) {
     var discount;
     var margin;
     discount = $('#select-discount').val();
-    margin = $('#select-margin').val();
+    margin = $('#select-margin-value').text();
     post_data = JSON.stringify({
         'ticker': ticker,
-        'discount':  parseFloat(discount) / 100.0,
-        'margin' : parseFloat(margin)
+        'discount': parseFloat(discount) / 100.0,
+        'margin': parseFloat(margin)
     })
     $.ajax({
         type: "POST",
         url: "/pages/investmentSuggestion",
         dataType: 'json',
         data: post_data,
-        success: function(data) {
+        success: function (data) {
             obj = data[0];
             $('#annual-growth-rate').text(obj.annualgrowthrate);
             $('#last-eps').text(obj.lasteps);
@@ -92,8 +127,9 @@ function updateInvestmentSuggestion(ticker) {
             $('#last-price').text(obj.lastprice);
             $('#suggestion').text(obj.suggestion);
             $('#investment-suggestion-title').text(ticker + ', Predicting Future Value');
+            $('#investment-suggestion-title').fadeOut(500).fadeIn(500);
         },
-        error: function(request, status, error) {
+        error: function (request, status, error) {
             console.log("ajax call went wrong:" + request.responseText);
         }
     })
@@ -108,13 +144,13 @@ function updateFinancialReport(ticker) {
         url: "/pages/financialReport",
         dataType: 'json',
         data: post_data,
-        success: function(data) {
+        success: function (data) {
             // update financial report
             tbody = $('#financial-report-table > tbody');
             tbody.empty();
             row_list = "";
             financial_report = JSON.parse(data.financial_report);
-            $.each(financial_report, function(idx, obj) {
+            $.each(financial_report, function (idx, obj) {
                 row = "<tr><td>" +
                     obj.year + "</td><td>" +
                     obj.eps + "</td><td>" +
@@ -134,36 +170,38 @@ function updateFinancialReport(ticker) {
                 '<a target="MarketWatch" class="text-success ml-3" style="font-size:1rem; text-decoration:underline" href="https://www.marketwatch.com/investing/stock/' +
                 ticker + '/financials">MarketWatch</a>';
             $('#financial-info-title').html(ticker + ', Financial Information' + marketWatch_url);
+            $('#financial-info-title').fadeOut(500).fadeIn(500);
             // update financial warning list
             tbody = $('#financial-warning-list-table > tbody');
             tbody.empty();
             row_list = "";
             financial_warning_list = data.financial_warning_list;
-            $.each(financial_warning_list, function(idx, value) {
+            $.each(financial_warning_list, function (idx, value) {
                 row = "<tr><td>" + value + "</td></tr>";
                 row_list = row_list + row;
             });
             tbody.append(row_list);
             $('#financial-warning-list-title').text(ticker + ', Warning List');
+            $('#financial-warning-list-title').fadeOut(500).fadeIn(500);
             // update EPS chart
             years = [];
             eps_list = [];
             stock_price_list = [];
             yearly_stock_price = JSON.parse(data.yearly_stock_price);
-            $.each(financial_report, function(idx, obj) {
+            $.each(financial_report, function (idx, obj) {
                 years.push(obj.year);
                 eps_list.push(parseFloat(obj.eps));
                 find_stock_price = false;
-                $.each(yearly_stock_price, function(idx, stock) {
-                   if (stock.year == obj.year){
+                $.each(yearly_stock_price, function (idx, stock) {
+                    if (stock.year == obj.year) {
                         stock_price_list.push(stock.meanprice);
                         find_stock_price = true;
                         return false;
-                   }
+                    }
 
                 });
-                if ( ! find_stock_price){
-                       stock_price_list.push('')
+                if (!find_stock_price) {
+                    stock_price_list.push('')
                 }
             });
             //console.log(yearly_stock_price);
@@ -183,12 +221,11 @@ function updateFinancialReport(ticker) {
             }, false);
             epsChart.redraw();
         },
-        error: function(request, status, error) {
+        error: function (request, status, error) {
             console.log("ajax call went wrong:" + request.responseText);
         }
     })
 }
-
 
 
 //stockPriceHistory(request,ticker,start_date,end_date=dt.now()) 
@@ -216,7 +253,7 @@ Highcharts.getJSON('/pages/stockPriceHistory?ticker=GOOG', function (data) {
         ]);
     }
 
-    stockChart= Highcharts.stockChart('stock-chart-container', {
+    stockChart = Highcharts.stockChart('stock-chart-container', {
         yAxis: [{
             labels: {
                 align: 'left'
@@ -267,13 +304,13 @@ Highcharts.getJSON('/pages/stockPriceHistory?ticker=GOOG', function (data) {
                 color: 'lightgray',
                 width: 1
             }],
-        }       
+        }
         ],
         plotOptions: {
             candlestick: {
                 color: '#6ba887',
                 lineColor: '#6ba887',
-                upLineColor: '#db5f5f', 
+                upLineColor: '#db5f5f',
                 upColor: '#db5f5f'
             }
 
@@ -286,7 +323,7 @@ Highcharts.getJSON('/pages/stockPriceHistory?ticker=GOOG', function (data) {
         }, {
             type: 'sma',
             linkedTo: 'stock-data',
-            color:'#dd6666',
+            color: '#dd6666',
             params: {
                 period: 5
             },
@@ -305,14 +342,14 @@ Highcharts.getJSON('/pages/stockPriceHistory?ticker=GOOG', function (data) {
         }, {
             type: 'sma',
             linkedTo: 'stock-data',
-            color:'orange',
+            color: 'orange',
             params: {
                 period: 60
             },
             marker: {
                 enabled: false
             }
-        },{
+        }, {
             type: 'column',
             id: 'aapl-volume',
             name: 'AAPL Volume',
@@ -323,7 +360,7 @@ Highcharts.getJSON('/pages/stockPriceHistory?ticker=GOOG', function (data) {
         {
             type: 'macd',
             yAxis: 2,
-            color:'orange',
+            color: 'orange',
             linkedTo: 'stock-data'
         },
         {
@@ -334,7 +371,7 @@ Highcharts.getJSON('/pages/stockPriceHistory?ticker=GOOG', function (data) {
                 enabledThreshold: 5
             }
         }
-    ],
+        ],
         responsive: {
             rules: [{
                 condition: {
@@ -356,8 +393,8 @@ epsChart = Highcharts.chart('eps-chart-container', {
     },
     title: {
         text: 'EPS',
-        style:{
-            fontWeight:'500'
+        style: {
+            fontWeight: '500'
         }
     },
     subtitle: {
@@ -411,7 +448,7 @@ epsChart = Highcharts.chart('eps-chart-container', {
         name: 'EPS',
         yAxis: 0,
         data: []
-    },{
+    }, {
         name: 'Stock mean price',
         yAxis: 1,
         data: [],
@@ -421,10 +458,11 @@ epsChart = Highcharts.chart('eps-chart-container', {
 
 Highcharts.setOptions({
     lang: {
-      thousandsSep: ','
+        thousandsSep: ','
     }
 });
 
-$(function () {
-    $('[data-toggle="tooltip"]').tooltip()
-  })
+
+
+
+

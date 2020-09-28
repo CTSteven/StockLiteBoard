@@ -1,0 +1,36 @@
+
+body {
+    background-color: #f1f1f1;
+}
+
+#warning-label {
+    line-height: 1rem;
+    float: left;
+    font-weight: 600;
+    position: absolute;
+    left: -70px;
+    top: 5px;
+    transform: rotate(-40deg);
+    font-size: 0.9rem;
+    display: block;
+    background-color: rgb(236, 170, 27);
+    width: 200px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+
+.slider {
+    width: 100% !important;
+}
+
+.slider-selection {
+	background: #59c4f1 !important;
+}
+
+.slider .tooltip {
+    line-height: 1.2 !important;
+}
+
+.slider .tooltip.bs-tooltip-top {
+    margin-top: -38px !important;
+}

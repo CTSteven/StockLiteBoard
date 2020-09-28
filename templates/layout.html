@@ -1,6 +1,6 @@
 <!doctype html>
 <html>
-
+{% load static %}
 <head profile="http://www.w3.org/2005/10/profile">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -11,8 +11,13 @@
   <link rel="stylesheet" type="text/css" href="https://code.highcharts.com/css/stocktools/gui.css">
   <link rel="stylesheet" type="text/css" href="https://code.highcharts.com/css/annotations/popup.css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css">
+  <link rel="stylesheet" href="{% static 'css/bootstrap-slider.min.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/ion.rangeSlider.min.css' %}" />  
+  <link rel="stylesheet" href="{% static "pages/dashboard.css" %}">
+
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"
     integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+
   <!--script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
     integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
   </script-->
@@ -22,7 +27,7 @@
     href="{% url 'about' %}">About</a>
 </header-->
 
-<body class="bg-light">
+<body>
 
   {% block content %}
 
@@ -32,7 +37,8 @@
 
     <p class="text-monospace">
       <h5 class="pr-3">By Steven K &nbsp; &nbsp; <a href='https://github.com/CTSteven/InvestmentDashboard'
-          target='MyGitHub' style="color:black;" aria-label="GitHub"><i class="fab fa-github"></i></a></h5>
+          target='MyGitHub' style="color:black;" aria-label="GitHub" data-toggle="tooltip" data-placement="top"
+                                    title="GitHub"><i class="fab fa-github"></i></a></h5>
       <div class="text-center">
         <span>@ 2020 All Rights Reserved</span>
       </div>
@@ -47,6 +53,9 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
     integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
   </script>
+
+  <script src="{% static 'js/bootstrap-slider.min.js' %}" ></script>
+  <script src="{% static 'js/ion.rangeSlider.min.js' %}" ></script>
 </body>
 
 </html>
