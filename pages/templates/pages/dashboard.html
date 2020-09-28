@@ -78,14 +78,14 @@
                                 <td id='PV' class="text-monospace"></td>
                             </tr>
                             <tr>
-                                <th scope="col" data-toggle="tooltip" data-placement="top" title="Present * ( 1 - Margin Error)  ">Margin Price</th>
+                                <th scope="col" data-toggle="tooltip" data-placement="top" title="Present Value * ( 1 - Margin Error)  ">Margin Price</th>
                                 <td id='margin-price' class="text-monospace"></td>
                             </tr>
                             <tr>
                                 <th scope="col"data-toggle="tooltip" data-placement="top" title="Stock's latest price. ">Latest Price</th>
                                 <td id='last-price' class="text-monospace"></td>
                             </tr>
-                            <tr data-toggle="tooltip" data-placement="top" title="Don't use this to make real decision !">
+                            <tr data-toggle="tooltip" data-placement="top" title="Warning , Don't use this suggestion to make decision in real marking !">
                                 <th scope="col" class=" text-center text-white bg-info rounded-left ">Suggestion</th>
                                 <td id='suggestion' class=" font-weight-bold bg-warning text-center rounded-right"
                                    ></td>
@@ -101,11 +101,11 @@
             <form>
                 <div class="col-12">
                     <div class="form-group row ">
-                        <label for="select-discount" class='col-sm-6 col-form-label'>Discount Rate (%)</label>
+                        <label for="select-discount" class='col-sm-6 col-form-label'>Discount Rate (%) &nbsp;<a target='YCHARTS' class="text-success" href="https://ycharts.com/indicators/us_discount_rate" data-toggle="tooltip" data-placement="top" title="Have a look about Discount Rate suggestion at YCHARTS web site ."><i class="fas fa-info-circle"></i></a></label>
                         <div class="col-sm-6">
                             <select class="form-control" id="select-discount">
                                 {% for discount in discount_range %}
-                                <option value='{{ discount }}' {% if discount == "5.0" %}selected{% endif %}>{{ discount }}
+                                <option value='{{ discount }}' {% if discount == "2.5" %}selected{% endif %}>{{ discount }}
                                 </option>
                                 {% endfor %}
                             </select>
@@ -114,7 +114,7 @@
                 </div>
                 <div class="col-12">
                     <div class="form-group row">
-                        <label for="select-margin" class='col-sm-6 col-form-label' data-toggle="tooltip" data-placement="top" title="Choose a prediction error range.">Margin of Error</label>
+                        <label for="select-margin" class='col-sm-6 col-form-label' data-toggle="tooltip" data-placement="top" title="Choose a prediction margin range.">Prediction Margin</label>
                         <div class="col-sm-6">
                             <select class="form-control" id="select-margin">
                                 {% for margin in margin_range %}
@@ -153,7 +153,7 @@
                     Stock
                     Price History <a target="YahooFinancial" class="text-success ml-3"
                         style="font-size:1rem; text-decoration:underline"
-                        href="https://finance.yahoo.com/quote/GOOG/">(Yahoo Financial)</a></span></h4>
+                        href="https://finance.yahoo.com/quote/GOOG/">Yahoo Financial</a></span></h4>
             <div id="stock-chart-container" class="chart" style="max-height: 800px; height: 70vh;"></div>
         </div>
     </div>
@@ -163,7 +163,7 @@
                     id="financial-info-title">GOOG,
                     Financial Information <a target="MarketWatch" class="text-success ml-3"
                         style="font-size:1rem; text-decoration:underline"
-                        href="https://www.marketwatch.com/investing/stock/GOOG/financials">(MarketWatch)</a></span></h4>
+                        href="https://www.marketwatch.com/investing/stock/GOOG/financials">MarketWatch</a></span></h4>
             <div class="table-responsive">
                 <table class="table table-hover bg-white text-center" id='financial-report-table'>
                     <thead class=" bg-info text-white">
@@ -201,6 +201,8 @@
 <script src="https://code.highcharts.com/stock/modules/price-indicator.js"></script>
 <script src="https://code.highcharts.com/stock/modules/full-screen.js"></script>
 <script src="https://code.highcharts.com/stock/modules/stock-tools.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/bootstrap-slider.min.js" integrity="sha512-f0VlzJbcEB6KiW8ZVtL+5HWPDyW1+nJEjguZ5IVnSQkvZbwBt2RfCBY0CBO1PsMAqxxrG4Di6TfsCPP3ZRwKpA==" crossorigin="anonymous"></script>
 
 <script src="{% static "pages/dashboard.js" %}"></script>
 

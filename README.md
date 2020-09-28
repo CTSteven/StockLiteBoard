@@ -48,3 +48,10 @@ Main process :
 
 
 You can refer [Vincent Tatan's blog ](https://towardsdatascience.com/value-investing-dashboard-with-python-beautiful-soup-and-dash-python-43002f6a97ca) to learn complete explanation.
+
+
+How to run on gunicorn :
+When you follow comment from web search , there is no myproject.wsgi file in Django default project template. 
+
+pip install qunicorn
+pip install dj-static  # not working for solving static files not found problem

@@ -45,7 +45,7 @@ $('#select-stock').change(function() {
         stockChart.redraw();
         yahooFinancial_url =
             '<a target="YahooFinancial" class="text-success ml-3" style="font-size:1rem; text-decoration:underline" href="https://finance.yahoo.com/quote/' +
-            ticker + '/">(Yahoo Financial)</a>';
+            ticker + '/">Yahoo Financial</a>';
         $('#stock-chart-title').html(ticker + ', Stock Price History' + yahooFinancial_url);
         updateFinancialReport(ticker);
         updateInvestmentSuggestion(ticker);
@@ -132,7 +132,7 @@ function updateFinancialReport(ticker) {
             tbody.append(row_list);
             marketWatch_url =
                 '<a target="MarketWatch" class="text-success ml-3" style="font-size:1rem; text-decoration:underline" href="https://www.marketwatch.com/investing/stock/' +
-                ticker + '/financials">(MarketWatch)</a>';
+                ticker + '/financials">MarketWatch</a>';
             $('#financial-info-title').html(ticker + ', Financial Information' + marketWatch_url);
             // update financial warning list
             tbody = $('#financial-warning-list-table > tbody');
@@ -166,7 +166,7 @@ function updateFinancialReport(ticker) {
                        stock_price_list.push('')
                 }
             });
-            console.log(yearly_stock_price);
+            //console.log(yearly_stock_price);
             epsChart.setTitle({
                 text: ticker + ', EPS & Stock mean price'
             });

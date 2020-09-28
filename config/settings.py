@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
 from pathlib import Path
+from django.core.management.utils import get_random_secret_key
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,14 +22,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'y8%wymc3z!i$wq19sj$_t5e!+&gl&3+49ylps^oc%09hs6kgf)'
+SECRET_KEY = os.environ.get("SECRET_KEY",default=get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = int(os.environ.get("DEBUG", default=1))
 
 ALLOWED_HOSTS = ['*']
 
-DJANGO_LOG_LEVEL = 'INFO'
+DJANGO_LOG_LEVEL = os.environ.get("DEBUG", default="INFO")
 
 LOGGING = {
     'version': 1,
@@ -160,18 +161,52 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_URL = '/static/'
+
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000"
 ]
 
-STATICFILES_DIRS = [
-    BASE_DIR / "static"
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/3.1/howto/static-files/
+# If got static files not found error , read following document
+# https://docs.djangoproject.com/en/3.1/howto/static-files/deployment/
+# 
+#
+# If run gunicorn , it search static files path of STATIC_ROOT setting
+# In following sample , it's BASE_DIR/staticfiles
+# First, Run :  python manage.py collectstatic , this command copy static files of whole project to staticfiles folder
+# for example, 
+# 1. add following  static files settings
+# 2. install gunicorn and dj-static package
+# 3. change wsgi.py
+#       ...
+#       from dj_static import Cling
+#       ...
+#       application = Cling(get_wsgi_application())
+#
+# 4. run python manage.py collectstatic , copy files to staticfiles folder
+# 5. run : gunicorn --bind 0.0.0.0:5000 config.wsgi:application
+# check every thing is ok !
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+STATIC_URL = '/static/'
+
+# Extra places for collectstatic to find static files.
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
+
+# Without set this , default will find files in STATICFILES_DIRS
+"""
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 ]
+"""
+
 
 # In order to use Memcached in Mac , install memcached first: 
 # brew install memcached

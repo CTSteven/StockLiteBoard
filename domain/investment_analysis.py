@@ -90,8 +90,8 @@ def infer_reasonable_share_price(ticker, financialreportingdf, stockpricedf, dis
     dfprice['peratio'] = findMinimumPER(stockpricedf, financialreportingdf)
     # future stock price
     dfprice['FV'] = dfprice['futureeps'] * dfprice['peratio']
-    print('dfprice:\n',dfprice)
-    print('discountrate: %s' % discountrate)
+    #print('dfprice:\n',dfprice)
+    #print('discountrate: %s' % discountrate)
     dfprice['PV'] = abs(npf.pv(discountrate, years, 0, fv=dfprice['FV']))
     if dfprice['FV'].values[0] > 0:
         dfprice['marginprice'] = dfprice['PV']*(1-marginrate)
