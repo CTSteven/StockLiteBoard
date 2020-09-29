@@ -79,7 +79,7 @@ def investmentSuggestionView(request):
         return HttpResponse({err_msg}, content_type="application/json")
 
     suggestion = getInvestmentSuggestion(ticker, discount=discount, margin= margin )
-    json_data = suggestion.to_json(orient="records",date_format="epoch",double_precision=5)
+    json_data = suggestion.to_json(orient="records",date_format="epoch",double_precision=2)
     return HttpResponse(json_data, content_type="application/json")
 
 
@@ -98,7 +98,7 @@ def financialReportView(request):
     yearly_stock_price = yearly_stock_price[['year','meanprice']]
     #print(yearly_stock_price)
     financial_report_summary = {
-        'financial_report':financial_report.to_json(orient="records",date_format="epoch",double_precision=5),
+        'financial_report':financial_report.to_json(orient="records",date_format="epoch",double_precision=2),
         'financial_warning_list':financial_warning_list,
         'yearly_stock_price':yearly_stock_price.to_json(orient="records",double_precision=3),
         }

@@ -3,6 +3,7 @@ var stockChart = null;
 var epsChart = null;
 var priceCompareSlider = null;
 
+
 $(function () {
 
 
@@ -33,27 +34,84 @@ $(function () {
         if ($('#select-margin-value').text() == e.value)
             return false;
         $('#select-margin-value').text(e.value);
-        updateInvestmentSuggestion(ticker);
-        $('#margin-price').fadeOut(500).fadeIn(500);
+        var present_value = parseFloat($('#PV').text());
+        var margin_rate = parseFloat(e.value);
+        var price_margin = present_value * margin_rate;
+        var latest_price = parseFloat($('#latest-price').text());
+        $('#price-margin').html('&#x00B1; '+price_margin.toFixed(2));
+        $('#price-margin').fadeOut(500).fadeIn(500);
+        updatePriceCompareSlider(present_value,margin_rate,latest_price)
+        
     });
 
-    $("#price-compare-slider").ionRangeSlider({
+    priceCompareSlider = $("#price-compare-slider > .js-range-slider").ionRangeSlider({
         type: "double",
-        min: 0,
-        max: 10,
-        from: 2,
-        to: 8,
+        min: 1000,
+        max: 2000,
+        from: 1300,
+        to: 1700,
         grid: true,
-        grid_snap: true,
+        grid_snap: false,
         from_fixed: true,  // fix position of FROM handle
-        to_fixed: false     // fix position of TO handle
+        to_fixed: true,     // fix position of TO handle
+        to_shadow:false,
+        prettify_separator:",",
+        grid_num:6,
+        onStart: function(data){
+            var html='';
+            var left= priceConvertToPercent(0,1000,2000);
+            html +='<span id="latest-price-mark" style="left:'+left+'%">'+0+'<br>Latest Price</span>';
+            data.slider.append(html);
+        }
     });
-
 
     updateFinancialReport('GOOG');
     updateInvestmentSuggestion('GOOG');
-
 });
+
+function priceConvertToPercent(num, min, max){
+    return ( num - min) / (max - min) * 100;
+}
+
+function updatePriceCompareSlider(present_value,margin_rate,latest_price){
+    var margin_low = present_value * ( 1 - margin_rate);
+    var margin_heigh = present_value * ( 1 + margin_rate);
+    var half_range = 0;
+    if (margin_low < 0) {
+        margin_low = 0;
+    } 
+    if (latest_price < margin_low){
+        half_range =  ( present_value - latest_price ) * 1.25  ;
+    }
+    else if (latest_price > margin_heigh){
+        half_range =  ( latest_price - present_value ) * 1.25  ;
+    }
+    else {
+        half_range =  ( margin_heigh - present_value ) * 1.25  ;
+    }
+    var min = present_value - half_range;
+    var max = present_value + half_range;
+    var left= priceConvertToPercent(latest_price,min,max);
+    min = min.toFixed(0);
+    max = max.toFixed(0);
+    if (min < 0) min = 0;
+    margin_low = margin_low.toFixed(0);
+    margin_heigh = margin_heigh.toFixed(0);
+    latest_price = latest_price.toFixed(0);
+    priceCompareSlider.data('ionRangeSlider').update({
+        min: min,
+        max: max,
+        from: margin_low,
+        to: margin_heigh,
+        onUpdate: function(data){
+            var html='';
+            var left= priceConvertToPercent(latest_price,min,max);
+            html +='<span id="latest-price-mark" style="left:'+left+'%">'+latest_price+'<br>Latest Price</span>';
+            data.slider.append(html);
+        }
+    });
+    $('#expected-price-range').fadeOut(500).fadeIn(500);
+}
 
 $('#select-stock').change(function () {
     var ticker;
@@ -117,20 +175,24 @@ function updateInvestmentSuggestion(ticker) {
         data: post_data,
         success: function (data) {
             obj = data[0];
+            price_margin = parseFloat(obj.PV) * parseFloat(margin) ;
+            price_margin = price_margin.toFixed(2);
             $('#annual-growth-rate').text(obj.annualgrowthrate);
             $('#last-eps').text(obj.lasteps);
             $('#future-eps').text(obj.futureeps);
             $('#pe-ratio').text(obj.peratio);
             $('#FV').text(obj.FV);
             $('#PV').text(obj.PV);
-            $('#margin-price').text(obj.marginprice);
-            $('#last-price').text(obj.lastprice);
-            $('#suggestion').text(obj.suggestion);
+            $('#price-margin').html('&#x00B1; '+price_margin);
+            $('#latest-price').text(obj.lastprice);
+            //$('#suggestion').text(obj.suggestion);
             $('#investment-suggestion-title').text(ticker + ', Predicting Future Value');
             $('#investment-suggestion-title').fadeOut(500).fadeIn(500);
+            updatePriceCompareSlider(parseFloat(obj.PV),parseFloat(margin),parseFloat(obj.lastprice));
         },
         error: function (request, status, error) {
             console.log("ajax call went wrong:" + request.responseText);
+            alert("Error message :"+ request.responseText);
         }
     })
 }
@@ -223,6 +285,7 @@ function updateFinancialReport(ticker) {
         },
         error: function (request, status, error) {
             console.log("ajax call went wrong:" + request.responseText);
+            alert("Error message :"+ request.responseText);
         }
     })
 }

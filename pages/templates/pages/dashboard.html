@@ -5,8 +5,10 @@
 
 <div class="bg-info" style="opacity:0.95">
     <div class="text-center pb-2 pt-2 text-white">
-        <h2>Stock Investment Dashboard</h2><div id ="warning-label">POC<br>Demo Site</div>
-        <h6>( Warning, this POC application may contain incorrect data and should not be used for real market trading )</h6>
+        <h2>Stock Investment Dashboard</h2>
+        <div id="warning-label">POC<br>Demo Site</div>
+        <h6>( Warning, this POC application may contain incorrect data and should not be used for real market trading )
+        </h6>
     </div>
 
 </div>
@@ -66,7 +68,6 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <div id="price-compare-slider" ></div>
                     </div>
                     <div class="col-sm-6 col-12">
                         <table class="table bg-white table-borderless table-striped text-right"
@@ -83,24 +84,25 @@
                                     <td id='PV' class="text-monospace"></td>
                                 </tr>
                                 <tr>
-                                    <th scope="col" data-toggle="tooltip" data-placement="top"
-                                        title="Present Value * ( 1 - Margin Error)  ">Margin Price</th>
-                                    <td id='margin-price' class="text-monospace"></td>
+                                    <th scope="col" style="background-color:#f9da96" data-toggle="tooltip"
+                                        data-placement="top"
+                                        title="Price Margin = Present Value * ( 1 - Prediction Margin ) ; Expected Price = Present Value +/- Price Margin . ">
+                                        Price Margin</th>
+                                    <td id='price-margin' class="text-monospace"></td>
                                 </tr>
                                 <tr>
-                                    <th scope="col" data-toggle="tooltip" data-placement="top"
-                                        title="Stock's latest price. ">Latest Price</th>
-                                    <td id='last-price' class="text-monospace"></td>
+                                    <th scope="col" style="background-color:#75b4f9;" data-toggle="tooltip"
+                                        data-placement="top" title="Stock's latest price.">Latest Price</th>
+                                    <td id='latest-price' class="text-monospace"></td>
                                 </tr>
-                                <tr data-toggle="tooltip" data-placement="top"
-                                    title="Warning , Don't use this suggestion to make decision in real market !">
-                                    <th scope="col" class=" text-center text-white bg-info rounded-left ">Suggestion
-                                    </th>
-                                    <td id='suggestion' class=" font-weight-bold bg-warning text-center rounded-right">
-                                    </td>
-                                </tr>
+
                             </tbody>
                         </table>
+
+                    </div>
+                    <div id="price-compare-slider" class="col-12 pr-3 pb-3 pl-3">
+                        <h6 class="text-center font-weight-bold" id="expected-price-range">Expected Price Range</h4>
+                        <input class="js-range-slider"></input>
                     </div>
                 </div>
             </div>
@@ -133,7 +135,7 @@
                         </div>
                     </div>
                     <div class="col-12">
-                        <div class="form-group row" style="padding-bottom:11px">
+                        <div class="form-group row">
                             <label for="select-margin" class='col-6 col-form-label' data-toggle="tooltip"
                                 data-placement="top" title="Choose a prediction margin range.">Prediction Margin</label>
                             <label id="select-margin-value" for="select-margin"
@@ -175,7 +177,7 @@
 
 </div>
 <div class="container-fluid">
-    <div class="row  mt-5">
+    <div class="row  mt-4">
         <div class='col-12'>
             <div class="rounded-lg shadow-sm p-2 bg-light clearfix">
                 <h4 class="mb-3"><i class="fas fa-chart-line text-info"></i><span class="ml-2"
@@ -188,7 +190,7 @@
             </div>
         </div>
     </div>
-    <div class="row mt-5">
+    <div class="row mt-4">
         <div class="col-12">
             <div class="rounded bg-light shadow-sm p-2">
                 <h4 class="mb-3"><i class="fas fa-chart-bar text-info"></i><span class="ml-2"

@@ -34,3 +34,114 @@ body {
 .slider .tooltip.bs-tooltip-top {
     margin-top: -38px !important;
 }
+
+#price-compare-slider .irs-from, 
+#price-compare-slider  .irs-to, 
+#price-compare-slider  .irs-single {
+    position: absolute;
+    display: block;
+    top: -4px;
+    left: 0;
+    cursor: default;
+    white-space: nowrap;
+}
+
+#price-compare-slider .irs--flat .irs-bar {
+    top: 25px;
+    height: 12px;
+    background-color: #fac85b;
+}
+
+#price-compare-slider  .irs--flat .irs-from::before,
+#price-compare-slider   .irs--flat .irs-to::before, 
+#price-compare-slider  .irs--flat .irs-single::before {
+    position: absolute;
+    display: block;
+    content: "";
+    bottom: -8px;
+    left: 50%;
+    width: 0;
+    height: 0;
+    margin-left: -4px;
+    overflow: hidden;
+    border: 4px solid transparent;
+    border-top-color: #fac85b ;
+}
+
+#price-compare-slider .irs--flat .irs-from, 
+#price-compare-slider .irs--flat .irs-to, 
+#price-compare-slider .irs--flat .irs-single {
+    color: black;
+    font-size: 12px;
+    line-height: 1.5;
+    text-shadow: none;
+    padding: 2px 5px;
+    background-color: #fac85b;
+    border-radius: 4px;
+}
+
+#price-compare-slider .irs--flat .irs-min, 
+#price-compare-slider .irs--flat .irs-max {
+    top: 0;
+    padding: 1px 3px;
+    color: white;
+    font-size: 10px;
+    line-height: 1.333;
+    text-shadow: none;
+    background-color: #858688;
+    border-radius: 4px;
+}
+
+#price-compare-slider  .irs-grid-text {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    white-space: nowrap;
+    text-align: center;
+    font-size: 11px;
+    line-height: 11px;
+    padding: 0 3px;
+    color: #000;
+}
+
+#price-compare-slider .irs--flat .irs-handle > i:first-child {
+    position: absolute;
+    display: block;
+    top: 0;
+    left: 50%;
+    width: 2px;
+    height: 100%;
+    margin-left: -1px;
+    background-color: #fac85b;
+}
+
+#latest-price-mark {
+    display:block;
+    position: absolute;
+    top: 45px;
+    color: white;
+    font-size: 12px;
+    line-height: 1.333;
+    text-shadow: none;
+    text-align:center;
+    white-space: nowrap;
+    padding: 2px 5px;
+    background-color: rgb(9, 110, 233);
+    border-radius: 4px;
+    transform: translateX(-50%);
+    opacity:0.8;
+}
+
+#latest-price-mark::before {
+    position: absolute;
+    display: block;
+    content: "";
+    top: -9px;
+    left: 50%;
+    width: 0;
+    height: 0;
+    margin-left: -5px;
+    overflow: hidden;
+    border: 5px solid transparent;
+    border-bottom-color: rgb(9, 110, 233);
+}

@@ -1,31 +1,25 @@
-## Simple Value Investing Dashboard, using python 
-
+## Stock Investment Dashboard, using python 
+---
 
 ### Go to [ demo site ](https://stock-dashboard-c2s6b2cyea-de.a.run.app)
 
-This application , referring to [Vincent Tatan's blog and project at GitHub ](https://towardsdatascience.com/value-investing-dashboard-with-python-beautiful-soup-and-dash-python-43002f6a97ca) , collect company's stock price history , financial summary information from professional financial website ( MarketWatch) and yahoo ( pandas' datareader) to do simple rule-based analysis then infer reasonable share price to give suggestion on sell or buy decision .
+### Purpose and Idea
 
-Value investment and technical analysis are two mainstream in stock market. To increase probability of winning , investors now should know more than that in this rapid change era . Maybe choose good funds to buy is better idea for general investors.  Even professional fund managers face big challenge to fast collecting and interpreting information for making good trading decision and quick enough before market change to another condition . Information system could help practitioners do their job easier. 
+This project is originally for practice purpose , in order to learn how to build web application in Python way after finished some Deep Learning courses with Jupyter Notebook. 
+I found Vincent's blog about using python to build investment tool which could analyze and predict stock's reasonable price based on predicted future value. I am interest in investment. It's a good choice for practice project. 
 
-This application show how Python parsing web page and organize information with friendly tabular and chart web page offering a easy to use investment tool.  I have learned a lot through reading codes , developing new function and refactoring part of UI and code to another style . Thanks Vincent share his idea and project. 
+After first version is finished by reference to Vincent's project ( You can go to [Vincent Tatan's blog and GitHub project ](https://towardsdatascience.com/value-investing-dashboard-with-python-beautiful-soup-and-dash-python-43002f6a97ca) to get more information  ) ,  I decide to do more practices , change framework , redesign page content, and make this application appear a new style.  You can go to [ demo site ](https://stock-dashboard-c2s6b2cyea-de.a.run.app) and have a look.
 
-Following are some changes I make from that project :
-- Change UI layout and apply Bootstrap 4
-- Direct run in Jupyter notebook
-- Change share price graph to K chart , add SMA , MACD , RSI 
-- File name are also changed and do some code refactoring
-- Get data through API from stock market data company is more reliable and efficient than parsing web page from website , but this part left no modification.
+This application implement simple model to predict expected stock price. For example, annual growth of EPS is calculated by average 1st and 5th yeas' EPS. It's unreliable assumption. In demo site, you'll find most price prediction are different from real market behavior. This model alone is not enough.  So, don't use this application in real market decision !
 
-.
-It's fun and very useful to develop investment portfolio management or stock investment tools. The book ["The Man Who Solved the Market"](https://www.amazon.com/Man-Who-Solved-Market-Revolution/dp/073521798X)  tell the story about how the company , initial core members are lots of top PHD mathematicians , develop information system to beat financial market . The idea of Big Data and AI are already implemented to solve complicate and dynamic changing problem in that era . The book doesn't uncover technical detail, it's business secret . Many company still begin to use similar investment strategy and tool. Since Big Data and AI technology quickly spread to software community and industry. When more and more people and company know how to use that technology. Such system may soon be from unique superiority become basic ability of industries.  
+Some experts have developed models to solve financial market challenges, like the true story in this book ["The Man Who Solved the Market"](https://www.amazon.com/Man-Who-Solved-Market-Revolution/dp/073521798X) , but no tech detail are covered in that book just some terms and little hints . Hope there are more direct resources to learn how to build such system. 
 
+Now, this application can show stock K chart, MACD, RSI ... , critical financial indicators, link to Yahoo financial , MarketWath web site, let you self study more information about the stock which you would like to invest in.  
 
-.
-
+---
 ## Warning : ##
-This application has not been rigorously tested and its domain rules are very simple which are hard to cover the complexity of real stock market. There may be also wrong information introduced by some not found bugs.
-## <span style='color:#a00000'>This application is not mature enough and risky to be your decision tool in real stock market !</span>
-
+This application has not been rigorously tested and its domain rules are very simple which are hard to cover the complexity of real stock market. There may be also incorrect data introduced by some not found bugs or data sources .
+### <span style='color:#a00000'>This application is not mature enough and risky to be your decision tool in real stock market !</span>
 
 
 -------
@@ -36,22 +30,57 @@ This application has not been rigorously tested and its domain rules are very si
 
 ![](data/../assets/dashboard-s2.png)
 
-Main process :
+-------
 
-1. Get stock ticker and name to be data source of dropdown control
-2. Get stock price history from yahoo through pandas datareader when user choose a stock from dropdown control
-3. Plot stock k chart , sma  , macd , rsi lines
-4. Get stock financial information from financial website to do basic analysis and infer future value for trading decision.
+### Develop tools and main packages  
+1. Visual Studio Code
+2. Python 3.8
+3. pipenv
+4. Web framework :  from Dash migrate to Django
+5. Stock chart :  from cufflinks.quant_figure change to HighCharts Stock
+6. jQuery : through ajax update information and stock chart
+7. pandas datareader : to get stock price histor 
+8. BeautifulSoup : parsing web page
+9. gunicorn for web server
+10. dj-static for static file process in gunicorn 
+11. Web UI apply Bootstrap 4.x and responsive
+12. Fontawesome : icon
+13. bootstrap-slider :  https://github.com/seiyria/bootstrap-slider
+14. Ion.RangeSlider : http://ionden.com/a/plugins/ion.rangeSlider/index.html
+    
 
 
-.
+## Run and Deploy
+1. no requirement for database or storage
+1. stock price and financial information are real time access from other web site or service , and cached in memory for 12 hr
+1. Demo site is deploy to Google Cloud Run, it may need more seconds to start application if it already auto shutdown after long idle. 
+1. It may take more seconds to refresh stock information if it's the first usage of that stock in last 12 hours
+ 
+### Run in development mode
+1.  python manage.py runserver
+  
+### Run in gunicorn
+1. python manage.py collectstatic  // this will copy css js image ... files to staticfiles folder
+2. gunicorn --bind 0.0,0.0:change_to_prefered_port config.wsgi:application
+   
+### Deploy to Google Cloud Run
+1. Apply Google Cloud Service account
+2. install Google Cloud SDK for python, follow instruction on official document
+3. install Google Cloud extend module for Visual Code
+4. use Cloud Run to deploy application
+
+### Run in Jupyter Notebook
+1. In Jupyter Notebook, use jupyter-dash to wrap application and run in new browser. Need to install jupyter-dash to run.
+2. dashboard.py is the app called in Jupyter notebook, it's 2nd version based on Dash
 
 
-You can refer [Vincent Tatan's blog ](https://towardsdatascience.com/value-investing-dashboard-with-python-beautiful-soup-and-dash-python-43002f6a97ca) to learn complete explanation.
+## Project status
+- There are no plan to enhance more function in this project.
+- There may be some bugs left unresolved.
+- Without Unit tests. 
+- Without reliable QA testing and error handling.  
+  
 
 
-How to run on gunicorn :
-When you follow comment from web search , there is no myproject.wsgi file in Django default project template. 
 
-pip install qunicorn
-pip install dj-static  # not working for solving static files not found problem
+

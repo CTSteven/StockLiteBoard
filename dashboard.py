@@ -8,7 +8,7 @@ import plotly.offline as plyo
 from flask import Flask
 from flask_caching import Cache
 from dateutil.relativedelta import relativedelta
-import stock_info_service
+import domain.stock_info_service
 from domain.stock_info_service import *
 from domain.investment_analysis import *
 import sys
