@@ -52,9 +52,11 @@ This application has not been rigorously tested and its domain rules are very si
 
 ## Run and Deploy
 1. no requirement for database or storage
-1. stock price and financial information are real time access from other web site or service , and cached in memory for 12 hr
-1. Demo site is deploy to Google Cloud Run, it may need more seconds to start application if it already auto shutdown after long idle. 
-1. It may take more seconds to refresh stock information if it's the first usage of that stock in last 12 hours
+2. stock price and financial information are real time access from other web site or service , if data source web sites block request that will cause service error
+3. Stock information will be cached in memory for 12 hr after first accessed
+4. Demo site is deploy to Google Cloud Run, it may need more seconds to start application if it already auto shutdown after long idle. 
+5. It may take more seconds to refresh stock information if it's the first usage of that stock in last 12 hours
+
  
 ### Run in development mode
 1.  python manage.py runserver
@@ -77,9 +79,7 @@ This application has not been rigorously tested and its domain rules are very si
 ## Project status
 - There are no plan to enhance more function in this project.
 - There may be some bugs left unresolved.
-- Without Unit tests. 
-- Without reliable QA testing and error handling.  
-  
+
 
 
 

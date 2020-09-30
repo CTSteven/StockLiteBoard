@@ -3,6 +3,7 @@ FROM python:3.8-slim
 
 # Set the working directory to /app
 ENV APP_HOME /app
+ENV DEBUG=0
 WORKDIR $APP_HOME
 
 # copy the requirements file used for dependencies

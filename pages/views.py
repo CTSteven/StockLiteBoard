@@ -4,6 +4,8 @@ from django.views.generic import TemplateView
 import numpy as np
 import pandas as pd
 from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
 import json
 from datetime import datetime
 from django.core.cache import cache
@@ -52,10 +54,14 @@ def stockPriceHistoryView(request):
     if (ticker == None ):
         return HttpResponse({}, content_type="application/json")
 
-    stock_price_history = getStockPriceHistory(ticker).reset_index()
-    json_data = stock_price_history[['Date','Open','High','Low','Close','Volume']].to_json(orient="values",date_format="epoch",double_precision=5)
-    logger.debug('stock price history total take %s' %( str( datetime.now() - dt_start) ) )
-    return HttpResponse(json_data, content_type="application/json")
+    try:
+        stock_price_history = getStockPriceHistory(ticker).reset_index()
+        json_data = stock_price_history[['Date','Open','High','Low','Close','Volume']].to_json(orient="values",date_format="epoch",double_precision=5)
+        logger.debug('stock price history total take %s' %( str( datetime.now() - dt_start) ) )
+        return HttpResponse(json_data, content_type="application/json")
+    except Exception as e:
+        logger.error(e)
+        return Response(str(e) ,status= status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
@@ -78,10 +84,13 @@ def investmentSuggestionView(request):
     if ( err_msg != ""):
         return HttpResponse({err_msg}, content_type="application/json")
 
-    suggestion = getInvestmentSuggestion(ticker, discount=discount, margin= margin )
-    json_data = suggestion.to_json(orient="records",date_format="epoch",double_precision=2)
-    return HttpResponse(json_data, content_type="application/json")
-
+    try:
+        suggestion = getInvestmentSuggestion(ticker, discount=discount, margin= margin )
+        json_data = suggestion.to_json(orient="records",date_format="epoch",double_precision=2)
+        return HttpResponse(json_data, content_type="application/json")
+    except Exception as e:
+        logger.error(e)
+        return Response(str(e),status= status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
 def financialReportView(request):
@@ -91,20 +100,25 @@ def financialReportView(request):
     if (ticker == None ):
         return HttpResponse({}, content_type="application/json")
 
-    financial_report = getFinancialReport(ticker).reset_index()
-    financial_warning_list = getFinancialWarningList(ticker)
-    yearly_stock_price = getYearlyStockPrice(ticker).rename(columns={'mean':'meanprice'})
-    yearly_stock_price = pd.merge(yearly_stock_price, financial_report , how='inner', on=['year']).reset_index()
-    yearly_stock_price = yearly_stock_price[['year','meanprice']]
-    #print(yearly_stock_price)
-    financial_report_summary = {
-        'financial_report':financial_report.to_json(orient="records",date_format="epoch",double_precision=2),
-        'financial_warning_list':financial_warning_list,
-        'yearly_stock_price':yearly_stock_price.to_json(orient="records",double_precision=3),
-        }
+    try:
+        financial_report = getFinancialReport(ticker).reset_index()
+        financial_warning_list = getFinancialWarningList(ticker)
+        yearly_stock_price = getYearlyStockPrice(ticker).rename(columns={'mean':'meanprice'})
+        yearly_stock_price = pd.merge(yearly_stock_price, financial_report , how='inner', on=['year']).reset_index()
+        yearly_stock_price = yearly_stock_price[['year','meanprice']]
+        #print(yearly_stock_price)
+        financial_report_summary = {
+            'financial_report':financial_report.to_json(orient="records",date_format="epoch",double_precision=2),
+            'financial_warning_list':financial_warning_list,
+            'yearly_stock_price':yearly_stock_price.to_json(orient="records",double_precision=3),
+            }
 
-    json_data = json.dumps(financial_report_summary)
-    return HttpResponse(json_data, content_type="application/json")
+        json_data = json.dumps(financial_report_summary)
+        return HttpResponse(json_data, content_type="application/json")
+
+    except Exception as e:
+        logger.error(e)
+        return Response(str(e),status= status.HTTP_400_BAD_REQUEST)
 
 
 

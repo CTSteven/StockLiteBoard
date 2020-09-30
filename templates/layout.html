@@ -45,6 +45,40 @@
     </p>
   </div>
 
+    <div id="errorToast" class="toast " role="alert" aria-live="assertive" aria-atomic="true" data-autohide="false" data-delay="2000" style="position:absolute; top:2rem; left:45%; min-width:200px; min-height:100px; z-index:1111 ">
+        <div class="toast-header bg-danger text-white">
+
+            <strong class="mr-auto">Error</strong>
+            <small></small>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="toast-body">
+        </div>
+    </div>
+
+    <div class="modal" id="_errorMessageModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-danger">
+                    <h5 class="modal-title">System Error</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="max-height:400px; overflow-y:auto">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">關閉</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
@@ -56,6 +90,31 @@
 
   <script src="{% static 'js/bootstrap-slider.min.js' %}" ></script>
   <script src="{% static 'js/ion.rangeSlider.min.js' %}" ></script>
+  <script>
+
+
+        function processAjaxErrorMessage(xhr, status, error) {
+
+            var errMsg = "Status Code : " + xhr.status + "<br>";
+            if (xhr.status == 403) {
+                errMsg += "Unauthorized Access";
+            }
+            else {
+                if (xhr.responseText != null && xhr.responseText != "")
+                    errMsg += xhr.responseText;
+                else
+                    errMsg += error;
+            }
+            if (xhr.status == 500 && xhr.responseJSON == undefined) {
+                $("#_errorMessageModal").find(".modal-body").html(errMsg);
+                $("#_errorMessageModal").modal("show");
+            } else {
+                $("#errorToast").find(".toast-body").html(errMsg);
+                $('#errorToast').toast('show');
+            }
+        }
+
+  </script>
 </body>
 
 </html>
