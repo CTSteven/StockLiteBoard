@@ -21,7 +21,7 @@
                 ],
                 "resources": {
                     "limits": {
-                        "memory": "256Mi"
+                        "memory": "300Mi"
                     }
                 }
             },

@@ -3,7 +3,6 @@ FROM python:3.8-slim
 
 # Set the working directory to /app
 ENV APP_HOME /app
-ENV DEBUG=0
 WORKDIR $APP_HOME
 
 # copy the requirements file used for dependencies
@@ -18,6 +17,8 @@ COPY . .
 RUN python manage.py collectstatic --noinput
 
 ENV PORT 8080
+
+ENV DEBUG 0
 
 # Setting this ensures print statements and log messages
 # promptly appear in Cloud Logging.
