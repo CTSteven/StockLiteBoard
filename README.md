@@ -12,7 +12,7 @@ After first version is finished by reference to Vincent's project ( You can go t
 
 This application implement simple model to predict expected stock price. For example, annual growth of EPS is calculated by average 1st and 5th yeas' EPS. It's unreliable assumption. In demo site, you'll find most price prediction are different from real market behavior. This model alone is not enough.  So, don't use this application in real market decision !
 
-Some experts have developed models to solve financial market challenges, like the true story in this book ["The Man Who Solved the Market"](https://www.amazon.com/Man-Who-Solved-Market-Revolution/dp/073521798X) , but no tech detail are covered in that book just some terms and little hints . Hope there are more direct resources to learn how to build such system. 
+Some experts have developed models to solve financial market challenges, like the true story in this book ["The Man Who Solved the Market"](https://www.amazon.com/Man-Who-Solved-Market-Revolution/dp/073521798X) , but no tech detail are covered in that book. Hope there are more direct resources to learn how to build such system. 
 
 Now, this application can show stock K chart, MACD, RSI ... , critical financial indicators, link to Yahoo financial , MarketWath web site, let you self study more information about the stock which you would like to invest in.  
 
