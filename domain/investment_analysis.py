@@ -76,7 +76,9 @@ def infer_reasonable_share_price(ticker, financialreportingdf, stockpricedf, dis
 
         # Non Conservative
         lasteps = financialreportingdf.eps.tail(1).values[0]  # presentvalue
-
+        #print('1st eps ',financialreportingdf.eps.iloc[0])
+        #print('last eps ',financialreportingdf.eps.iloc[-1])
+        #print('annual growth rate ',annualgrowthrate)
         # conservative
         # lasteps = financialreportingdf.eps.mean()
 

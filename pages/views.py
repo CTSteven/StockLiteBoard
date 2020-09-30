@@ -106,7 +106,8 @@ def financialReportView(request):
         yearly_stock_price = getYearlyStockPrice(ticker)
         yearly_stock_price = pd.merge(yearly_stock_price, financial_report , how='inner', on=['year']).reset_index()
         yearly_stock_price = yearly_stock_price[['year','low','mean','high','close']]
-        #print(yearly_stock_price)
+        #logger.debug(yearly_stock_price)
+        #logger.debug(financial_report)
         financial_report_summary = {
             'financial_report':financial_report.to_json(orient="records",date_format="epoch",double_precision=2),
             'financial_warning_list':financial_warning_list,

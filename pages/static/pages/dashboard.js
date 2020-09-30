@@ -266,9 +266,12 @@ function updateFinancialReport(ticker) {
             stock_price_list = [];
             stock_lmh_list = [];
             yearly_stock_price = JSON.parse(data.yearly_stock_price);
+            var financial_number_rex = /\((.*)\)/;
             $.each(financial_report, function (idx, obj) {
                 years.push(obj.year);
-                eps_list.push(parseFloat(obj.eps));
+                
+                eps = parseFloat(obj.eps.replace(financial_number_rex,'-$1').replace(",",""));
+                eps_list.push(eps);
                 find_stock_price = false;
                 $.each(yearly_stock_price, function (idx, stock) {
                     if (stock.year == obj.year) {

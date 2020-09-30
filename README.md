@@ -6,15 +6,32 @@
 ### Purpose and Idea
 
 This project is originally for practice purpose , in order to learn how to build web application in Python way after finished some Deep Learning courses with Jupyter Notebook. 
-I found Vincent's blog about using python to build investment tool which could analyze and predict stock's reasonable price based on predicted future value. I am interest in investment. It's a good choice for practice project. 
+I found Vincent's blog about using python to build investment tool which could analyze and predict stock's reasonable price based on predicted future value. I am interest in investment. I start to work on 1st version , mainly reference to  Vincent's project. 
+( You can go to [Vincent Tatan's blog and GitHub project ](https://towardsdatascience.com/value-investing-dashboard-with-python-beautiful-soup-and-dash-python-43002f6a97ca) to get more information. )
+ 
+Then I start to change the framework , redesign  UI , improve performance,  try to make the application looks like a real tool for investor.  You can go to [ demo site ](https://stock-dashboard-c2s6b2cyea-de.a.run.app) to try it out.
 
-After first version is finished by reference to Vincent's project ( You can go to [Vincent Tatan's blog and GitHub project ](https://towardsdatascience.com/value-investing-dashboard-with-python-beautiful-soup-and-dash-python-43002f6a97ca) to get more information  ) ,  I use this project to do more practices , change framework , redesign page content, and make this application appear a new style.  You can go to [ demo site ](https://stock-dashboard-c2s6b2cyea-de.a.run.app) and have a look.
+This application implement very simplified model to predict expected stock price. 
+1. Annual_growth
+   - npf.rate(4, 0 , - 1st_year_eps , 5th_year_eps ) , npf is numpy financial package 
+2. PE Ratio
+   - yearly mean stock price /  EPS , and select minimum of recent 5 year
+3. EPS after 2 years later , Future EPS
+   - npf.fv( Annual_growth, 2 years , 0, 5th_year_eps)
+4. Future Value
+   -  Future EPS x PR Ratio
+5. Present Value 
+   -  npf.pv( Dicount Rate , 2 years, 0, Future Value)
+6. Expected Reasonable Price Range , add on +/- margin rate 
+   -  Present Value x ( 1  (+/-) Margin Rate )
+  
+If you try out at demo site, you'll find most price prediction are very different from real market behavior. These business rules are obviously not enough. 
 
-This application implement simple model to predict expected stock price. For example, annual growth of EPS is calculated by average 1st and 5th yeas' EPS. It's unreliable assumption. In demo site, you'll find most price prediction are different from real market behavior. This model alone is not enough.  So, don't use this application in real market decision !
+~ ~ ~ So, don't use this application in real market decision ! ! ! ~ ~ ~
 
-Some experts have developed models to solve financial market challenges, like the true story in this book ["The Man Who Solved the Market"](https://www.amazon.com/Man-Who-Solved-Market-Revolution/dp/073521798X) , but no tech detail are covered in that book. Hope there are more direct resources to learn how to build such system. 
+Some experts have developed models and software applications to solve financial market challenges , like the true story introduced in this book ["The Man Who Solved the Market"](https://www.amazon.com/Man-Who-Solved-Market-Revolution/dp/073521798X) , but no tech detail are covered in that book. It's a big vision many people study and work hard to approach to .
 
-Now, this application can show stock K chart, MACD, RSI ... , critical financial indicators, link to Yahoo financial , MarketWath web site, let you self study more information about the stock which you would like to invest in.  
+
 
 ---
 ## Warning : ##
