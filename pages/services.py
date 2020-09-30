@@ -54,7 +54,11 @@ def refreshStockPriceHistoryCache(ticker):
     cache.set(stock_price_history_cache_key(ticker), stock_price_history)
     # Calculate yearly HIGH LOW AVERAGE last day  close share price 
     stock_price_history['year'] = pd.DatetimeIndex(stock_price_history.index).year
+    stock_price_history['date'] = pd.DatetimeIndex(stock_price_history.index)
+    yearly_close_price = stock_price_history[['year','Close']].loc[ stock_price_history.groupby('year').date.idxmax() ]
+    yearly_close_price.rename(columns={'Close':'close'},inplace=True)
     yearly_stock_price = stock_price_history.groupby('year')['Close'].agg([('low','min'),('high','max'),'mean','count'])
+    yearly_stock_price = pd.merge(yearly_stock_price, yearly_close_price, how='inner', on=['year'])
     cache.set(yearly_stock_price_cache_key(ticker), yearly_stock_price)
     logger.debug('refresh stock history and financial report cache take %s' %( str( datetime.now() - dt_start) ) )
     return stock_price_history, yearly_stock_price

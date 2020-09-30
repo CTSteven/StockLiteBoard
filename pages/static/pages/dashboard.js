@@ -6,7 +6,7 @@ var default_ticker = 'GOOG';
 var discount_slide_start = null;
 
 $(function () {
- 
+
 
     $('[data-toggle="tooltip"]').tooltip();
 
@@ -264,6 +264,7 @@ function updateFinancialReport(ticker) {
             years = [];
             eps_list = [];
             stock_price_list = [];
+            stock_lmh_list = [];
             yearly_stock_price = JSON.parse(data.yearly_stock_price);
             $.each(financial_report, function (idx, obj) {
                 years.push(obj.year);
@@ -271,14 +272,16 @@ function updateFinancialReport(ticker) {
                 find_stock_price = false;
                 $.each(yearly_stock_price, function (idx, stock) {
                     if (stock.year == obj.year) {
-                        stock_price_list.push(stock.meanprice);
+                        stock_price_list.push(stock.close);
+                        stock_lmh_list.push([stock.low, stock.mean, stock.high])
                         find_stock_price = true;
                         return false;
                     }
 
                 });
                 if (!find_stock_price) {
-                    stock_price_list.push('')
+                    stock_price_list.push('');
+                    stock_lmh_list.push([]);
                 }
             });
             //console.log(yearly_stock_price);
@@ -294,6 +297,10 @@ function updateFinancialReport(ticker) {
             }, false);
             epsChart.series[1].update({
                 data: stock_price_list,
+                //name: ticker + ' EPS of Recent Years'
+            }, false);
+            epsChart.series[2].update({
+                data: stock_lmh_list,
                 //name: ticker + ' EPS of Recent Years'
             }, false);
             epsChart.redraw();
@@ -486,6 +493,62 @@ function createStockChart(ticker) {
     })
 }
 
+
+
+// Define custom series type for displaying low/med/high values using boxplot as a base
+Highcharts.seriesType('lowmedhigh', 'boxplot', {
+    keys: ['low', 'median', 'high'],
+    tooltip: {
+        pointFormat: '<span style="color:{point.color}">\u25CF</span> {series.name}: ' +
+            'Low <b>{point.low}</b> - Median <b>{point.median}</b> - High <b>{point.high}</b><br/>'
+    }
+}, {
+    // Change point shape to a line with three crossing lines for low/median/high
+    // Stroke width is hardcoded to 1 for simplicity
+    drawPoints: function () {
+        var series = this;
+        Highcharts.each(this.points, function (point) {
+            var graphic = point.graphic,
+                verb = graphic ? 'animate' : 'attr',
+                shapeArgs = point.shapeArgs,
+                width = shapeArgs.width,
+                left = Math.floor(shapeArgs.x) + 0.5,
+                right = left + width,
+                crispX = left + Math.round(width / 2) + 0.5,
+                highPlot = Math.floor(point.highPlot) + 0.5,
+                medianPlot = Math.floor(point.medianPlot) + 0.5,
+                lowPlot = Math.floor(point.lowPlot) + 0.5 - (point.low === 0 ? 1 : 0); // Sneakily draw low marker even if 0
+
+            if (point.isNull) {
+                return;
+            }
+
+            if (!graphic) {
+                point.graphic = graphic = series.chart.renderer.path('point').add(series.group);
+            }
+
+            graphic.attr({
+                stroke: point.color || series.color,
+                "stroke-width": 1
+            });
+
+            graphic[verb]({
+                d: [
+                    'M', left, highPlot,
+                    'H', right,
+                    'M', left, medianPlot,
+                    'H', right,
+                    'M', left, lowPlot,
+                    'H', right,
+                    'M', crispX, highPlot,
+                    'V', lowPlot
+                ]
+            });
+        });
+    }
+});
+
+
 epsChart = Highcharts.chart('eps-chart-container', {
     chart: {
         type: 'line'
@@ -510,7 +573,7 @@ epsChart = Highcharts.chart('eps-chart-container', {
     },
     {
         title: {
-            text: 'Stock mean price'
+            text: 'Stock close price'
         },
         opposite: true
     }],
@@ -548,10 +611,18 @@ epsChart = Highcharts.chart('eps-chart-container', {
         yAxis: 0,
         data: []
     }, {
-        name: 'Stock mean price',
+        name: 'Stock close price',
         yAxis: 1,
         data: [],
         color: 'orange'
+    }, {
+        name: 'Stock L-M-H',
+        type: 'lowmedhigh',
+        yAxis: 1,
+        data: [],
+        color: 'orange',
+        pointWidth: 14,
+        showInLegend: false
     }]
 });
 
@@ -560,8 +631,6 @@ Highcharts.setOptions({
         thousandsSep: ','
     }
 });
-
-
 
 
 

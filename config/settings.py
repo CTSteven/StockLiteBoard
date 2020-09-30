@@ -36,11 +36,11 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
-            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'format': '{levelname} {clientip} {asctime} {module} {process:d} {thread:d} {message}',
             'style': '{',
         },
         'simple': {
-            'format': '{levelname} {asctime} {message}',
+            'format': '{levelname} {clientip} {asctime} {message}',
             'style': '{',
         },
     },
@@ -57,7 +57,7 @@ LOGGING = {
         'django': {
             'handlers': ['console'],
             'level': ('INFO' if DJANGO_LOG_LEVEL == None else DJANGO_LOG_LEVEL) ,
-            'propagate': False,
+            'propagate': True,
         },
         'pages':{
             'handlers': ['console'],
