@@ -8,7 +8,7 @@
 This project is originally for practice purpose , in order to learn how to build web application in Python way after finished some Deep Learning courses with Jupyter Notebook. 
 I found Vincent's blog about using python to build investment tool which could analyze and predict stock's reasonable price based on predicted future value. I am interest in investment. It's a good choice for practice project. 
 
-After first version is finished by reference to Vincent's project ( You can go to [Vincent Tatan's blog and GitHub project ](https://towardsdatascience.com/value-investing-dashboard-with-python-beautiful-soup-and-dash-python-43002f6a97ca) to get more information  ) ,  I decide to do more practices , change framework , redesign page content, and make this application appear a new style.  You can go to [ demo site ](https://stock-dashboard-c2s6b2cyea-de.a.run.app) and have a look.
+After first version is finished by reference to Vincent's project ( You can go to [Vincent Tatan's blog and GitHub project ](https://towardsdatascience.com/value-investing-dashboard-with-python-beautiful-soup-and-dash-python-43002f6a97ca) to get more information  ) ,  I use this project to do more practices , change framework , redesign page content, and make this application appear a new style.  You can go to [ demo site ](https://stock-dashboard-c2s6b2cyea-de.a.run.app) and have a look.
 
 This application implement simple model to predict expected stock price. For example, annual growth of EPS is calculated by average 1st and 5th yeas' EPS. It's unreliable assumption. In demo site, you'll find most price prediction are different from real market behavior. This model alone is not enough.  So, don't use this application in real market decision !
 
@@ -37,16 +37,17 @@ This application has not been rigorously tested and its domain rules are very si
 2. Python 3.8
 3. pipenv
 4. Web framework :  from Dash migrate to Django
-5. Stock chart :  from cufflinks.quant_figure change to HighCharts Stock
-6. jQuery : through ajax update information and stock chart
-7. pandas datareader : to get stock price histor 
-8. BeautifulSoup : parsing web page
-9. gunicorn for web server
-10. dj-static for static file process in gunicorn 
-11. Web UI apply Bootstrap 4.x and responsive
-12. Fontawesome : icon
-13. bootstrap-slider :  https://github.com/seiyria/bootstrap-slider
-14. Ion.RangeSlider : http://ionden.com/a/plugins/ion.rangeSlider/index.html
+5. Django Rest Framework
+6. Stock chart :  from cufflinks.quant_figure change to HighCharts Stock
+7. jQuery : through ajax update information and stock chart
+8. pandas datareader : to get stock price histor 
+9. BeautifulSoup : parsing web page
+10. gunicorn for web server
+11. dj-static for static file process in gunicorn 
+12. Web UI apply Bootstrap 4.x and responsive
+13. Fontawesome : icon
+14. bootstrap-slider :  https://github.com/seiyria/bootstrap-slider
+15. Ion.RangeSlider : http://ionden.com/a/plugins/ion.rangeSlider/index.html
     
 
 

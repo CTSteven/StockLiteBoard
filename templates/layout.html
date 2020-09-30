@@ -45,7 +45,7 @@
     </p>
   </div>
 
-    <div id="errorToast" class="toast " role="alert" aria-live="assertive" aria-atomic="true" data-autohide="false" data-delay="2000" style="position:absolute; top:2rem; left:45%; min-width:200px; min-height:100px; z-index:1111 ">
+    <div id="errorToast" class="toast " role="alert" aria-live="assertive" aria-atomic="true" data-autohide="false" data-delay="2000" style="position:absolute; top:2rem; left:45%; min-width:200px; min-height:100px;  ">
         <div class="toast-header bg-danger text-white">
 
             <strong class="mr-auto">Error</strong>
@@ -109,7 +109,9 @@
                 $("#_errorMessageModal").find(".modal-body").html(errMsg);
                 $("#_errorMessageModal").modal("show");
             } else {
+                var scrollTop = $(window).scrollTop();
                 $("#errorToast").find(".toast-body").html(errMsg);
+                $("#errorToast").css({'z-index':'1111','top':scrollTop+10});
                 $('#errorToast').toast('show');
             }
         }

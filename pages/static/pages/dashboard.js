@@ -3,6 +3,7 @@ var stockChart = null;
 var epsChart = null;
 var priceCompareSlider = null;
 var default_ticker = 'GOOG';
+var discount_slide_start = null;
 
 $(function () {
  
@@ -23,9 +24,14 @@ $(function () {
         if ($('#select-discount-value').text() == e.value)
             return false;
         $('#select-discount-value').text(e.value);
-        updateInvestmentSuggestion(ticker);
-        $('#PV').fadeOut(500).fadeIn(500);
-        $('#margin-price').fadeOut(500).fadeIn(500);
+        var present_value = parseFloat($('#PV').text());
+        var margin_rate = parseFloat(e.value);
+        var price_margin = present_value * margin_rate;
+        var latest_price = parseFloat($('#latest-price').text());
+        $('#price-margin').html('&#x00B1; ' + price_margin.toFixed(2));
+        $('#price-margin').fadeOut(500).fadeIn(500);
+        updatePriceCompareSlider(present_value, margin_rate, latest_price)
+
     });
 
     $('#select-margin').on('slideStop', function (e) {
@@ -48,7 +54,6 @@ $(function () {
     $('#select-stock').change(function () {
         var ticker;
         ticker = $(this).val();
-
         var url = '/pages/stockPriceHistory?ticker=' + ticker;
         $.ajax({
             type: "GET",
