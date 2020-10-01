@@ -58,7 +58,7 @@ This application has not been rigorously tested and its domain rules are very si
 7. jQuery : through ajax update information and stock chart
 8. pandas datareader : to get stock price histor 
 9. BeautifulSoup : parsing web page
-10. gunicorn for web server
+10. gunicorn web server
 11. dj-static for static file process in gunicorn 
 12. Web UI apply Bootstrap 4.x and responsive
 13. Fontawesome : icon
@@ -91,12 +91,6 @@ This application has not been rigorously tested and its domain rules are very si
 ### Run in Jupyter Notebook
 1. In Jupyter Notebook, use jupyter-dash to wrap application and run in new browser. Need to install jupyter-dash to run.
 2. dashboard.py is the app called in Jupyter notebook, it's 2nd version based on Dash
-
-
-## Project status
-- There are no plan to enhance more function in this project.
-- There may be some bugs left unresolved.
-
 
 
 
