@@ -29,7 +29,7 @@ If you try out at demo site, you'll find most price prediction are very differen
 
 ~ ~ ~ So, don't use this application in real market decision ! ! ! ~ ~ ~
 
-Some experts have already developed models and software to solve financial market challenges, like the true story introduced in this book ["The Man Who Solved the Market"](https://www.amazon.com/Man-Who-Solved-Market-Revolution/dp/073521798X). Though that book touch on lightly about tech details, may still get some ideas to follow .
+Some experts have already developed models and software to solve financial market challenges, like the true story introduced in this book ["The Man Who Solved the Market"](https://www.amazon.com/Man-Who-Solved-Market-Revolution/dp/073521798X). Though that book touch lightly on tech details, may still get some ideas to follow .
 
 
 ---
