@@ -89,6 +89,8 @@ def refreshFinancialReportCache(ticker):
     financial_info = get_stock_financial_info_from_report(financial_report)
     financial_report[['roe', 'interestcoverageratio', 'epsgrowth', 'roa']] = np.round(
         financial_info[['roe', 'interestcoverageratio', 'epsgrowth', 'roa']], 2)
+    #print('financial_report\n',financial_report)
+    #print('financial_info\n',financial_info)
     financial_warning_list = eligibilitycheck(ticker, financial_info)
     cache.set(financial_report_cache_key(ticker), financial_report)
     cache.set(financial_info_cache_key(ticker), financial_info)

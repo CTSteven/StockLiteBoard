@@ -21,7 +21,8 @@ def financial_report_format(list):
             if text.endswith(')'):
                 text = text[1:-1] # remove the parentheses
                 posornegnumber = -1
-                
+            else:
+                posornegnumber = 1
             if text.endswith('%'):
     #             Then please make it into comma float
                 endtext = float(text[:-1].replace(",",""))/100.0 * posornegnumber 

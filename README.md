@@ -3,15 +3,15 @@
 
 ### Go to [ demo site ](https://stock-dashboard-c2s6b2cyea-de.a.run.app)
 
-### Purpose and Idea
+### Purpose
 
 This project is originally for practice purpose , in order to learn how to build web application in Python way after finished some Deep Learning courses with Jupyter Notebook. 
 I found Vincent's blog about using python to build investment tool which could analyze and predict stock's reasonable price based on predicted future value. I am interest in investment. I start to work on 1st version , mainly reference to  Vincent's project. 
 ( You can go to [Vincent Tatan's blog and GitHub project ](https://towardsdatascience.com/value-investing-dashboard-with-python-beautiful-soup-and-dash-python-43002f6a97ca) to get more information. )
  
-Then I start to change the framework , redesign  UI , improve performance,  try to make this application looks like a real tool.  You can go to [ demo site ](https://stock-dashboard-c2s6b2cyea-de.a.run.app) to try it out.
+After 1st version finished, I start to migrate framework , redesign  UI , improve performance, add technical analysis charts , try to make this application easy to use.  You can go to [ demo site ](https://stock-dashboard-c2s6b2cyea-de.a.run.app) to try it out.
 
-This application implement very simplified model to predict expected stock price. 
+This application implement simplified model to predict expected stock price. 
 1. Annual_growth
    - npf.rate(4, 0 , - 1st_year_eps , 5th_year_eps ) , npf is numpy financial package 
 2. PE Ratio
@@ -27,11 +27,10 @@ This application implement very simplified model to predict expected stock price
   
 If you try out at demo site, you'll find most price prediction are very different from real market behavior. These business rules are obviously not enough. 
 
-~ ~ ~ So, don't use this application in real market decision ! ! ! ~ ~ ~
+So, don't use this application in real market decision ! ! ! 
 
-Some experts have already developed models and software to solve financial market challenges, like the true story introduced in this book ["The Man Who Solved the Market"](https://www.amazon.com/Man-Who-Solved-Market-Revolution/dp/073521798X). Though that book touch lightly on tech details, may still get some ideas to follow .
-
-There are some projects related to stock and financial market in GitHub. [Awesome AI in Finance](https://github.com/georgezouq/awesome-ai-in-finance) collects a lot of good resources. Next learning journey is right ahead.
+Some experts have already developed models and software to solve financial market challenges, like the true story introduced in this book ["The Man Who Solved the Market"](https://www.amazon.com/Man-Who-Solved-Market-Revolution/dp/073521798X). Though the book touch lightly on tech details, some math and statistics terms (  Hidden Markov Model ,nonrandom trading effect,  combination effect  ... ) appeared in the book imply the team need software , mathematical , and financial market experts to build such system . 
+That certainly is teamwork.
 
 
 ---
