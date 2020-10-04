@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-04 22:03+0800\n"
+"POT-Creation-Date: 2020-10-05 00:11+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,6 +30,10 @@ msgstr "注意，這 POC 展示網站可能包含不正確的資料，請勿於�
 #: pages/templates/pages/dashboard.html:21
 msgid "Stock Name"
 msgstr "股票名稱"
+
+#: pages/templates/pages/dashboard.html:41
+msgid "Predicting Future Value"
+msgstr "預估未來價值"
 
 #: pages/templates/pages/dashboard.html:53
 msgid "Annual Growth Rate"
@@ -63,6 +67,10 @@ msgstr "誤差幅度"
 msgid "Latest Price"
 msgstr "最新股價"
 
+#: pages/templates/pages/dashboard.html:105
+msgid "Expected Price Range"
+msgstr "預期股價區間"
+
 #: pages/templates/pages/dashboard.html:113
 msgid "Future Value Factors"
 msgstr "未來價值預估因子"
@@ -76,49 +84,58 @@ msgstr "折現率 (%%)"
 msgid "Prediction Margin"
 msgstr "預估誤差幅度"
 
-#: pages/templates/pages/dashboard.html:206
+#: pages/templates/pages/dashboard.html:163
+msgid "Financial Warning List"
+msgstr "財報注意事項"
+
+#: pages/templates/pages/dashboard.html:185
+msgid "Stock Price History"
+msgstr "歷史股價"
+
+#: pages/templates/pages/dashboard.html:197
+msgid "Financial Information"
+msgstr "財報資訊"
+
+#: pages/templates/pages/dashboard.html:205
 msgid "Year"
 msgstr "年度"
 
-#: pages/templates/pages/dashboard.html:207
+#: pages/templates/pages/dashboard.html:206
 msgid "EPS"
 msgstr "EPS"
 
-#: pages/templates/pages/dashboard.html:208
+#: pages/templates/pages/dashboard.html:207
 msgid "EPS Growth"
 msgstr "EPS 成長率"
 
-#: pages/templates/pages/dashboard.html:209
+#: pages/templates/pages/dashboard.html:208
 msgid "Net Income"
 msgstr "淨營收"
 
-#: pages/templates/pages/dashboard.html:210
+#: pages/templates/pages/dashboard.html:209
 msgid "Shareholder Equity"
 msgstr "股東權益"
 
-#: pages/templates/pages/dashboard.html:211
+#: pages/templates/pages/dashboard.html:210
 msgid "ROA"
 msgstr "ROA"
 
-#: pages/templates/pages/dashboard.html:212
+#: pages/templates/pages/dashboard.html:211
 msgid "Longterm Debt"
 msgstr "長期負債"
 
-#: pages/templates/pages/dashboard.html:213
+#: pages/templates/pages/dashboard.html:212
 msgid "Interest Expense"
 msgstr "利息費用"
 
-#: pages/templates/pages/dashboard.html:214
+#: pages/templates/pages/dashboard.html:213
 msgid "EBITDA"
 msgstr "EBITDA"
 
-#: pages/templates/pages/dashboard.html:215
+#: pages/templates/pages/dashboard.html:214
 msgid "ROE"
 msgstr "ROE"
 
-#: pages/templates/pages/dashboard.html:216
+#: pages/templates/pages/dashboard.html:215
 msgid "Interest Coverage Ratio"
 msgstr "利息覆蓋率"
-
-#~ msgid "Choose a Stock :"
-#~ msgstr "請選擇股票"

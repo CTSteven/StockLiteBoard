@@ -1,0 +1,42 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-10-05 00:19+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: pages/static/pages/dashboard.js:93
+msgid "Stock Price History"
+msgstr "歷史股價"
+
+#: pages/static/pages/dashboard.js:171
+msgid "Latest Price"
+msgstr "最新股價"
+
+#: pages/static/pages/dashboard.js:207
+msgid "Predicting Future Value"
+msgstr "預估未來價值"
+
+#: pages/static/pages/dashboard.js:253
+msgid "Financial Information"
+msgstr "財報資訊"
+
+#: pages/static/pages/dashboard.js:265
+msgid "Financial Warning List"
+msgstr "財報注意事項"
+
+#: pages/static/pages/dashboard.js:296
+msgid "EPS & Stock mean price"
+msgstr "EPS 與 年度平均股價"

@@ -162,8 +162,12 @@ LOCALE_PATHS = [
     str(BASE_DIR.joinpath('locale')),
 ]
 
-# create locale message file : django-admin makemessages --locale=zh --extension html
-# edit translation content
+# i18n :
+# use {% translate 'original text' %}  in template html
+# use gettext('original text') in javascript
+# create locale message file for template : django-admin makemessages --locale=zh --extension html
+# create locale message file for javascript : django-admin makemessages -d djangojs --locale=zh
+# edit translation content of django.po  djangojs.po files
 # compile translation message file: django-admin compilemessages 
 #
 

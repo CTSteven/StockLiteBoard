@@ -90,7 +90,7 @@ $(function () {
                 yahooFinancial_url =
                     '<a target="YahooFinancial" class="text-success ml-3" style="font-size:1rem; text-decoration:underline" href="https://finance.yahoo.com/quote/' +
                     ticker + '/">Yahoo Financial</a>';
-                $('#stock-chart-title').html(ticker + ', Stock Price History' + yahooFinancial_url);
+                $('#stock-chart-title').html(ticker + ', '+gettext('Stock Price History')+' '+ yahooFinancial_url);
                 $('#stock-chart-title').fadeOut(500).fadeIn(500);
                 updateFinancialReport(ticker);
                 updateInvestmentSuggestion(ticker);
@@ -168,7 +168,7 @@ function updatePriceCompareSlider(present_value, margin_rate, latest_price) {
         onUpdate: function (data) {
             var html = '';
             var left = priceConvertToPercent(latest_price, min, max);
-            html += '<span id="latest-price-mark" style="left:' + left + '%">' + latest_price + '<br>Latest Price</span>';
+            html += '<span id="latest-price-mark" style="left:' + left + '%">' + latest_price + '<br>'+gettext('Latest Price')+'</span>';
             data.slider.append(html);
         }
     });
@@ -204,7 +204,7 @@ function updateInvestmentSuggestion(ticker) {
             $('#price-margin').html('&#x00B1; ' + price_margin);
             $('#latest-price').text(obj.lastprice);
             //$('#suggestion').text(obj.suggestion);
-            $('#investment-suggestion-title').text(ticker + ', Predicting Future Value');
+            $('#investment-suggestion-title').text(ticker + ', '+gettext('Predicting Future Value'));
             $('#investment-suggestion-title').fadeOut(500).fadeIn(500);
             updatePriceCompareSlider(parseFloat(obj.PV), parseFloat(margin), parseFloat(obj.lastprice));
         },
@@ -250,7 +250,7 @@ function updateFinancialReport(ticker) {
             marketWatch_url =
                 '<a target="MarketWatch" class="text-success ml-3" style="font-size:1rem; text-decoration:underline" href="https://www.marketwatch.com/investing/stock/' +
                 ticker + '/financials">MarketWatch</a>';
-            $('#financial-info-title').html(ticker + ', Financial Information' + marketWatch_url);
+            $('#financial-info-title').html(ticker + ', '+gettext('Financial Information') + marketWatch_url);
             $('#financial-info-title').fadeOut(500).fadeIn(500);
             // update financial warning list
             tbody = $('#financial-warning-list-table > tbody');
@@ -262,7 +262,7 @@ function updateFinancialReport(ticker) {
                 row_list = row_list + row;
             });
             tbody.append(row_list);
-            $('#financial-warning-list-title').text(ticker + ', Warning List');
+            $('#financial-warning-list-title').text(ticker + ', '+gettext('Financial Warning List'));
             $('#financial-warning-list-title').fadeOut(500).fadeIn(500);
             // update EPS chart
             years = [];
@@ -293,7 +293,7 @@ function updateFinancialReport(ticker) {
             });
             //console.log(yearly_stock_price);
             epsChart.setTitle({
-                text: ticker + ', EPS & Stock mean price'
+                text: ticker + ', '+gettext('EPS & Stock mean price')
             });
             epsChart.xAxis[0].update({
                 categories: years

@@ -129,7 +129,7 @@ body {
     background-color: rgb(9, 110, 233);
     border-radius: 4px;
     transform: translateX(-50%);
-    opacity:0.8;
+    opacity:0.9;
 }
 
 #latest-price-mark::before {
