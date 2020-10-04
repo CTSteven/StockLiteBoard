@@ -1,13 +1,15 @@
 {% extends 'layout.html' %}
+{% load i18n %}
 
 {% block content %}
+
 {% load static %}
 
 <div class="bg-info" style="opacity:0.95">
     <div class="text-center pb-2 pt-2 text-white">
-        <h2>Stock Investment Dashboard</h2>
+        <h2>{% translate "Stock Investment Dashboard" %}</h2>
         <div id="warning-label">POC<br>Demo Site</div>
-        <h6>( Warning, this POC application may contain incorrect data and should not be used for real market trading )
+        <h6>( {% translate 'Warning, this POC Demo website may contain incorrect data and should not be used for real market trading' %} )
         </h6>
     </div>
 
@@ -16,8 +18,7 @@
     <div class="row">
         <div class="col-12">
             <div class="form-group row">
-                <label for="select-stock" class='col-sm-12 col-lg-2 col-form-label text-white font-weight-bold'>Choose a
-                    Stock :</label>
+                <label for="select-stock" class='col-sm-12 col-lg-2 col-form-label text-white font-weight-bold'>{% translate 'Stock Name' %}&nbsp;<span id="data-loading" class="spinner-border" style="margin-left:5px;visibility: visible;width: 1.5rem; height: 1.5rem; border-width:0.2rem; color:rgb(117, 219, 250)"  role="status"></span></label>
                 <div class="col-sm-12 col-lg-10 col-12">
                     <select class="form-control" id="select-stock">
                         <option></option>
@@ -49,21 +50,21 @@
                                     <th scope="col" class="text-nowrap" style="width:55%" data-toggle="tooltip"
                                         data-placement="top"
                                         title="Annual growth of EPS, base on  1st and last year's EPS of 5 years period. ">
-                                        Annual Growth Rate</th>
+                                        {% translate 'Annual Growth Rate' %}</th>
                                     <td id="annual-growth-rate" class="text-monospace" style="width:45%"></td>
                                 </tr>
                                 <tr>
-                                    <th scope="col">Last EPS</th>
+                                    <th scope="col">{% translate 'Last EPS' %}</th>
                                     <td id='last-eps' class="text-monospace"></td>
                                 </tr>
                                 <tr>
                                     <th scope="col" data-toggle="tooltip" data-placement="top"
-                                        title="Base on Last EPS & Annual Growth Rate.">Future EPS</th>
+                                        title="Base on Last EPS & Annual Growth Rate.">{% translate 'Future EPS' %}</th>
                                     <td id='future-eps' class="text-monospace"></td>
                                 </tr>
                                 <tr>
                                     <th scope="col" data-toggle="tooltip" data-placement="top"
-                                        title="Minimum PE Ration of 5 years period">PE Ration</th>
+                                        title="Minimum PE Ration of 5 years period">{% translate 'PE Ration' %}</th>
                                     <td id='pe-ratio' class="text-monospace"></td>
                                 </tr>
                             </tbody>
@@ -75,24 +76,24 @@
                             <tbody>
                                 <tr>
                                     <th scope="col" style="width:55%" data-toggle="tooltip" data-placement="top"
-                                        title="Future * PE Ratio ">Future Value</th>
+                                        title="Future * PE Ratio ">{% translate 'Future Value' %}</th>
                                     <td id='FV' class="text-monospace" style="width:45%"></td>
                                 </tr>
                                 <tr>
                                     <th scope="col" data-toggle="tooltip" data-placement="top"
-                                        title=" Base on  Future Value & Discount Rate.">Present Value</th>
+                                        title=" Base on  Future Value & Discount Rate.">{% translate 'Present Value' %}</th>
                                     <td id='PV' class="text-monospace"></td>
                                 </tr>
                                 <tr>
                                     <th scope="col"  data-toggle="tooltip"
                                         data-placement="top"
                                         title="Price Margin = Present Value * ( 1 - Prediction Margin ) ; Expected Price = Present Value +/- Price Margin . ">
-                                        <span class=" rounded"style="background-color:#f9da96; padding:10px 12px;">Price Margin<span></th>
+                                        <span class=" rounded"style="background-color:#f9da96; padding:10px 12px;">{% translate 'Price Margin' %}<span></th>
                                     <td id='price-margin' class="text-monospace"></td>
                                 </tr>
                                 <tr>
                                     <th scope="col" data-toggle="tooltip"
-                                        data-placement="top" title="Stock's latest price."><span class=" rounded"style="background-color:#75b4f9; padding:10px 12px">Latest Price</span></th>
+                                        data-placement="top" title="Stock's latest price."><span class=" rounded"style="background-color:#75b4f9; padding:10px 12px">{% translate 'Latest Price' %}</span></th>
                                     <td id='latest-price' class="text-monospace"></td>
                                 </tr>
 
@@ -109,13 +110,12 @@
         </div>
         <div class="col-12 col-lg-5 mt-4">
             <div class="rounded-lg shadow-sm bg-light p-2">
-                <h4 class="mb-2"><i class="fas fa-sliders-h text-info"></i><span class="ml-2">Future Value
-                        Factors</span>
+                <h4 class="mb-2"><i class="fas fa-sliders-h text-info"></i><span class="ml-2">{% translate 'Future Value Factors' %}</span>
                 </h4>
                 <form>
                     <div class="col-12">
                         <div class="form-group row ">
-                            <label for="select-discount" class='col-6 col-form-label'>Discount Rate (%) &nbsp;<a
+                            <label for="select-discount" class='col-6 col-form-label'>{% translate 'Discount Rate (%)' %} &nbsp;<a
                                     target='YCHARTS' class="text-success"
                                     href="https://ycharts.com/indicators/us_discount_rate" data-toggle="tooltip"
                                     data-placement="top"
@@ -137,7 +137,7 @@
                     <div class="col-12">
                         <div class="form-group row">
                             <label for="select-margin" class='col-6 col-form-label' data-toggle="tooltip"
-                                data-placement="top" title="Choose a prediction margin range.">Prediction Margin</label>
+                                data-placement="top" title="Choose a prediction margin range.">{% translate 'Prediction Margin' %}</label>
                             <label id="select-margin-value" for="select-margin"
                                 class='col-6 col-form-label'>0.15</label>
                             <div class="col-12 mt-4">
@@ -203,17 +203,17 @@
                     <table class="table table-hover bg-white text-center" id='financial-report-table'>
                         <thead class=" bg-info text-white">
                             <tr>
-                                <th scope="col" class=" align-middle">Year</th>
-                                <th scope="col" class=" align-middle">EPS</th>
-                                <th scope="col" class=" align-middle">EPS Growth</th>
-                                <th scope="col" class=" align-middle">Net Income</th>
-                                <th scope="col" class=" align-middle">Shareholder Equity</th>
-                                <th scope="col" class=" align-middle">ROA</th>
-                                <th scope="col" class=" align-middle">Longterm Debt</th>
-                                <th scope="col" class=" align-middle">Interest Expense</th>
-                                <th scope="col" class=" align-middle">EBITDA</th>
-                                <th scope="col" class=" align-middle">ROE</th>
-                                <th scope="col" class=" align-middle">Interest Coverage Ratio</th>
+                                <th scope="col" class=" align-middle">{% translate 'Year' %}</th>
+                                <th scope="col" class=" align-middle">{% translate 'EPS' %}</th>
+                                <th scope="col" class=" align-middle">{% translate 'EPS Growth' %}</th>
+                                <th scope="col" class=" align-middle">{% translate 'Net Income' %}</th>
+                                <th scope="col" class=" align-middle">{% translate 'Shareholder Equity' %}</th>
+                                <th scope="col" class=" align-middle">{% translate 'ROA' %}</th>
+                                <th scope="col" class=" align-middle">{% translate 'Longterm Debt' %}</th>
+                                <th scope="col" class=" align-middle">{% translate 'Interest Expense' %}</th>
+                                <th scope="col" class=" align-middle">{% translate 'EBITDA' %}</th>
+                                <th scope="col" class=" align-middle">{% translate 'ROE' %}</th>
+                                <th scope="col" class=" align-middle">{% translate 'Interest Coverage Ratio' %}</th>
                             </tr>
                         </thead>
                         <tbody>

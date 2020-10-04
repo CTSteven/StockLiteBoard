@@ -51,6 +51,8 @@ $(function () {
         var ticker;
         ticker = $(this).val();
         var url = '/pages/stockPriceHistory?ticker=' + ticker;
+        showDataLoading();
+
         $.ajax({
             type: "GET",
             url: url,
@@ -92,14 +94,16 @@ $(function () {
                 $('#stock-chart-title').fadeOut(500).fadeIn(500);
                 updateFinancialReport(ticker);
                 updateInvestmentSuggestion(ticker);
-
+                hideDataLoading();
             },
             error: function (xhr, status, error) {
                 processAjaxErrorMessage(xhr, status, error);
+                hideDataLoading();
                 // console.log("ajax call went wrong:" + request.responseText);
                 // alert("Error message :" + request.responseText);
             }
         });
+
     });
 
     priceCompareSlider = $("#price-compare-slider > .js-range-slider").ionRangeSlider({
@@ -269,8 +273,8 @@ function updateFinancialReport(ticker) {
             var financial_number_rex = /\((.*)\)/;
             $.each(financial_report, function (idx, obj) {
                 years.push(obj.year);
-                
-                eps = parseFloat(obj.eps.replace(financial_number_rex,'-$1').replace(",",""));
+
+                eps = parseFloat(obj.eps.replace(financial_number_rex, '-$1').replace(",", ""));
                 eps_list.push(eps);
                 find_stock_price = false;
                 $.each(yearly_stock_price, function (idx, stock) {
@@ -328,6 +332,7 @@ function createStockChart(ticker) {
         'margin': parseFloat(margin)
     })
     var url = '/pages/stockPriceHistory?ticker=' + ticker;
+    showDataLoading();
     $.ajax({
         type: "GET",
         url: url,
@@ -416,7 +421,7 @@ function createStockChart(ticker) {
                     }
 
                 },
-                rangeSelector:{
+                rangeSelector: {
                     selected: 4, buttonTheme: { // styles for the buttons
                         fill: 'none',
                         stroke: 'none',
@@ -509,17 +514,24 @@ function createStockChart(ticker) {
                     }]
                 }
             });
-
+            hideDataLoading();
         },
         error: function (xhr, status, error) {
             processAjaxErrorMessage(xhr, status, error);
+            hideDataLoading();
             //console.log("ajax call went wrong:" + request.responseText);
             //alert("Error message :" + request.responseText);
         }
     })
 }
 
+function showDataLoading(){
+    $('#data-loading').css('visibility', 'visible');
+}
 
+function hideDataLoading(){
+    $('#data-loading').css('visibility', 'hidden');
+}
 
 // Define custom series type for displaying low/med/high values using boxplot as a base
 Highcharts.seriesType('lowmedhigh', 'boxplot', {

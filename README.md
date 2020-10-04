@@ -23,15 +23,17 @@ This application implement simplified model to predict expected stock price.
 5. Present Value 
    -  npf.pv( Dicount Rate , 2 years, 0, Future Value)
 6. Expected Reasonable Price Range , add on +/- margin rate 
-   -  Present Value x ( 1  (+/-) Margin Rate )
+   -  Present Value x ( 1  +/- Margin Rate )
   
-If you try out at demo site, you'll find most price prediction are very different from real market behavior. These business rules are obviously not enough. 
+If you try out at demo site, you'll find most price prediction are very different from real market behavior. These business rules are obviously not enough. It's only POC.
 
 So, don't use this application in real market decision ! ! ! 
 
-Some experts have already developed models and software to solve financial market challenges, like the true story introduced in this book ["The Man Who Solved the Market"](https://www.amazon.com/Man-Who-Solved-Market-Revolution/dp/073521798X). Though the book touch lightly on tech details, some math and statistics terms (  Hidden Markov Model ,nonrandom trading effect,  combination effect  ... ) appeared in the book imply the team need software , mathematical , and financial market experts to build such system . 
-That certainly is teamwork.
+Some experts have already developed models and software to solve financial market challenges, like the true story introduced in this book ["The Man Who Solved the Market"](https://www.amazon.com/Man-Who-Solved-Market-Revolution/dp/073521798X). Though the book touch lightly on tech details, since this is a hot topic many resource are available on Web and GitHub.  I have found some links : 
+- [Awesome AI in Finance](https://github.com/georgezouq/awesome-ai-in-finance)
+- [Machine Learning for Algorithmic Trading](https://github.com/PacktPublishing/Machine-Learning-for-Algorithmic-Trading-Second-Edition)
 
+There are lots of domain knowledge and skills needed to build similar system.
 
 ---
 ## Warning : ##

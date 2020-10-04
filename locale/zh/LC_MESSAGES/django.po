@@ -1,0 +1,124 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-10-04 22:03+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: pages/templates/pages/dashboard.html:10
+msgid "Stock Investment Dashboard"
+msgstr "股票投資儀表板"
+
+#: pages/templates/pages/dashboard.html:12
+msgid ""
+"Warning, this POC Demo website may contain incorrect data and should not be "
+"used for real market trading"
+msgstr "注意，這 POC 展示網站可能包含不正確的資料，請勿於真實市場交易使用"
+
+#: pages/templates/pages/dashboard.html:21
+msgid "Stock Name"
+msgstr "股票名稱"
+
+#: pages/templates/pages/dashboard.html:53
+msgid "Annual Growth Rate"
+msgstr "EPS年成長率"
+
+#: pages/templates/pages/dashboard.html:57
+msgid "Last EPS"
+msgstr "最近一年EPS"
+
+#: pages/templates/pages/dashboard.html:62
+msgid "Future EPS"
+msgstr "預估EPS"
+
+#: pages/templates/pages/dashboard.html:67
+msgid "PE Ration"
+msgstr "PE 比率"
+
+#: pages/templates/pages/dashboard.html:79
+msgid "Future Value"
+msgstr "預估未來價值"
+
+#: pages/templates/pages/dashboard.html:84
+msgid "Present Value"
+msgstr "折現後現值"
+
+#: pages/templates/pages/dashboard.html:91
+msgid "Price Margin"
+msgstr "誤差幅度"
+
+#: pages/templates/pages/dashboard.html:96
+msgid "Latest Price"
+msgstr "最新股價"
+
+#: pages/templates/pages/dashboard.html:113
+msgid "Future Value Factors"
+msgstr "未來價值預估因子"
+
+#: pages/templates/pages/dashboard.html:118
+#, python-format
+msgid "Discount Rate (%%)"
+msgstr "折現率 (%%)"
+
+#: pages/templates/pages/dashboard.html:140
+msgid "Prediction Margin"
+msgstr "預估誤差幅度"
+
+#: pages/templates/pages/dashboard.html:206
+msgid "Year"
+msgstr "年度"
+
+#: pages/templates/pages/dashboard.html:207
+msgid "EPS"
+msgstr "EPS"
+
+#: pages/templates/pages/dashboard.html:208
+msgid "EPS Growth"
+msgstr "EPS 成長率"
+
+#: pages/templates/pages/dashboard.html:209
+msgid "Net Income"
+msgstr "淨營收"
+
+#: pages/templates/pages/dashboard.html:210
+msgid "Shareholder Equity"
+msgstr "股東權益"
+
+#: pages/templates/pages/dashboard.html:211
+msgid "ROA"
+msgstr "ROA"
+
+#: pages/templates/pages/dashboard.html:212
+msgid "Longterm Debt"
+msgstr "長期負債"
+
+#: pages/templates/pages/dashboard.html:213
+msgid "Interest Expense"
+msgstr "利息費用"
+
+#: pages/templates/pages/dashboard.html:214
+msgid "EBITDA"
+msgstr "EBITDA"
+
+#: pages/templates/pages/dashboard.html:215
+msgid "ROE"
+msgstr "ROE"
+
+#: pages/templates/pages/dashboard.html:216
+msgid "Interest Coverage Ratio"
+msgstr "利息覆蓋率"
+
+#~ msgid "Choose a Stock :"
+#~ msgstr "請選擇股票"

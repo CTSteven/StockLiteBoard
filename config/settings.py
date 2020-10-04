@@ -49,10 +49,6 @@ LOGGING = {
             'class': 'logging.StreamHandler',
         },
     },
-    'root': {
-        'handlers': ['console'],
-        'level': 'WARNING',
-    },
     'loggers': {
         'django': {
             'handlers': ['console'],
@@ -63,7 +59,7 @@ LOGGING = {
             'handlers': ['console'],
             'level': ('DEBUG' if DEBUG else 'INFO'),
             #'formatter':'simple',
-            'propagate': False,
+            'propagate': True,
         }
     },
 }
@@ -86,6 +82,7 @@ MIDDLEWARE = [
     'django.middleware.gzip.GZipMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -161,9 +158,14 @@ USE_L10N = True
 
 USE_TZ = True
 
+LOCALE_PATHS = [
+    str(BASE_DIR.joinpath('locale')),
+]
 
-
-
+# create locale message file : django-admin makemessages --locale=zh --extension html
+# edit translation content
+# compile translation message file: django-admin compilemessages 
+#
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000"

@@ -70,8 +70,15 @@ def infer_reasonable_share_price(ticker, financialreportingdf, stockpricedf, dis
 
         # Calcuate the rate per period
         # parameter:  periods , payment, present value, future value
-        annualgrowthrate = npf.rate(len(financialreportingdf.eps)-1, 0, -1 *
-                                    financialreportingdf.eps.iloc[0], financialreportingdf.eps.iloc[-1])
+        firstEPS = financialreportingdf.eps.iloc[0]
+        lastEPS = financialreportingdf.eps.iloc[-1]
+        # Adjust firstEPS at least 1 , prevent npf.rate get NaN
+        if (firstEPS<1):
+            adj = 1 - firstEPS
+            firstEPS = firstEPS + adj
+            lastEPS =  lastEPS + adj
+            
+        annualgrowthrate = npf.rate(len(financialreportingdf.eps)-1, 0, -1 * firstEPS,lastEPS)
         #print("Annual Growth Rate %f" % annualgrowthrate)
 
         # Non Conservative
