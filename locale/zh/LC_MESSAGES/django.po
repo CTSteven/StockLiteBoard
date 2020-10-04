@@ -19,7 +19,7 @@ msgstr ""
 
 #: pages/templates/pages/dashboard.html:10
 msgid "Stock Investment Dashboard"
-msgstr "股票投資儀表板"
+msgstr "股票投資看板"
 
 #: pages/templates/pages/dashboard.html:12
 msgid ""
