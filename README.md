@@ -59,23 +59,24 @@ This application has not been rigorously tested and its domain rules are very si
 5. Django Rest Framework
 6. Stock chart :  from cufflinks.quant_figure change to HighCharts Stock
 7. jQuery : through ajax update information and stock chart
-8. pandas datareader : to get stock price histor 
-9. BeautifulSoup : parsing web page
+8. pandas datareader : to get stock price history 
+9. BeautifulSoup : parse web page
 10. gunicorn web server
 11. dj-static for static file process in gunicorn 
-12. Web UI apply Bootstrap 4.x and responsive
+12. Web UI apply Bootstrap 4.x with responsive design
 13. Fontawesome : icon
-14. bootstrap-slider :  https://github.com/seiyria/bootstrap-slider
-15. Ion.RangeSlider : http://ionden.com/a/plugins/ion.rangeSlider/index.html
+14. 2 Slider components :
+    - ootstrap-slider :  https://github.com/seiyria/bootstrap-slider
+    - Ion.RangeSlider : http://ionden.com/a/plugins/ion.rangeSlider/index.html
     
 
 
 ## Run and Deploy
-1. no requirement for database or storage
-2. stock price and financial information are real time access from other web site or service , if data source web sites block request that will cause service error
+1. No requirement for database 
+2. Stock price and financial information are real time access from other web site or service , if data source web sites block request that will cause service error
 3. Stock information will be cached in memory for 12 hr after first accessed
 4. Demo site is deploy to Google Cloud Run, it may need more seconds to start application if it already auto shutdown after long idle. 
-5. It may take more seconds to refresh stock information if it's the first usage of that stock in last 12 hours
+5. It may take more seconds to refresh stock information if it's the first access of selected stock in last 12 hours
 
  
 ### Run in development mode
@@ -86,14 +87,15 @@ This application has not been rigorously tested and its domain rules are very si
 2. gunicorn --bind 0.0,0.0:change_to_prefered_port config.wsgi:application
    
 ### Deploy to Google Cloud Run
-1. Apply Google Cloud Service account
-2. install Google Cloud SDK for python, follow instruction on official document
-3. install Google Cloud extend module for Visual Code
-4. use Cloud Run to deploy application
+1. Apply for Google Cloud Service account
+2. Install Google Cloud SDK for python, follow instruction on official document
+3. Install Google Cloud extend module for Visual Studio Code
+4. Use Cloud Run to deploy application in Visual Studio Code
 
 ### Run in Jupyter Notebook
-1. In Jupyter Notebook, use jupyter-dash to wrap application and run in new browser. Need to install jupyter-dash to run.
-2. dashboard.py is the app called in Jupyter notebook, it's 2nd version based on Dash
+1. Open StockDAshboard.ipynb in Jupyter Notebook
+2. Its UI design is 2nd version different from latest style.  
+3. It use jupyter-dash to wrap Dash application ( dashboard.py) and open in new browser. May need to install related packages to successfully run in Jupyter notebook.
 
 
 
