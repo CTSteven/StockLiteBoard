@@ -33,7 +33,7 @@ Some experts have already developed models and software to solve financial marke
 - [Awesome AI in Finance](https://github.com/georgezouq/awesome-ai-in-finance)
 - [Machine Learning for Algorithmic Trading](https://github.com/PacktPublishing/Machine-Learning-for-Algorithmic-Trading-Second-Edition)
 
-Lots of domain knowledge and skills are needed to build similar system.
+Lots of domain knowledge and skills are required to build similar system.
 
 ---
 ## Warning : ##
