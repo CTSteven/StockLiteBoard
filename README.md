@@ -1,4 +1,4 @@
-## Stock Investment Dashboard, using python 
+## Stock Investment Dashboard, with python 
 ---
 
 ### Go to [ demo site ](https://stock-dashboard-c2s6b2cyea-de.a.run.app)
