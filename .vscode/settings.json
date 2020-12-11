@@ -16,5 +16,8 @@
         "py",
         "python"
     ],
-    "python.pythonPath": "/Users/steven/anaconda3/bin/python"
+    "python.pythonPath": "/usr/local/bin/python3",
+    "files.watcherExclude": {
+        "**/target": true
+    }
 }

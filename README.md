@@ -84,7 +84,7 @@ This application has not been rigorously tested and its domain rules are very si
   
 ### Run in gunicorn
 1. python manage.py collectstatic  // this will copy css js image ... files to staticfiles folder
-2. gunicorn --bind 0.0,0.0:change_to_prefered_port config.wsgi:application
+2. gunicorn --bind 0.0.0.0:change_to_prefered_port config.wsgi:application
    
 ### Deploy to Google Cloud Run
 1. Apply for Google Cloud Service account

@@ -215,7 +215,7 @@ def get_stock_financial_report(ticker):
     text_soup_balancesheet = BeautifulSoup(requests.get(balancesheet_url).text,"lxml")
 
     # Income Statement
-    titlesfinancials = text_soup_financials.findAll('td',{'class':'rowTitle'})
+    titlesfinancials = text_soup_financials.findAll('td',{'class':'fixed--column'})
 
     epslist = []
     netincomelist = []
@@ -225,37 +225,35 @@ def get_stock_financial_report(ticker):
 
     for title in titlesfinancials:
         if 'EPS (Basic)' in title.text:
-            epslist.append ([td.text for td in title.findNextSiblings(attrs={'class': 'valueCell'}) if td.text])
+            #epslist.append ([td.text for td in title.findNextSiblings(attrs={'class': 'valueCell'}) if td.text])
+            epslist.append ([td.text for td in title.parent.findAll('td')[1:6] ])
         if 'Net Income' in title.text:
-            netincomelist.append ([td.text for td in title.findNextSiblings(attrs={'class': 'valueCell'}) if td.text])
+            netincomelist.append ([td.text for td in title.parent.findAll('td')[1:6]])
         if 'Interest Expense' in title.text:
-            interestexpenselist.append ([td.text for td in title.findNextSiblings(attrs={'class': 'valueCell'}) if td.text])
+            interestexpenselist.append ([td.text for td in title.parent.findAll('td')[1:6]])
         if 'EBITDA' in title.text:
-            ebitdalist.append ([td.text for td in title.findNextSiblings(attrs={'class': 'valueCell'}) if td.text])
-
+            ebitdalist.append ([td.text for td in title.parent.findAll('td')[1:6]])
 
     # Balance sheet
-    titlesbalancesheet = text_soup_balancesheet.findAll('td', {'class': 'rowTitle'})
+    titlesbalancesheet = text_soup_balancesheet.findAll('td', {'class': 'fixed--column'})
     equitylist=[]
     for title in titlesbalancesheet:
         if 'Total Shareholders\' Equity' in title.text:
-            equitylist.append( [td.text for td in title.findNextSiblings(attrs={'class': 'valueCell'}) if td.text])
+            equitylist.append( [td.text for td in title.parent.findAll('td')[1:6]])
         if 'Long-Term Debt' in title.text:
-            longtermdebtlist.append( [td.text for td in title.findNextSiblings(attrs={'class': 'valueCell'}) if td.text])
+            longtermdebtlist.append( [td.text for td in title.parent.findAll('td')[1:6]])
 
     eps = getelementinlist(epslist,0)
     epsgrowth = getelementinlist(epslist,1)
     netincome = getelementinlist(netincomelist,0)
     shareholderequity = getelementinlist(equitylist,0)
     roa = getelementinlist(equitylist,1)
-
     longtermdebt = getelementinlist(longtermdebtlist,0)
     interestexpense =  getelementinlist(interestexpenselist,0)
     ebitda = getelementinlist(ebitdalist,0)
     # Don't forget to add in roe, interest coverage ratio
 
     ## Make it into Dataframes
-
     #df= pd.DataFrame({'eps': eps,'epsgrowth': epsgrowth,'netincome': netincome,'shareholderequity':shareholderequity,'roa': roa,'longtermdebt': longtermdebt,'interestexpense':interestexpense,'ebitda': ebitda},index=range(dt.today().year-5,dt.today().year))
     df= pd.DataFrame({'eps': eps,'epsgrowth': epsgrowth,'netincome': netincome,'shareholderequity':shareholderequity,'roa': roa,'longtermdebt': longtermdebt,'interestexpense':interestexpense,'ebitda': ebitda,'year':range(dt.today().year-5,dt.today().year)})
     df = df.set_index('year')
@@ -265,7 +263,6 @@ def get_stock_financial_report(ticker):
     # Adding roe, interest coverage ratio
     #dfformatted['roe'] = dfformatted.netincome/dfformatted.shareholderequity
     #dfformatted['interestcoverageratio'] = dfformatted.ebitda/dfformatted.interestexpense
-    #print(dfformatted)
     return df  
 
 # Convert report formatted currency to number and add row , interestcoverageratio
