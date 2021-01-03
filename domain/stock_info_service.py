@@ -3,9 +3,6 @@ from bs4 import BeautifulSoup
 import pandas as pd
 from pandas_datareader import data as pdr
 from datetime import datetime as dt
-import matplotlib.pyplot as plt
-import cufflinks as cf
-import plotly.offline as plyo
 from .utils import *
 
 ### Extract lists of the stocks with their tickers
@@ -142,65 +139,6 @@ def get_stock_price(ticker,start_date,end_date=dt.now()):
         )
     else:
         print('Need stock ticker parameter')
-
-def plot_stock_chart(ticker,title,stockprice_df):
-    plt.figure(figsize=(20,8))
-    plt.plot(stockprice_df.index,stockprice_df.Close)
-    #plt.plot(stockprice_df.index,stockprice_df.Open)
-    #plt.plot(stockprice_df.index, (stockprice_df.Close + stockprice_df.Open) / 2.0 )
-    plt.title('Google stock price',fontsize=18)
-    plt.show()
-
-### Draw classic stock K chart
-def plot_stock_k_chart(ticker,stockprice_df,asFigure=False):
-    #title=''
-    if (ticker==None or ticker.strip()==''):
-        return None
-    # stockprice_df=get_stock_price(ticker,dt(2020,1,1),end_date=dt.now())  
-    quotes = stockprice_df[['Open','High','Low','Close','Volume']]
-    qf = cf.QuantFig(
-        quotes,
-        title=ticker,
-        legend='top',
-        name='K',
-        up_color='red',
-        down_color='green',
-        
-    )
-    
-    qf.add_sma(
-        periods=5,
-        column='Close',
-        name='sma-5',
-        str='SMA-5',
-        color='red'
-    )
-    qf.add_sma(
-        periods=20,
-        column='Close',
-        name='sma-20',
-        str='SMA-20'
-    )
-    qf.add_sma(
-        periods=60,
-        column='Close',
-        name='sma-60',
-        str='SMA-60'
-    )
-    #qf.add_volume()
-    qf.add_macd()
-    qf.add_rsi(periods=14, showbands=False)
-    
-    #print(ticker)
-  #  fig = plyo.iplot(
-  #      qf.iplot(asFigure=True,    dimensions=(800,600)),
-  #      filename='qf_img'
-  #  )
-    #return qf.iplot(asFigure=True,    dimensions=(800,600))
-    #return qf.iplot()
-    return qf.iplot(asFigure=asFigure)
-
-
 
 
 ### 

@@ -1,0 +1,4 @@
+name: stock-dashboard
+sources:
+- https://github.com/CTSteven/StockDashboard
+version: 1.0.2

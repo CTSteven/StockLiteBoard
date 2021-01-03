@@ -92,11 +92,4 @@ This application has not been rigorously tested and its domain rules are very si
 3. Install Google Cloud extend module for Visual Studio Code
 4. Use Cloud Run to deploy application in Visual Studio Code
 
-### Run in Jupyter Notebook
-1. Open StockDAshboard.ipynb in Jupyter Notebook
-2. Its UI design is 2nd version different from latest style.  
-3. It use jupyter-dash to wrap Dash application ( dashboard.py) and open in new browser. May need to install related packages to successfully run in Jupyter notebook.
-
-
-
 
