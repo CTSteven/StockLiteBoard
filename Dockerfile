@@ -1,6 +1,6 @@
 # Python image to use.
 FROM python:3.8-slim-buster
-
+#FROM python:3.8-alpine
 # Set the working directory to /app
 ENV APP_HOME /app
 WORKDIR $APP_HOME

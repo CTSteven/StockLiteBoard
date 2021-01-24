@@ -35,6 +35,9 @@ Some experts have already developed models and software to solve financial marke
 
 Lots of domain knowledge and skills are required to build similar system.
 
+[The Wall Street Journal (2021-01-18) : <br>Quant hedge fund tells clients that drop of 20% to 30% was partly due to increased volatility.  ](https://www.wsj.com/articles/renaissance-says-losses-should-have-been-expected-at-some-point-11611008784)
+<br> Wow, even the best model won't always beat the market ...
+
 ---
 ## Warning : ##
 This application has not been rigorously tested and its domain rules are very simple which are hard to cover the complexity of real stock market. There may be also incorrect data introduced by some not found bugs or data sources .

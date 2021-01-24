@@ -1,3 +1,6 @@
 InvestmentDashboard.ipynb
 .gitignore
 .vscode
+.metals
+k8s
+__pycache__
