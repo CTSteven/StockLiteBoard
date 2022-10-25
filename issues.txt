@@ -1,0 +1,11 @@
+bug:
+    fetch stock price history from Yahoo failed.
+    Unable to read URL: https://finance.yahoo.com/quote/GOOG/history?period1=1508954072&period2=1666727999&interval=1d&frequency=1d&filter=history
+fixed:
+    update  pandas-datareader module to upper than 0.10.0
+
+issues:
+    Cannot install argon2-cffi module in MacOS
+fixed:
+    seems to agreed xcode license first ...
+    I try to upgrade pip pipenv python3.9 too
