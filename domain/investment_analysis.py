@@ -27,7 +27,6 @@ def eligibilitycheck(ticker, dfformatted):
     legiblestock = True
     reasonlist = []
 
-    # print (dfformatted)
     # EPS increases over the year (consistent)
     for growth in dfformatted.epsgrowth:
         if growth < 0:
@@ -52,7 +51,7 @@ def eligibilitycheck(ticker, dfformatted):
     if dfformatted.interestcoverageratio.tail(1).values[0] < 3:
         legiblestock = False
         reasonlist.append('Interest Coverage Ratio is less than 3 ')
-#     print ticker,legiblestock,reasonlist
+    logger.debug('ticker %s, legiblestock %s, reasonlist %s', ticker, legiblestock, reasonlist)
     return reasonlist
 
 
@@ -65,7 +64,6 @@ def infer_reasonable_share_price(ticker, financialreportingdf, stockpricedf, dis
     # Find EPS Annual Compounded Growth Rate
     # annualgrowthrate =  financialreportingdf.epsgrowth.mean() #growth rate
 
-    # print('financialreportdf:\n',financialreportingdf)
     try:
 
         # Calcuate the rate per period
@@ -92,9 +90,10 @@ def infer_reasonable_share_price(ticker, financialreportingdf, stockpricedf, dis
 
     # np.fv, compute the future value. parameters: interest rate , periods, payment, present value
         futureeps = abs(npf.fv(annualgrowthrate, years, 0, lasteps))
+        logger.debug('futureeps %s, annualgrowthrate %s, years %s, lasteps %s ', futureeps,annualgrowthrate, years, lasteps)
         dfprice.loc[0] = [ticker, annualgrowthrate, lasteps, futureeps]
     except:
-        print('eps does not exist')
+        logger.error('eps does not exist')
     dfprice.set_index('ticker', inplace=True)
     # conservative
     dfprice['peratio'] = findMinimumPER(stockpricedf, financialreportingdf)
@@ -121,6 +120,7 @@ def findMinimumPER(stockpricedf, financialreportingdf):
     #finrepdf = financialreportingdf.set_index('index')
   #  finrepdf.rename(columns={"index": "year"})
     stockpricedf['year'] = pd.DatetimeIndex(stockpricedf.index).year
+    logger.debug("stockpricedf['year'] %s, pd.DatetimeIndex(stockpricedf.index).year %s",stockpricedf['year'],pd.DatetimeIndex(stockpricedf.index).year)
     # base on yearly mean close price 
     #gframe = stockpricedf.groupby('year').head(1).set_index('year')
     gframe = stockpricedf.groupby('year')['Close'].agg(['mean'])

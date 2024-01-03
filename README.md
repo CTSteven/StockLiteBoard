@@ -1,15 +1,15 @@
-## Stock Investment Dashboard, with python 
+## Implement Simple Stock Investment Dashboard with python 
 ---
 
 ### Go to [ demo site ](https://stock-dashboard-c2s6b2cyea-de.a.run.app)
 
 ### Purpose
 
-This project is originally for practice purpose , in order to learn how to build web application in Python way after finished some Deep Learning courses with Jupyter Notebook. 
-I found Vincent's blog about using python to build investment tool which could analyze and predict stock's reasonable price based on predicted future value. I am interest in investment. I start to work on 1st version , mainly reference to  Vincent's project. 
+This project is a practice to learn how to build web application in Python after finished some Deep Learning courses with Jupyter Notebook. 
+I found Vincent's blog about using python to build investment tool to analyze and predict stock's reasonable price based on predicted future value. I am interest in investment. I start to build 1st version , mainly refer to  Vincent's project. 
 ( You can go to [Vincent Tatan's blog and GitHub project ](https://towardsdatascience.com/value-investing-dashboard-with-python-beautiful-soup-and-dash-python-43002f6a97ca) to get more information. )
  
-After 1st version finished, I start to migrate framework , redesign  UI , improve performance, add technical analysis charts , try to make this application easy to use.  You can go to [ demo site ](https://stock-dashboard-c2s6b2cyea-de.a.run.app) to try it out.
+After 1st version , I migrate web framework , redesign  UI , improve performance, add technical analysis charts , try to make this tool more easy to use.  You can go to [ demo site ](https://stock-dashboard-c2s6b2cyea-de.a.run.app) to try it out.
 
 This application implement simplified model to predict expected stock price. 
 1. Annual_growth
@@ -76,15 +76,18 @@ This application has not been rigorously tested and its domain rules are very si
 
 ## Run and Deploy
 1. No requirement for database 
-2. Stock price and financial information are real time access from other web site or service , if data source web sites block request that will cause service error
+2. Stock price and financial data are retrieved from other web site or service in real time, if data sources are blocked or data specs are changed that will cause service error
 3. Stock information will be cached in memory for 12 hr after first accessed
-4. Demo site is deploy to Google Cloud Run, it may need more seconds to start application if it already auto shutdown after long idle. 
-5. It may take more seconds to refresh stock information if it's the first access of selected stock in last 12 hours
+4. Demo site is deploy to Google Cloud Run, it may need a few seconds to start application if it already auto shutdown after long idle. 
+5. It may take a few seconds to refresh stock information if it's the first access of selected stock in last 12 hours
 
  
 ### Run in development mode
-1.  python manage.py runserver
-  
+1. config/settings.py will read OS environment variable to set logger level, set 'LOVVER_LOG_LEVLE=DEBUG' will enable debug mode
+1. python manage.py runserver
+
+**Set OS environment variable 'LOGGER_LEVEL **
+
 ### Run in gunicorn
 1. python manage.py collectstatic  // this will copy css js image ... files to staticfiles folder
 2. gunicorn --bind 0.0.0.0:change_to_prefered_port config.wsgi:application
@@ -95,4 +98,10 @@ This application has not been rigorously tested and its domain rules are very si
 3. Install Google Cloud extend module for Visual Studio Code
 4. Use Cloud Run to deploy application in Visual Studio Code
 
+
+What's new or fixed issues:
+
+2024-01-03
+1. Refacor codes to follow pylint and mypy rules
+2. Fixed issue: Error occured when retrieve stock data from yahoo
 

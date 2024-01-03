@@ -1,0 +1,12 @@
+Create project package requirements:
+    pip freeze > requirements.txt
+    this command will generate a lot of packages including some unused without cleaned packages during development
+
+logger.level :
+
+- `DEBUG`: 10
+- `INFO`: 20
+- `WARNING`: 30
+- `ERROR`: 40
+- `CRITICAL`: 50
+

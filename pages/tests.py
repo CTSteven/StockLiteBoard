@@ -14,6 +14,6 @@ class PagesTests(SimpleTestCase):
 
 
 class ServicesTests(TestCase):
-    def test_getInvestmentSuggestion_ZBRA(self):
-        suggestion = services.getInvestmentSuggestion('ZBRA',discount=0.025,margin=0.15)
+    def test_get_investment_suggestion_ZBRA(self):
+        suggestion = services.get_investment_suggestion('ZBRA',discount=0.025,margin=0.15)
         self.assertEqual(suggestion.iloc[0].lasteps, 10.08)

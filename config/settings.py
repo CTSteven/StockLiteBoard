@@ -30,6 +30,7 @@ DEBUG = int(os.environ.get("DEBUG", default='1'))
 ALLOWED_HOSTS = ['*']
 
 DJANGO_LOG_LEVEL = os.environ.get("DJANGO_LOG_LEVEL", default="INFO")
+LOGGER_LOG_LEVEL = os.environ.get("LOGGER_LOG_LEVEL", default="INFO")
 
 LOGGING = {
     'version': 1,
@@ -40,25 +41,31 @@ LOGGING = {
             'style': '{',
         },
         'simple': {
-            'format': '{levelname} {clientip} {asctime} {message}',
+            'format': '{levelname} {asctime} {module} {lineno} {funcName} {message}',
             'style': '{',
         },
     },
     'handlers': {
         'console': {
             'class': 'logging.StreamHandler',
+            'formatter':'simple',
         },
     },
     'loggers': {
         'django': {
             'handlers': ['console'],
-            'level': ('INFO' if DJANGO_LOG_LEVEL == None else DJANGO_LOG_LEVEL) ,
+            'level': ('INFO' if DJANGO_LOG_LEVEL is None else DJANGO_LOG_LEVEL) ,
             'propagate': True,
         },
         'pages':{
             'handlers': ['console'],
             'level': ('DEBUG' if DEBUG else 'INFO'),
-            #'formatter':'simple',
+            'formatter':'simple',
+            'propagate': True,
+        },
+        'domain': {
+            'handlers': ['console'],
+            'level': ('INFO' if LOGGER_LOG_LEVEL is None else LOGGER_LOG_LEVEL) ,
             'propagate': True,
         }
     },

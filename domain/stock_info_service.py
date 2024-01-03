@@ -1,9 +1,17 @@
-import requests
-from bs4 import BeautifulSoup
-import pandas as pd
-from pandas_datareader import data as pdr
+""" Services for Stock Information """
 from datetime import datetime as dt
+from typing import cast
+import pandas as pd
+import requests
+import logging
+from bs4 import BeautifulSoup
+import yfinance as yf
+yf.pdr_override()
+from pandas_datareader import data as pdr
+
 from .utils import *
+
+logger = logging.getLogger(__name__)
 
 ### Extract lists of the stocks with their tickers
 def save_sp500_stocks_info():  
@@ -112,7 +120,6 @@ def get_taiwan_stocks_info():
 
 # self append other stock list
 def save_self_stocks_info():
-    print("Adding own list of stocks info")
 
     dictlist = []
 
@@ -129,28 +136,46 @@ def save_self_stocks_info():
 
     return dictlist
 
-### Get stock price record from yahoo
-def get_stock_price(ticker,start_date,end_date=dt.now()):
-    if (ticker != None):
-        #ticker='2330.tw'
-        #ticker='GOOG'
-        return pdr.DataReader(
-            ticker.strip(),data_source='yahoo',start=start_date,end=end_date
-        )
+
+def get_stock_price(ticker, start_date, end_date=dt.now()) -> pd.DataFrame:
+    """
+    Get the stock price data for a given ticker and date range from yahoo.
+    
+    Args:
+        ticker (str): The stock ticker symbol.
+        start_date (datetime): The start date of the price data.
+        end_date (datetime, optional): The end date of the price data. Defaults to the current date.
+    
+    Returns:
+        pd.DataFrame: The stock price data.
+    """
+    if ticker is not None:
+        # ticker='2330.tw'
+        # ticker='GOOG'
+        try:
+            logger.debug("ticker : %s, start_date : %s, end_date : %s", ticker,start_date, end_date)
+            stock_price_data = pdr.get_data_yahoo(ticker.strip(), start=start_date, end=end_date)
+            logger.debug("total %d  stock price records of ticker %s from yahoo \n", stock_price_data.size, ticker)
+            return cast(pd.DataFrame,
+                        stock_price_data
+            )
+        except Exception as e:
+            logger.error("Exception : %s", e)
+            raise ValueError('Retrieve stock price data from yahoo failed')
     else:
-        print('Need stock ticker parameter')
+        raise ValueError('Missing stock ticker parameter')
 
 
-### 
-#  Get stock's financial information by parsing web page in MarketWatch website.
-###
-def get_stock_financial_report(ticker):
+def get_stock_financial_report(ticker) -> pd.DataFrame:
+    """
+      Get stock's financial information by parsing web page in MarketWatch website.
+    """
     ticker = ticker.strip()
     financial_url = 'https://www.marketwatch.com/investing/stock/%s/financials'%ticker
     balancesheet_url = 'https://www.marketwatch.com/investing/stock/%s/financials/balance-sheet'%ticker
-    #print(financial_url)
+
     text_soup_financials = BeautifulSoup(requests.get(financial_url).text,"lxml")
-    text_soup_balancesheet = BeautifulSoup(requests.get(balancesheet_url).text,"lxml")
+    text_soup_balancesheet = BeautifulSoup(requests.get(balancesheet_url, timeout=10).text,"lxml")
 
     # Income Statement
     titlesfinancials = text_soup_financials.findAll('td',{'class':'fixed--column'})
@@ -193,7 +218,14 @@ def get_stock_financial_report(ticker):
 
     ## Make it into Dataframes
     #df= pd.DataFrame({'eps': eps,'epsgrowth': epsgrowth,'netincome': netincome,'shareholderequity':shareholderequity,'roa': roa,'longtermdebt': longtermdebt,'interestexpense':interestexpense,'ebitda': ebitda},index=range(dt.today().year-5,dt.today().year))
-    df= pd.DataFrame({'eps': eps,'epsgrowth': epsgrowth,'netincome': netincome,'shareholderequity':shareholderequity,'roa': roa,'longtermdebt': longtermdebt,'interestexpense':interestexpense,'ebitda': ebitda,'year':range(dt.today().year-5,dt.today().year)})
+    df= pd.DataFrame({'eps': eps,'epsgrowth': epsgrowth,
+                      'netincome': netincome,
+                      'shareholderequity':shareholderequity,
+                      'roa': roa,
+                      'longtermdebt': longtermdebt,
+                      'interestexpense':interestexpense,
+                      'ebitda': ebitda,
+                      'year':range(dt.today().year-5,dt.today().year)})
     df = df.set_index('year')
     # convert financial report money format to numeric
     #dfformatted = df.apply(financial_report_format)
@@ -201,17 +233,24 @@ def get_stock_financial_report(ticker):
     # Adding roe, interest coverage ratio
     #dfformatted['roe'] = dfformatted.netincome/dfformatted.shareholderequity
     #dfformatted['interestcoverageratio'] = dfformatted.ebitda/dfformatted.interestexpense
-    return df  
+    return df
 
 # Convert report formatted currency to number and add row , interestcoverageratio
-def get_stock_financial_info_from_report(stock_financial_report):
-    #print('stock_financial_report : \n',stock_financial_report)
+def get_stock_financial_info_from_report(stock_financial_report) -> pd.DataFrame:
+    """
+    Get stock's financial information from the given financial report.
+    
+    Args:
+        stock_financial_report (pd.DataFrame): The financial report of the stock.
+    
+    Returns:
+        pd.DataFrame: The formatted financial information with added ROE and interest coverage ratio.
+    """
     # Format all the number in dataframe
     dfformatted = stock_financial_report.apply(financial_report_format)
 
     # Adding roe, interest coverage ratio
     dfformatted['roe'] = dfformatted.netincome/dfformatted.shareholderequity
     dfformatted['interestcoverageratio'] = dfformatted.ebitda/dfformatted.interestexpense
-    #print('dfformatted:\n',dfformatted)
-#     Insert ticker and df
+    
     return dfformatted

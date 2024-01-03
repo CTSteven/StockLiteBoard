@@ -10,7 +10,7 @@ def getelementinlist(list,element):
         return '-'
 
 
-def financial_report_format(list):
+def financial_report_format(list) -> list:
     """
         Formatting df value to numerical
     """

@@ -3,10 +3,21 @@ bug:
     Unable to read URL: https://finance.yahoo.com/quote/GOOG/history?period1=1508954072&period2=1666727999&interval=1d&frequency=1d&filter=history
 fixed:
     update  pandas-datareader module to 0.10.0
-    require requirements.txt to update too
+    require requirements.txt to update
 
-issues:
+issue:
     Cannot install argon2-cffi module in MacOS
 fixed:
     seems to agreed xcode license first ...
-    I try to upgrade pip pipenv python3.9 too
+    Upgrade to python3.9
+
+issue:
+    mypy report many django.core.* modules import error: 
+        Skipping analyzing "django.core.cache": module is installed, but missing library stubs or py.typed marker  [import-untyped]
+
+    still not know how to resolve this issue.
+    A article describe similar  error report from mypy and how to fix them. 
+    https://gist.github.com/jwhitlock/bb149f3d1525b21c563b25b695d7ad4d  
+    This article may give good suggestion to fix this issue. 
+
+    

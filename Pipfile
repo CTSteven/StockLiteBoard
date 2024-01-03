@@ -4,13 +4,18 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+mypy = "*"
+pandas-stubs = "*"
+types-requests = "*"
+types-beautifulsoup4 = "*"
+googlesearch-python = "*"
 
 [packages]
+dash = "*"
 django = "*"
 djangorestframework = "*"
 django-cors-headers = "*"
 requests = "*"
-bs4 = "*"
 pandas = "*"
 matplotlib = "*"
 cufflinks = "*"
@@ -20,6 +25,9 @@ python-memcached = "*"
 numpy-financial = "*"
 pandas-datareader = "*"
 argon2-cffi = "*"
+types-requests = "*"
+dj-static = "*"
+yfinance = "*"
 
 [requires]
 python_version = "3.8"
