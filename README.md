@@ -83,10 +83,9 @@ This application has not been rigorously tested and its domain rules are very si
 
  
 ### Run in development mode
-1. config/settings.py will read OS environment variable to set logger level, set 'LOVVER_LOG_LEVLE=DEBUG' will enable debug mode
+1. config/settings.py will read OS environment variable to set logger level, set 'LOGGER_LOG_LEVLE=DEBUG' will enable debug mode
 1. python manage.py runserver
 
-**Set OS environment variable 'LOGGER_LEVEL **
 
 ### Run in gunicorn
 1. python manage.py collectstatic  // this will copy css js image ... files to staticfiles folder
