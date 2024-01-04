@@ -1,18 +1,20 @@
 """
     Run "Simple Investment Dashboard" in Flask.
 """
+import logging
+import os
 import dash
 import dash_bootstrap_components as dbc
-import dashboard 
+import dashboard
 from dashboard import *
 #import importlib
-import logging
+
 from flask.logging import default_handler
-import os
+
 #%reload_ext autoreload
 #%autoreload 2
 #%matplotlib inline
-cf.offline.go_offline() # with execute this command will cause QuantFig.iplot() run into error
+#cf.offline.go_offline() # with execute this command will cause QuantFig.iplot() run into error
 
 
 # external JavaScript files
@@ -31,7 +33,7 @@ application = app.server
 app.layout = dashboard_layout()
 app.title = 'Simple Value Investing Dashboard'
 debug_mode = os.environ.get('FLASK_DEBUG') == '1'
-if ( debug_mode ):
+if  debug_mode:
     app.logger.setLevel(level=logging.DEBUG)
 register_callbacks(app)
 if __name__ == '__main__':
@@ -41,5 +43,5 @@ if __name__ == '__main__':
         port=server_port,
         host='0.0.0.0',
         dev_tools_ui=False,
-        dev_tools_silence_routes_logging=True) 
+        dev_tools_silence_routes_logging=True)
     # dev_tools_silence_routes_logging=False

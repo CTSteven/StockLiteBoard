@@ -181,7 +181,7 @@ def get_financial_warning_list(ticker):
         list: The financial warning list.
     """
     financial_warning_list = cache.get(financial_warning_list_cache_key(ticker))
-    if (financial_warning_list is None ):
+    if financial_warning_list is None :
         _, _, financial_warning_list = refresh_financial_report_cache(ticker)
     return financial_warning_list
 

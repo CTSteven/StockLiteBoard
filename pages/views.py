@@ -14,8 +14,6 @@ import pandas as pd
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from django.core.cache import cache
-from . import consts 
 from .services import get_financial_report, get_investment_suggestion, get_sp500_stock_list, \
     get_stock_price_history , get_financial_warning_list , get_yearly_stock_price
 
@@ -41,16 +39,13 @@ def dashboard_view(request):
     This function provides the view for the dashboard.
     """
     stock_list = get_sp500_stock_list()
-    #step_range = {i: '{:.2f}'.format(round(i, 2)) for i in np.arange(0, 1, 0.05)}
-    discount_range = np.arange(0,10.1,0.5)
-    discount_range = list(map(lambda x: str('{:.1f}'.format(x)), discount_range))
-    margin_range = np.arange(0,0.51,0.05)
-    margin_range = list(map(lambda x: str('{:.2f}'.format(x)), margin_range))
+    discount_range = [f'{x:.1f}' for x in np.arange(0, 10.1, 0.5)]
+    margin_range = [f'{x:.2f}' for x in np.arange(0, 0.51, 0.05)]
     context = {
-        'stock_list':stock_list, 
-        'discount_range':discount_range,
-        'margin_range':margin_range
-        }
+        'stock_list': stock_list,
+        'discount_range': discount_range,
+        'margin_range': margin_range
+    }
     template = 'pages/dashboard.html'
     return render(request,template,context)
 
@@ -66,7 +61,7 @@ def stock_price_history_view(request):
     if request.method=='GET':
         ticker=request.query_params.get('ticker')
     elif request.method=='POST':
-        data = request.body.decode('utf-8') 
+        data = request.body.decode('utf-8')
         json_data = json.loads(data)
         ticker = json_data.get('ticker')
 
@@ -75,8 +70,11 @@ def stock_price_history_view(request):
 
     try:
         stock_price_history = get_stock_price_history(ticker).reset_index()
-        json_data = stock_price_history[['Date','Open','High','Low','Close','Volume']].to_json(orient="values",date_format="epoch",double_precision=5)
-        logger.debug('stock price history total take %s',  str( datetime.now() - dt_start) ) 
+        json_data = stock_price_history[['Date','Open','High','Low','Close','Volume']].to_json(
+            orient="values",
+            date_format="epoch",
+            double_precision=5)
+        logger.debug('stock price history total take %s',  str( datetime.now() - dt_start) )
         return HttpResponse(json_data, content_type="application/json")
     except Exception as e:
         exc_type, exc_value, exc_traceback = sys.exc_info()
@@ -104,7 +102,7 @@ def investment_suggestion_view(request):
     if margin is None :
         err_msg = err_msg + 'Margin is empty\n'
 
-    logger.debug('ticker %s discount %s margin %s' % (ticker,discount,margin))
+    logger.debug(f'ticker {ticker} discount {discount} margin {margin}')
 
     if  err_msg != "":
         return HttpResponse({err_msg}, content_type="application/json")
@@ -125,7 +123,7 @@ def financial_report_view(request):
     data = request.body.decode('utf-8')
     json_data = json.loads(data)
     ticker = json_data.get('ticker')
-    if (ticker == None ):
+    if ticker is None :
         return HttpResponse({}, content_type="application/json")
 
     try:
@@ -148,6 +146,3 @@ def financial_report_view(request):
     except Exception as e:
         logger.error(e)
         return Response(str(e),status= status.HTTP_400_BAD_REQUEST)
-
-
-

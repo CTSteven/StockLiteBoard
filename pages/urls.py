@@ -20,4 +20,3 @@ urlpatterns = [
          JavaScriptCatalog.as_view(),
          name='javascript-catalog'),
 ]
-

@@ -175,7 +175,7 @@ LOCALE_PATHS = [
 # create locale message file for template : django-admin makemessages --locale=zh --extension html
 # create locale message file for javascript : django-admin makemessages -d djangojs --locale=zh
 # edit translation content of django.po  djangojs.po files
-# compile translation message file: django-admin compilemessages 
+# compile translation message file: django-admin compilemessages
 #
 
 CORS_ALLOWED_ORIGINS = [
@@ -186,12 +186,12 @@ CORS_ALLOWED_ORIGINS = [
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 # If got static files not found error , read following document
 # https://docs.djangoproject.com/en/3.1/howto/static-files/deployment/
-# 
+#
 #
 # If run gunicorn , it search static files path of STATIC_ROOT setting
 # In following sample , it's BASE_DIR/staticfiles
 # First, Run :  python manage.py collectstatic , this command copy static files of whole project to staticfiles folder
-# for example, 
+# for example,
 # 1. add following  static files settings
 # 2. install gunicorn and dj-static package
 # 3. change wsgi.py
@@ -222,7 +222,7 @@ STATICFILES_FINDERS = [
 """
 
 
-# In order to use Memcached in Mac , install memcached first: 
+# In order to use Memcached in Mac , install memcached first:
 # brew install memcached
 # brew services start memcached
 

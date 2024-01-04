@@ -31,13 +31,12 @@ def eligibilitycheck(ticker, dfformatted):
     for growth in dfformatted.epsgrowth:
         if growth < 0:
             legiblestock = False
-            reasonlist.append('There is negative growth : '+str('{:.2f}'.format(growth)))
+            reasonlist.append(f'There is negative growth: {growth:.2f}')
             break
     # ROE > 0.15
     if dfformatted.roe.mean() < 0.13:
         legiblestock = False
-        reasonlist.append('ROE mean is less than 0.13 : ' +
-                          str('{:.2f}'.format(dfformatted.roe.mean())))
+        reasonlist.append(f'ROE mean is less than 0.13: {dfformatted.roe.mean():.2f}')
     # ROA > 0.07 (also consider debt to equity cause Assets = liabilities + equity)
     if dfformatted.roa.mean() < 0.07:
         legiblestock = False
@@ -56,6 +55,21 @@ def eligibilitycheck(ticker, dfformatted):
 
 
 def infer_reasonable_share_price(ticker, financialreportingdf, stockpricedf, discountrate, marginrate):
+    """
+    Infer the reasonable share price for a given ticker based on financial reporting data, stock price data, discount rate, and margin rate.
+
+    Parameters:
+    ticker (str): The ticker symbol of the stock.
+    financialreportingdf (pandas.DataFrame): The financial reporting data for the stock.
+    stockpricedf (pandas.DataFrame): The stock price data for the stock.
+    discountrate (float): The discount rate used for valuation.
+    marginrate (float): The margin rate used for valuation.
+
+    Returns:
+    float: The inferred reasonable share price.
+    """
+    # Add your code here
+
     years = 2  # period
     dfprice = pd.DataFrame(
         columns=['ticker', 'annualgrowthrate', 'lasteps', 'futureeps'])
@@ -68,23 +82,19 @@ def infer_reasonable_share_price(ticker, financialreportingdf, stockpricedf, dis
 
         # Calcuate the rate per period
         # parameter:  periods , payment, present value, future value
-        firstEPS = financialreportingdf.eps.iloc[0]
-        lastEPS = financialreportingdf.eps.iloc[-1]
+        first_eps = financialreportingdf.eps.iloc[0]
+        last_eps = financialreportingdf.eps.iloc[-1]
         # Adjust firstEPS at least 1 , prevent npf.rate get NaN
-        if (firstEPS<1):
-            adj = 1 - firstEPS
-            firstEPS = firstEPS + adj
-            lastEPS =  lastEPS + adj
+        if first_eps<1:
+            adj = 1 - first_eps
+            first_eps = first_eps + adj
+            last_eps =  last_eps + adj
             
-        annualgrowthrate = npf.rate(len(financialreportingdf.eps)-1, 0, -1 * firstEPS,lastEPS)
-        #print("Annual Growth Rate %f" % annualgrowthrate)
+        annualgrowthrate = npf.rate(len(financialreportingdf.eps)-1, 0, -1 * first_eps,last_eps)
 
         # Non Conservative
-        #print(financialreportingdf)
+
         lasteps = financialreportingdf.eps.tail(1).values[0]  # presentvalue
-        #print('1st eps ',financialreportingdf.eps.iloc[0])
-        #print('last eps ',financialreportingdf.eps.iloc[-1])
-        #print('annual growth rate ',annualgrowthrate)
         # conservative
         # lasteps = financialreportingdf.eps.mean()
 
@@ -92,11 +102,11 @@ def infer_reasonable_share_price(ticker, financialreportingdf, stockpricedf, dis
         futureeps = abs(npf.fv(annualgrowthrate, years, 0, lasteps))
         logger.debug('futureeps %s, annualgrowthrate %s, years %s, lasteps %s ', futureeps,annualgrowthrate, years, lasteps)
         dfprice.loc[0] = [ticker, annualgrowthrate, lasteps, futureeps]
-    except:
-        logger.error('eps does not exist')
+    except Exception as e:
+        logger.error('eps does not exist: %s', str(e))
     dfprice.set_index('ticker', inplace=True)
     # conservative
-    dfprice['peratio'] = findMinimumPER(stockpricedf, financialreportingdf)
+    dfprice['peratio'] = find_minimum_PER(stockpricedf, financialreportingdf)
     # future stock price
     dfprice['FV'] = dfprice['futureeps'] * dfprice['peratio']
     #print('dfprice:\n',dfprice)
@@ -113,7 +123,7 @@ def infer_reasonable_share_price(ticker, financialreportingdf, stockpricedf, dis
     return dfprice
 
 
-def findMinimumPER(stockpricedf, financialreportingdf):
+def find_minimum_PER(stockpricedf, financialreportingdf):
     """ 
         Given the share price and eps of per year , calculate PE ration of each year then return the minimum one.
     """

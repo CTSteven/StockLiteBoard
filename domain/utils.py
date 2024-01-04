@@ -1,22 +1,23 @@
-
-
-def getelementinlist(list,element):
+"""
+ This module offers utility functions.
+"""
+def getelementinlist(data_list, element):
     """
-        Retrieve array element , return '-' if out of index.
+        Retrieve array element, return '-' if out of index.
     """
     try:
-        return list[element]
-    except:
+        return data_list[element]
+    except IndexError:
         return '-'
 
 
-def financial_report_format(list) -> list:
+def financial_report_format(data_list) -> list:
     """
         Formatting df value to numerical
     """
     newlist=[]
     posornegnumber = 1
-    for text in list:
+    for text in data_list:
         if isinstance(text, str):
             if text.endswith(')'):
                 text = text[1:-1] # remove the parentheses
@@ -25,27 +26,27 @@ def financial_report_format(list) -> list:
                 posornegnumber = 1
             if text.endswith('%'):
     #             Then please make it into comma float
-                endtext = float(text[:-1].replace(",",""))/100.0 * posornegnumber 
+                endtext = float(text[:-1].replace(",",""))/100.0 * posornegnumber
             elif text.endswith('B'):
     #             Then please times 1000000000
     #             Change it into integer
-                endtext = int(float(text[:-1].replace(",",""))*1000000000)* posornegnumber 
+                endtext = int(float(text[:-1].replace(",",""))*1000000000)* posornegnumber
             elif text.endswith('M'):
     #             Then please times 1000000
     #             Change it into integer
-                endtext = int(float(text[:-1].replace(",",""))*1000000)* posornegnumber 
+                endtext = int(float(text[:-1].replace(",",""))*1000000)* posornegnumber
             elif ',' in text:
     #             Then please remove the ,
     #             Then change it into int
-                endtext = int(float(text.replace(",","")))* posornegnumber 
+                endtext = int(float(text.replace(",","")))* posornegnumber
 
             elif text.endswith('-'):
     #             Insert 0
                 endtext = 0
             else:
     #             change to float
-                endtext = float(text)* posornegnumber 
+                endtext = float(text)* posornegnumber
         else:
             endtext = text
         newlist.append(endtext)
-    return newlist   
+    return newlist

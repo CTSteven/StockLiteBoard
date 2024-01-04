@@ -8,6 +8,7 @@ dash==2.14.2
 dash-core-components==2.0.0
 dash-html-components==2.0.0
 dash-table==5.0.0
+dashboard==0.0.6
 dj-static==0.0.6
 django==4.2.9
 django-cors-headers==4.3.1

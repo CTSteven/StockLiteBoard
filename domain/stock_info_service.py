@@ -1,20 +1,24 @@
 """ Services for Stock Information """
+from pandas_datareader import data as pdr
 from datetime import datetime as dt
-from typing import cast
+from typing import cast, Dict
+import logging
 import pandas as pd
 import requests
-import logging
 from bs4 import BeautifulSoup
 import yfinance as yf
 yf.pdr_override()
-from pandas_datareader import data as pdr
 
 from .utils import *
 
 logger = logging.getLogger(__name__)
 
 ### Extract lists of the stocks with their tickers
-def save_sp500_stocks_info():  
+def save_sp500_stocks_info():
+    """
+    Save S&P 500 stock information.
+    """
+    # Code implementation here
     resp = requests.get('http://en.wikipedia.org/wiki/List_of_S%26P_500_companies')
     soup = BeautifulSoup(resp.text,'lxml')
     table = soup.find('table',{'class':'wikitable sortable'})
@@ -45,6 +49,9 @@ def save_sp500_stocks_info():
     return stocks_info_df
 
 def get_stocks_ipywidgets_options():
+    """
+    Get options for stocks in IPywidgets format.
+    """
     #df =  save_sp500_stocks_info()
     df = get_taiwan_stocks_info()
     options = list(zip( df['labels'],df['tickers']+'.tw' ))
@@ -52,6 +59,9 @@ def get_stocks_ipywidgets_options():
     return  options
 
 def get_stocks_dash_options():
+    """
+    Get options for stocks in Dash format.
+    """
     df =  save_sp500_stocks_info()
     #df = get_taiwan_stocks_info()
     dictlist = []
@@ -62,6 +72,9 @@ def get_stocks_dash_options():
 # Tickers from russell
 # This function will return empty array until the csv file of Russell components is available.
 def save_russell_info():
+    """
+    Save Russell stock information.
+    """
     print("Getting russell stocks info")
     russell_csv_url = None
     dictlist = []
@@ -113,13 +126,16 @@ def get_taiwan_stocks_info():
     stocks_info_df = pd.DataFrame(stocks_info).T
     stocks_info_df.columns=['tickers','security','gics_industry','gics_sub_industry']
     stocks_info_df['seclabels'] = 'TWSE'
-    stocks_info_df['labels'] = stocks_info_df[['tickers','security', 'gics_industry','gics_sub_industry','seclabels']].apply(lambda x: ' - '.join(x), axis=1)
+    stocks_info_df['labels'] = stocks_info_df[['tickers','security', 'gics_industry','gics_sub_industry','seclabels']].apply(' - '.join, axis=1)
 
     return stocks_info_df
 
 
 # self append other stock list
 def save_self_stocks_info():
+    """
+    Save self stocks information.
+    """
 
     dictlist = []
 
@@ -161,7 +177,7 @@ def get_stock_price(ticker, start_date, end_date=dt.now()) -> pd.DataFrame:
             )
         except Exception as e:
             logger.error("Exception : %s", e)
-            raise ValueError('Retrieve stock price data from yahoo failed')
+            raise ValueError('Retrieve stock price data from yahoo failed') from e
     else:
         raise ValueError('Missing stock ticker parameter')
 
@@ -180,51 +196,44 @@ def get_stock_financial_report(ticker) -> pd.DataFrame:
     # Income Statement
     titlesfinancials = text_soup_financials.findAll('td',{'class':'fixed--column'})
 
-    epslist = []
-    netincomelist = []
-    longtermdebtlist = []
-    interestexpenselist = []
-    ebitdalist = []
+    financial_info : Dict[str,list]= {
+        'eps': [],
+        'netincome': [],
+        'shareholderequity':[],
+        'longtermdebt': [],
+        'interestexpense': [],
+        'ebitda': []
+    }
 
     for title in titlesfinancials:
         if 'EPS (Basic)' in title.text:
-            #epslist.append ([td.text for td in title.findNextSiblings(attrs={'class': 'valueCell'}) if td.text])
-            epslist.append ([td.text for td in title.parent.findAll('td')[1:6] ])
+            financial_info['eps'].append([td.text for td in title.parent.findAll('td')[1:6]])
         if 'Net Income' in title.text:
-            netincomelist.append ([td.text for td in title.parent.findAll('td')[1:6]])
+            financial_info['netincome'].append([td.text for td in title.parent.findAll('td')[1:6]])
         if 'Interest Expense' in title.text:
-            interestexpenselist.append ([td.text for td in title.parent.findAll('td')[1:6]])
+            financial_info['interestexpense'].append ([td.text for td in title.parent.findAll('td')[1:6]])
         if 'EBITDA' in title.text:
-            ebitdalist.append ([td.text for td in title.parent.findAll('td')[1:6]])
+            financial_info['ebitda'].append ([td.text for td in title.parent.findAll('td')[1:6]])
 
     # Balance sheet
     titlesbalancesheet = text_soup_balancesheet.findAll('td', {'class': 'fixed--column'})
-    equitylist=[]
+
     for title in titlesbalancesheet:
         if 'Total Shareholders\' Equity' in title.text:
-            equitylist.append( [td.text for td in title.parent.findAll('td')[1:6]])
+            financial_info['shareholderequity'].append( [td.text for td in title.parent.findAll('td')[1:6]])
         if 'Long-Term Debt' in title.text:
-            longtermdebtlist.append( [td.text for td in title.parent.findAll('td')[1:6]])
-
-    eps = getelementinlist(epslist,0)
-    epsgrowth = getelementinlist(epslist,1)
-    netincome = getelementinlist(netincomelist,0)
-    shareholderequity = getelementinlist(equitylist,0)
-    roa = getelementinlist(equitylist,1)
-    longtermdebt = getelementinlist(longtermdebtlist,0)
-    interestexpense =  getelementinlist(interestexpenselist,0)
-    ebitda = getelementinlist(ebitdalist,0)
-    # Don't forget to add in roe, interest coverage ratio
+            financial_info['longtermdebt'].append( [td.text for td in title.parent.findAll('td')[1:6]])
 
     ## Make it into Dataframes
     #df= pd.DataFrame({'eps': eps,'epsgrowth': epsgrowth,'netincome': netincome,'shareholderequity':shareholderequity,'roa': roa,'longtermdebt': longtermdebt,'interestexpense':interestexpense,'ebitda': ebitda},index=range(dt.today().year-5,dt.today().year))
-    df= pd.DataFrame({'eps': eps,'epsgrowth': epsgrowth,
-                      'netincome': netincome,
-                      'shareholderequity':shareholderequity,
-                      'roa': roa,
-                      'longtermdebt': longtermdebt,
-                      'interestexpense':interestexpense,
-                      'ebitda': ebitda,
+    df= pd.DataFrame({'eps': financial_info['eps'][0],
+                      'epsgrowth': financial_info['eps'][1],
+                      'netincome': financial_info['netincome'][0],
+                      'shareholderequity':financial_info['shareholderequity'][0],
+                      'roa': financial_info['shareholderequity'][1],
+                      'longtermdebt': financial_info['longtermdebt'][0],
+                      'interestexpense':financial_info['interestexpense'][0],
+                      'ebitda': financial_info['ebitda'][0],
                       'year':range(dt.today().year-5,dt.today().year)})
     df = df.set_index('year')
     # convert financial report money format to numeric
@@ -236,7 +245,7 @@ def get_stock_financial_report(ticker) -> pd.DataFrame:
     return df
 
 # Convert report formatted currency to number and add row , interestcoverageratio
-def get_stock_financial_info_from_report(stock_financial_report) -> pd.DataFrame:
+def get_stock_financial_info_from_report(stock_financial_report: pd.DataFrame) -> pd.DataFrame:
     """
     Get stock's financial information from the given financial report.
     
