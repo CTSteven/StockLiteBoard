@@ -104,3 +104,6 @@ What's new or fixed issues:
 1. Refacor codes to follow pylint and mypy rules
 2. Fixed issue: Error occured when retrieve stock data from yahoo
 
+2024-01-15
+1. Add Copilot usage guidelines and improve logging in investment_suggestion_view
+2. Refactor dashboard.js to asynchronously update charts when stock is selected.
