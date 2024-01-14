@@ -95,7 +95,8 @@
 
         function processAjaxErrorMessage(xhr, status, error) {
 
-            var errMsg = "Status Code : " + xhr.status + "<br>";
+            //var errMsg = "Status Code : " + xhr.status + "<br>";
+            var errMsg = "";
             if (xhr.status == 403) {
                 errMsg += "Unauthorized Access";
             }

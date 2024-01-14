@@ -1,3 +1,20 @@
+Getting the most out of Copilot:
+    refers to https://code.visualstudio.com/docs/editor/github-copilot
+
+- Provide context
+    - Open files
+    - Top level comment
+    - Appropriate includes and references
+    - Meaningful function names
+    - Specific and well-scoped function comments
+    - Prime Copilot with sample code
+
+- Be consistent and keep quality bar high
+    - Garbage in, garbage out
+    - Temporarily disable completions from Copilot status menu
+
+- To see more features in above article link
+
 Create project package requirements:
     pip freeze > requirements.txt
     this command will generate a lot of packages including some unused without cleaned packages during development

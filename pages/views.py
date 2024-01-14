@@ -102,7 +102,7 @@ def investment_suggestion_view(request):
     if margin is None :
         err_msg = err_msg + 'Margin is empty\n'
 
-    logger.debug(f'ticker {ticker} discount {discount} margin {margin}')
+    logger.debug('ticker %s discount %s margin %s', ticker, discount, margin)
 
     if  err_msg != "":
         return HttpResponse({err_msg}, content_type="application/json")

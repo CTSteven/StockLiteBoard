@@ -50,60 +50,80 @@ $(function () {
     $('#select-stock').change(function () {
         var ticker;
         ticker = $(this).val();
-        var url = '/pages/stockPriceHistory?ticker=' + ticker;
-        showDataLoading();
+        updateSelectedStock(ticker);
+    });
 
-        $.ajax({
-            type: "GET",
-            url: url,
-            success: function (data) {
-                ohlc = [],
-                    volume = [],
-                    dataLength = data.length,
-                    i = 0;
-                for (i; i < dataLength; i += 1) {
-                    ohlc.push([
-                        data[i][0], // the date
-                        data[i][1], // open
-                        data[i][2], // high
-                        data[i][3], // low
-                        data[i][4] // close
-                    ]);
-                    volume.push([
-                        data[i][0], // the date
-                        data[i][5] // the volume
-                    ]);
-                }
-                /*
-                stockChart.setTitle( {
-                    text: ticker+', Stock Price'
-                });*/
-                stockChart.series[0].update({
-                    data: ohlc,
-                    name: ticker + ' Stock Price'
-                }, false);
-                stockChart.series[4].update({
-                    data: volume,
-                    name: ticker + ' Volume '
-                }, false);
-                stockChart.redraw();
-                yahooFinancial_url =
-                    '<a target="YahooFinancial" class="text-success ml-3" style="font-size:1rem; text-decoration:underline" href="https://finance.yahoo.com/quote/' +
-                    ticker + '/">Yahoo Financial</a>';
-                $('#stock-chart-title').html(ticker + ', '+gettext('Stock Price History')+' '+ yahooFinancial_url);
-                $('#stock-chart-title').fadeOut(500).fadeIn(500);
-                updateFinancialReport(ticker);
-                updateInvestmentSuggestion(ticker);
-                hideDataLoading();
-            },
-            error: function (xhr, status, error) {
-                processAjaxErrorMessage(xhr, status, error);
-                hideDataLoading();
-                // console.log("ajax call went wrong:" + request.responseText);
-                // alert("Error message :" + request.responseText);
-            }
+});
+
+$(document).ready(function() {
+    updateSelectedStock('GOOG');
+});
+
+function updateSelectedStock(ticker) {
+        Promise.all([
+            updateStockPriceHistory(ticker),
+            updateFinancialReport(ticker),
+            updateInvestmentSuggestion(ticker)
+        ]).then(([historyResult, reportResult, suggestionResult]) => {
+           
+        }).catch(error => {
+            console.log(error);
+            alert(error);
         });
+}
 
+
+function updateStockPriceHistory(ticker) {
+    var url = '/pages/stockPriceHistory?ticker=' + ticker;
+    showDataLoading();
+
+    $.ajax({
+        type: "GET",
+        url: url,
+        success: function (data) {
+            ohlc = [],
+                volume = [],
+                dataLength = data.length,
+                i = 0;
+            for (i; i < dataLength; i += 1) {
+                ohlc.push([
+                    data[i][0], // the date
+                    data[i][1], // open
+                    data[i][2], // high
+                    data[i][3], // low
+                    data[i][4] // close
+                ]);
+                volume.push([
+                    data[i][0], // the date
+                    data[i][5] // the volume
+                ]);
+            }
+            /*
+            stockChart.setTitle( {
+                text: ticker+', Stock Price'
+            });*/
+            stockChart.series[0].update({
+                data: ohlc,
+                name: ticker + ' Stock Price'
+            }, false);
+            stockChart.series[4].update({
+                data: volume,
+                name: ticker + ' Volume '
+            }, false);
+            stockChart.redraw();
+            yahooFinancial_url =
+                '<a target="YahooFinancial" class="text-success ml-3" style="font-size:1rem; text-decoration:underline" href="https://finance.yahoo.com/quote/' +
+                ticker + '/">Yahoo Financial</a>';
+            $('#stock-chart-title').html(ticker + ', ' + gettext('Stock Price History') + ' ' + yahooFinancial_url);
+            $('#stock-chart-title').fadeOut(500).fadeIn(500);
+            hideDataLoading();
+        },
+        error: function (xhr, status, error) {
+            processAjaxErrorMessage(xhr, status, error);
+            hideDataLoading();
+            // console.log("ajax call went wrong:" + request.responseText);
+            // alert("Error message :" + request.responseText);
+        }
     });
 
     priceCompareSlider = $("#price-compare-slider > .js-range-slider").ionRangeSlider({
@@ -126,10 +146,7 @@ $(function () {
             data.slider.append(html);
         }
     });
-    createStockChart(default_ticker);
-    updateFinancialReport(default_ticker);
-    updateInvestmentSuggestion(default_ticker);
-});
+};
 
 function priceConvertToPercent(num, min, max) {
     return (num - min) / (max - min) * 100;
@@ -168,7 +185,7 @@ function updatePriceCompareSlider(present_value, margin_rate, latest_price) {
         onUpdate: function (data) {
             var html = '';
             var left = priceConvertToPercent(latest_price, min, max);
-            html += '<span id="latest-price-mark" style="left:' + left + '%">' + latest_price + '<br>'+gettext('Latest Price')+'</span>';
+            html += '<span id="latest-price-mark" style="left:' + left + '%">' + latest_price + '<br>' + gettext('Latest Price') + '</span>';
             data.slider.append(html);
         }
     });
@@ -204,7 +221,7 @@ function updateInvestmentSuggestion(ticker) {
             $('#price-margin').html('&#x00B1; ' + price_margin);
             $('#latest-price').text(obj.lastprice);
             //$('#suggestion').text(obj.suggestion);
-            $('#investment-suggestion-title').text(ticker + ', '+gettext('Predicting Future Value'));
+            $('#investment-suggestion-title').text(ticker + ', ' + gettext('Predicting Future Value'));
             $('#investment-suggestion-title').fadeOut(500).fadeIn(500);
             updatePriceCompareSlider(parseFloat(obj.PV), parseFloat(margin), parseFloat(obj.lastprice));
         },
@@ -250,7 +267,7 @@ function updateFinancialReport(ticker) {
             marketWatch_url =
                 '<a target="MarketWatch" class="text-success ml-3" style="font-size:1rem; text-decoration:underline" href="https://www.marketwatch.com/investing/stock/' +
                 ticker + '/financials">MarketWatch</a>';
-            $('#financial-info-title').html(ticker + ', '+gettext('Financial Information') + marketWatch_url);
+            $('#financial-info-title').html(ticker + ', ' + gettext('Financial Information') + marketWatch_url);
             $('#financial-info-title').fadeOut(500).fadeIn(500);
             // update financial warning list
             tbody = $('#financial-warning-list-table > tbody');
@@ -262,7 +279,7 @@ function updateFinancialReport(ticker) {
                 row_list = row_list + row;
             });
             tbody.append(row_list);
-            $('#financial-warning-list-title').text(ticker + ', '+gettext('Financial Warning List'));
+            $('#financial-warning-list-title').text(ticker + ', ' + gettext('Financial Warning List'));
             $('#financial-warning-list-title').fadeOut(500).fadeIn(500);
             // update EPS chart
             years = [];
@@ -293,7 +310,7 @@ function updateFinancialReport(ticker) {
             });
             //console.log(yearly_stock_price);
             epsChart.setTitle({
-                text: ticker + ', '+gettext('EPS & Stock mean price')
+                text: ticker + ', ' + gettext('EPS & Stock mean price')
             });
             epsChart.xAxis[0].update({
                 categories: years
@@ -320,216 +337,11 @@ function updateFinancialReport(ticker) {
     })
 }
 
-
-function createStockChart(ticker) {
-    var discount;
-    var margin;
-    discount = $('#select-discount').val();
-    margin = $('#select-margin-value').text();
-    post_data = JSON.stringify({
-        'ticker': ticker,
-        'discount': parseFloat(discount) / 100.0,
-        'margin': parseFloat(margin)
-    })
-    var url = '/pages/stockPriceHistory?ticker=' + ticker;
-    showDataLoading();
-    $.ajax({
-        type: "GET",
-        url: url,
-        success: function (data) {
-
-            // split the data set into ohlc and volume
-            var ohlc = [],
-                volume = [],
-                dataLength = data.length,
-                i = 0;
-
-            for (i; i < dataLength; i += 1) {
-                ohlc.push([
-                    data[i][0], // the date
-                    data[i][1], // open
-                    data[i][2], // high
-                    data[i][3], // low
-                    data[i][4] // close
-                ]);
-
-                volume.push([
-                    data[i][0], // the date
-                    data[i][5] // the volume
-                ]);
-            }
-
-            stockChart = Highcharts.stockChart('stock-chart-container', {
-                yAxis: [{
-                    labels: {
-                        align: 'left'
-                    },
-                    height: '60%',
-                    resize: {
-                        enabled: true
-                    }
-                }, {
-                    top: '60%',
-                    height: '10%',
-                    labels: {
-                        align: 'right',
-                        x: -3
-                    },
-                    offset: 0,
-                    title: {
-                        text: 'VOLUME'
-                    }
-                }, {
-                    top: '70%',
-                    height: '17%',
-                    labels: {
-                        align: 'right',
-                        x: -3
-                    },
-                    offset: 0,
-                    title: {
-                        text: 'MACD'
-                    }
-                }, {
-                    top: '87%',
-                    height: '13%',
-                    labels: {
-                        align: 'right',
-                        x: -3
-                    },
-                    offset: 0,
-                    title: {
-                        text: 'RSI'
-                    },
-                    plotLines: [{
-                        value: 70,
-                        color: 'lightgray',
-                        width: 1
-                    }, {
-                        value: 30,
-                        color: 'lightgray',
-                        width: 1
-                    }],
-                }
-                ],
-                plotOptions: {
-                    candlestick: {
-                        color: '#6ba887',
-                        lineColor: '#6ba887',
-                        upLineColor: '#db5f5f',
-                        upColor: '#db5f5f'
-                    }
-
-                },
-                rangeSelector: {
-                    selected: 4, buttonTheme: { // styles for the buttons
-                        fill: 'none',
-                        stroke: 'none',
-                        'stroke-width': 0,
-                        r: 8,
-                        style: {
-                            color: '#039',
-                            fontWeight: 'bold'
-                        },
-                        states: {
-                            hover: {
-                            },
-                            select: {
-                                fill: '#039',
-                                style: {
-                                    color: 'white'
-                                }
-                            }
-                            // disabled: { ... }
-                        }
-                    },
-                },
-                series: [{
-                    type: 'candlestick', // ohlc
-                    id: 'stock-data',
-                    name: 'GOOG Stock Price',
-                    data: ohlc
-                }, {
-                    type: 'sma',
-                    linkedTo: 'stock-data',
-                    color: '#dd6666',
-                    params: {
-                        period: 5
-                    },
-                    marker: {
-                        enabled: false
-                    }
-                }, {
-                    type: 'sma',
-                    linkedTo: 'stock-data',
-                    params: {
-                        period: 20
-                    },
-                    marker: {
-                        enabled: false
-                    }
-                }, {
-                    type: 'sma',
-                    linkedTo: 'stock-data',
-                    color: 'orange',
-                    params: {
-                        period: 60
-                    },
-                    marker: {
-                        enabled: false
-                    }
-                }, {
-                    type: 'column',
-                    id: 'aapl-volume',
-                    name: 'AAPL Volume',
-                    data: volume,
-                    color: '#38c',
-                    yAxis: 1
-                },
-                {
-                    type: 'macd',
-                    yAxis: 2,
-                    color: 'orange',
-                    linkedTo: 'stock-data'
-                },
-                {
-                    type: 'rsi',
-                    yAxis: 3,
-                    linkedTo: 'stock-data',
-                    marker: {
-                        enabledThreshold: 5
-                    }
-                }
-                ],
-                responsive: {
-                    rules: [{
-                        condition: {
-                            maxWidth: 800
-                        },
-                        chartOptions: {
-                            rangeSelector: {
-                                inputEnabled: false
-                            }
-                        }
-                    }]
-                }
-            });
-            hideDataLoading();
-        },
-        error: function (xhr, status, error) {
-            processAjaxErrorMessage(xhr, status, error);
-            hideDataLoading();
-            //console.log("ajax call went wrong:" + request.responseText);
-            //alert("Error message :" + request.responseText);
-        }
-    })
-}
-
-function showDataLoading(){
+function showDataLoading() {
     $('#data-loading').css('visibility', 'visible');
 }
 
-function hideDataLoading(){
+function hideDataLoading() {
     $('#data-loading').css('visibility', 'hidden');
 }
 
@@ -586,6 +398,158 @@ Highcharts.seriesType('lowmedhigh', 'boxplot', {
     }
 });
 
+stockChart = Highcharts.stockChart('stock-chart-container', {
+    yAxis: [{
+        labels: {
+            align: 'left'
+        },
+        height: '60%',
+        resize: {
+            enabled: true
+        }
+    }, {
+        top: '60%',
+        height: '10%',
+        labels: {
+            align: 'right',
+            x: -3
+        },
+        offset: 0,
+        title: {
+            text: 'VOLUME'
+        }
+    }, {
+        top: '70%',
+        height: '17%',
+        labels: {
+            align: 'right',
+            x: -3
+        },
+        offset: 0,
+        title: {
+            text: 'MACD'
+        }
+    }, {
+        top: '87%',
+        height: '13%',
+        labels: {
+            align: 'right',
+            x: -3
+        },
+        offset: 0,
+        title: {
+            text: 'RSI'
+        },
+        plotLines: [{
+            value: 70,
+            color: 'lightgray',
+            width: 1
+        }, {
+            value: 30,
+            color: 'lightgray',
+            width: 1
+        }],
+    }
+    ],
+    plotOptions: {
+        candlestick: {
+            color: '#6ba887',
+            lineColor: '#6ba887',
+            upLineColor: '#db5f5f',
+            upColor: '#db5f5f'
+        }
+
+    },
+    rangeSelector: {
+        selected: 4, buttonTheme: { // styles for the buttons
+            fill: 'none',
+            stroke: 'none',
+            'stroke-width': 0,
+            r: 8,
+            style: {
+                color: '#039',
+                fontWeight: 'bold'
+            },
+            states: {
+                hover: {
+                },
+                select: {
+                    fill: '#039',
+                    style: {
+                        color: 'white'
+                    }
+                }
+                // disabled: { ... }
+            }
+        },
+    },
+    series: [{
+        type: 'candlestick', // ohlc
+        id: 'stock-data',
+    }, {
+        type: 'sma',
+        linkedTo: 'stock-data',
+        color: '#dd6666',
+        params: {
+            period: 5
+        },
+        marker: {
+            enabled: false
+        }
+    }, {
+        type: 'sma',
+        linkedTo: 'stock-data',
+        params: {
+            period: 20
+        },
+        marker: {
+            enabled: false
+        }
+    }, {
+        type: 'sma',
+        linkedTo: 'stock-data',
+        color: 'orange',
+        params: {
+            period: 60
+        },
+        marker: {
+            enabled: false
+        }
+    }, {
+        type: 'column',
+        id: 'aapl-volume',
+        name: 'AAPL Volume',
+        color: '#38c',
+        yAxis: 1
+    },
+    {
+        type: 'macd',
+        yAxis: 2,
+        color: 'orange',
+        linkedTo: 'stock-data'
+    },
+    {
+        type: 'rsi',
+        yAxis: 3,
+        linkedTo: 'stock-data',
+        marker: {
+            enabledThreshold: 5
+        }
+    }
+    ],
+    responsive: {
+        rules: [{
+            condition: {
+                maxWidth: 800
+            },
+            chartOptions: {
+                rangeSelector: {
+                    inputEnabled: false
+                }
+            }
+        }]
+    }
+});
 
 epsChart = Highcharts.chart('eps-chart-container', {
     chart: {
