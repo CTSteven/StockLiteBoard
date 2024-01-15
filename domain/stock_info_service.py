@@ -253,7 +253,7 @@ def get_stock_financial_report(ticker) -> pd.DataFrame:
     else:
         raise ValueError('Missing stock ticker parameter')
 
-# Convert report formatted currency to number and add row , interestcoverageratio
+# Convert report formatted currency to number and add roe , interestcoverageratio
 def get_stock_financial_info_from_report(stock_financial_report: pd.DataFrame) -> pd.DataFrame:
     """
     Get stock's financial information from the given financial report.

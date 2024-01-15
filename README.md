@@ -101,9 +101,12 @@ This application has not been rigorously tested and its domain rules are very si
 What's new or fixed issues:
 
 2024-01-03
-1. Refacor codes to follow pylint and mypy rules
+1. Refactor codes to follow pylint and mypy rules
 2. Fixed issue: Error occured when retrieve stock data from yahoo
 
 2024-01-15
 1. Add Copilot usage guidelines and improve logging in investment_suggestion_view
 2. Refactor dashboard.js to asynchronously update charts when stock is selected.
+
+2024-01-16
+1. Refactor code to prevent from invoking duplicated requests to access same stock data from outside website  

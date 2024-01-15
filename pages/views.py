@@ -14,8 +14,8 @@ import pandas as pd
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .services import get_financial_report, get_investment_suggestion, get_sp500_stock_list, \
-    get_stock_price_history , get_financial_warning_list , get_yearly_stock_price
+from .services import get_financial_report_data, get_investment_suggestion, get_sp500_stock_list, \
+    get_stock_price_history_data
 
 logger = logging.getLogger(__name__)
 
@@ -55,7 +55,7 @@ def stock_price_history_view(request):
     This function provides the view for the stock price history.
     """
     # Add your code here
-
+    logger.debug('stock_price_history_view called')
     ticker = None
     dt_start = datetime.now()
     if request.method=='GET':
@@ -69,7 +69,8 @@ def stock_price_history_view(request):
         return HttpResponse({}, content_type="application/json")
 
     try:
-        stock_price_history = get_stock_price_history(ticker).reset_index()
+        stock_price_history_data = get_stock_price_history_data(ticker)
+        stock_price_history = stock_price_history_data.stock_price_history.reset_index()
         json_data = stock_price_history[['Date','Open','High','Low','Close','Volume']].to_json(
             orient="values",
             date_format="epoch",
@@ -89,6 +90,7 @@ def investment_suggestion_view(request):
     """
     This function provides the view for the investment suggestion.
     """
+    logger.debug('investment_suggestion_view called')
     data = request.body.decode('utf-8')
     json_data = json.loads(data)
     ticker = json_data.get('ticker')
@@ -112,7 +114,7 @@ def investment_suggestion_view(request):
         json_data = suggestion.to_json(orient="records",date_format="epoch",double_precision=2)
         return HttpResponse(json_data, content_type="application/json")
     except Exception as e:
-        logger.error(e)
+        logger.exception(e)
         return Response(str(e),status= status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
@@ -120,6 +122,7 @@ def financial_report_view(request):
     """
         This function provides the view for the financial report.
     """
+    logger.debug('financial_report_view called')
     data = request.body.decode('utf-8')
     json_data = json.loads(data)
     ticker = json_data.get('ticker')
@@ -127,9 +130,11 @@ def financial_report_view(request):
         return HttpResponse({}, content_type="application/json")
 
     try:
-        financial_report = get_financial_report(ticker).reset_index()
-        financial_warning_list = get_financial_warning_list(ticker)
-        yearly_stock_price = get_yearly_stock_price(ticker)
+        financial_report_data = get_financial_report_data(ticker)
+        financial_report = financial_report_data.financial_report.reset_index()
+        financial_warning_list = financial_report_data.financial_warning_list
+        stock_price_history_data = get_stock_price_history_data(ticker)
+        yearly_stock_price = stock_price_history_data.yearly_stock_price
         yearly_stock_price = pd.merge(yearly_stock_price, financial_report , how='inner', on=['year']).reset_index()
         yearly_stock_price = yearly_stock_price[['year','low','mean','high','close']]
         #logger.debug(yearly_stock_price)

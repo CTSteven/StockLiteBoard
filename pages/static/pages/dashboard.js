@@ -55,21 +55,20 @@ $(function () {
 
 });
 
-$(document).ready(function() {
+$(document).ready(function () {
     updateSelectedStock('GOOG');
 });
 
 function updateSelectedStock(ticker) {
-        Promise.all([
-            updateStockPriceHistory(ticker),
-            updateFinancialReport(ticker),
-            updateInvestmentSuggestion(ticker)
-        ]).then(([historyResult, reportResult, suggestionResult]) => {
-           
-        }).catch(error => {
-            console.log(error);
-            alert(error);
-        });
+    Promise.all([
+        updateStockPriceHistory(ticker),
+        updateFinancialReport(ticker),
+        updateInvestmentSuggestion(ticker)
+    ]).then(([historyResult, reportResult, suggestionResult]) => {
+
+    }).catch(error => {
+        console.log(error);
+    });
 }
 
 
@@ -237,104 +236,108 @@ function updateFinancialReport(ticker) {
     post_data = JSON.stringify({
         'ticker': ticker
     })
-    $.ajax({
-        type: "POST",
-        url: "/pages/financialReport",
-        dataType: 'json',
-        data: post_data,
-        success: function (data) {
-            // update financial report
-            tbody = $('#financial-report-table > tbody');
-            tbody.empty();
-            row_list = "";
-            financial_report = JSON.parse(data.financial_report);
-            $.each(financial_report, function (idx, obj) {
-                row = "<tr><td>" +
-                    obj.year + "</td><td>" +
-                    obj.eps + "</td><td>" +
-                    obj.epsgrowth + "</td><td>" +
-                    obj.netincome + "</td><td>" +
-                    obj.shareholderequity + "</td><td>" +
-                    obj.roa + "</td><td>" +
-                    obj.longtermdebt + "</td><td>" +
-                    obj.interestexpense + "</td><td>" +
-                    obj.ebitda + "</td><td>" +
-                    obj.roe + "</td><td>" +
-                    obj.interestcoverageratio + "</td></tr>";
-                row_list = row_list + row;
-            });
-            tbody.append(row_list);
-            marketWatch_url =
-                '<a target="MarketWatch" class="text-success ml-3" style="font-size:1rem; text-decoration:underline" href="https://www.marketwatch.com/investing/stock/' +
-                ticker + '/financials">MarketWatch</a>';
-            $('#financial-info-title').html(ticker + ', ' + gettext('Financial Information') + marketWatch_url);
-            $('#financial-info-title').fadeOut(500).fadeIn(500);
-            // update financial warning list
-            tbody = $('#financial-warning-list-table > tbody');
-            tbody.empty();
-            row_list = "";
-            financial_warning_list = data.financial_warning_list;
-            $.each(financial_warning_list, function (idx, value) {
-                row = "<tr><td>" + value + "</td></tr>";
-                row_list = row_list + row;
-            });
-            tbody.append(row_list);
-            $('#financial-warning-list-title').text(ticker + ', ' + gettext('Financial Warning List'));
-            $('#financial-warning-list-title').fadeOut(500).fadeIn(500);
-            // update EPS chart
-            years = [];
-            eps_list = [];
-            stock_price_list = [];
-            stock_lmh_list = [];
-            yearly_stock_price = JSON.parse(data.yearly_stock_price);
-            var financial_number_rex = /\((.*)\)/;
-            $.each(financial_report, function (idx, obj) {
-                years.push(obj.year);
-
-                eps = parseFloat(obj.eps.replace(financial_number_rex, '-$1').replace(",", ""));
-                eps_list.push(eps);
-                find_stock_price = false;
-                $.each(yearly_stock_price, function (idx, stock) {
-                    if (stock.year == obj.year) {
-                        stock_price_list.push(stock.close);
-                        stock_lmh_list.push([stock.low, stock.mean, stock.high])
-                        find_stock_price = true;
-                        return false;
-                    }
-
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            type: "POST",
+            url: "/pages/financialReport",
+            dataType: 'json',
+            data: post_data,
+            success: function (data) {
+                // update financial report
+                tbody = $('#financial-report-table > tbody');
+                tbody.empty();
+                row_list = "";
+                financial_report = JSON.parse(data.financial_report);
+                $.each(financial_report, function (idx, obj) {
+                    row = "<tr><td>" +
+                        obj.year + "</td><td>" +
+                        obj.eps + "</td><td>" +
+                        obj.epsgrowth + "</td><td>" +
+                        obj.netincome + "</td><td>" +
+                        obj.shareholderequity + "</td><td>" +
+                        obj.roa + "</td><td>" +
+                        obj.longtermdebt + "</td><td>" +
+                        obj.interestexpense + "</td><td>" +
+                        obj.ebitda + "</td><td>" +
+                        obj.roe + "</td><td>" +
+                        obj.interestcoverageratio + "</td></tr>";
+                    row_list = row_list + row;
                 });
-                if (!find_stock_price) {
-                    stock_price_list.push('');
-                    stock_lmh_list.push([]);
-                }
-            });
-            //console.log(yearly_stock_price);
-            epsChart.setTitle({
-                text: ticker + ', ' + gettext('EPS & Stock mean price')
-            });
-            epsChart.xAxis[0].update({
-                categories: years
-            }, false);
-            epsChart.series[0].update({
-                data: eps_list,
-                //name: ticker + ' EPS of Recent Years'
-            }, false);
-            epsChart.series[1].update({
-                data: stock_price_list,
-                //name: ticker + ' EPS of Recent Years'
-            }, false);
-            epsChart.series[2].update({
-                data: stock_lmh_list,
-                //name: ticker + ' EPS of Recent Years'
-            }, false);
-            epsChart.redraw();
-        },
-        error: function (xhr, status, error) {
-            processAjaxErrorMessage(xhr, status, error);
-            //console.log("ajax call went wrong:" + request.responseText);
-            //alert("Error message :" + request.responseText);
-        }
-    })
+                tbody.append(row_list);
+                marketWatch_url =
+                    '<a target="MarketWatch" class="text-success ml-3" style="font-size:1rem; text-decoration:underline" href="https://www.marketwatch.com/investing/stock/' +
+                    ticker + '/financials">MarketWatch</a>';
+                $('#financial-info-title').html(ticker + ', ' + gettext('Financial Information') + marketWatch_url);
+                $('#financial-info-title').fadeOut(500).fadeIn(500);
+                // update financial warning list
+                tbody = $('#financial-warning-list-table > tbody');
+                tbody.empty();
+                row_list = "";
+                financial_warning_list = data.financial_warning_list;
+                $.each(financial_warning_list, function (idx, value) {
+                    row = "<tr><td>" + value + "</td></tr>";
+                    row_list = row_list + row;
+                });
+                tbody.append(row_list);
+                $('#financial-warning-list-title').text(ticker + ', ' + gettext('Financial Warning List'));
+                $('#financial-warning-list-title').fadeOut(500).fadeIn(500);
+                // update EPS chart
+                years = [];
+                eps_list = [];
+                stock_price_list = [];
+                stock_lmh_list = [];
+                yearly_stock_price = JSON.parse(data.yearly_stock_price);
+                var financial_number_rex = /\((.*)\)/;
+                $.each(financial_report, function (idx, obj) {
+                    years.push(obj.year);
+
+                    eps = parseFloat(obj.eps.replace(financial_number_rex, '-$1').replace(",", ""));
+                    eps_list.push(eps);
+                    find_stock_price = false;
+                    $.each(yearly_stock_price, function (idx, stock) {
+                        if (stock.year == obj.year) {
+                            stock_price_list.push(stock.close);
+                            stock_lmh_list.push([stock.low, stock.mean, stock.high])
+                            find_stock_price = true;
+                            return false;
+                        }
+
+                    });
+                    if (!find_stock_price) {
+                        stock_price_list.push('');
+                        stock_lmh_list.push([]);
+                    }
+                });
+                //console.log(yearly_stock_price);
+                epsChart.setTitle({
+                    text: ticker + ', ' + gettext('EPS & Stock mean price')
+                });
+                epsChart.xAxis[0].update({
+                    categories: years
+                }, false);
+                epsChart.series[0].update({
+                    data: eps_list,
+                    //name: ticker + ' EPS of Recent Years'
+                }, false);
+                epsChart.series[1].update({
+                    data: stock_price_list,
+                    //name: ticker + ' EPS of Recent Years'
+                }, false);
+                epsChart.series[2].update({
+                    data: stock_lmh_list,
+                    //name: ticker + ' EPS of Recent Years'
+                }, false);
+                epsChart.redraw();
+                resolve('success');
+            },
+            error: function (xhr, status, error) {
+                processAjaxErrorMessage(xhr, status, error);
+                //console.log("ajax call went wrong:" + request.responseText);
+                //alert("Error message :" + request.responseText);
+                reject(error)
+            }
+        });
+    });
 }
 
 function showDataLoading() {
