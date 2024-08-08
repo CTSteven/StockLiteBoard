@@ -1,17 +1,15 @@
 ## Implement Simple Stock Investment Dashboard with python 
 ---
 
-### Go to [ demo site ](https://stock-dashboard-c2s6b2cyea-de.a.run.app)
-
 ### Purpose
 
-This project is a practice to learn how to build web application in Python after finished some Deep Learning courses with Jupyter Notebook. 
-I found Vincent's blog about using python to build investment tool to analyze and predict stock's reasonable price based on predicted future value. I am interest in investment. I start to build 1st version , mainly refer to  Vincent's project. 
+This is a practice project for learning development of web application in Python after finished some Deep Learning courses with Jupyter Notebook. 
+ I am interest in investment. Vincent's blog and GitHub project about using python to build investment tool to analyze and predict stock's reasonable price based on predicted future value off a good starting point. I start to build 1st version , mainly refer to  Vincent's project. 
 ( You can go to [Vincent Tatan's blog and GitHub project ](https://towardsdatascience.com/value-investing-dashboard-with-python-beautiful-soup-and-dash-python-43002f6a97ca) to get more information. )
  
-After 1st version , I migrate web framework , redesign  UI , improve performance, add technical analysis charts , try to make this tool more easy to use.  You can go to [ demo site ](https://stock-dashboard-c2s6b2cyea-de.a.run.app) to try it out.
+After 1st version , I migrate web framework , redesign  UI , improve performance, add technical analysis charts , try to make this tool more easy to use. ]
 
-This application implement simplified model to predict expected stock price. 
+This application implement simplified model to predict expected stock price according to fillowing indicators : 
 1. Annual_growth
    - npf.rate(4, 0 , - 1st_year_eps , 5th_year_eps ) , npf is numpy financial package 
 2. PE Ratio
@@ -24,10 +22,10 @@ This application implement simplified model to predict expected stock price.
    -  npf.pv( Dicount Rate , 2 years, 0, Future Value)
 6. Expected Reasonable Price Range , add on +/- margin rate 
    -  Present Value x ( 1  +/- Margin Rate )
-  
-If you try out at demo site, you'll find most price prediction are very different from real market behavior. These business rules are obviously not enough. It's only POC.
 
-So, don't use this application in real market decision ! ! ! 
+The real stock market is so complicate so these business rules are obviously not enough. It's only POC.
+
+So, don't use this application for real market decision ! ! ! 
 
 Some experts have already developed models and software to solve financial market challenges, like the true story introduced in this book ["The Man Who Solved the Market"](https://www.amazon.com/Man-Who-Solved-Market-Revolution/dp/073521798X). Though the book touch lightly on tech details, many resource around similar topic are available on Web and GitHub.  I have found some links : 
 - [Awesome AI in Finance](https://github.com/georgezouq/awesome-ai-in-finance)
@@ -110,3 +108,6 @@ What's new or fixed issues:
 
 2024-01-16
 1. Refactor code to prevent from invoking duplicated requests to access same stock data from outside website  
+
+2024-08-08
+1. Close the demo site. In an era of AI rising, the methods and tools for software development are so different. We can do better design and work more efficiency and learn more quickly through AI tools' help. This project becomes less helpful for learning reference, so does the demo site. This project's demo site is closed now leave resource fo more effective usage.
