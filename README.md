@@ -4,7 +4,7 @@
 ### Purpose
 
 This is a practice project for learning development of web application in Python after finished some Deep Learning courses with Jupyter Notebook. 
- I am interest in investment. Vincent's blog and GitHub project about using python to build investment tool to analyze and predict stock's reasonable price based on predicted future value off a good starting point. I start to build 1st version , mainly refer to  Vincent's project. 
+ I am interest in investment. Vincent's blog and GitHub project about using python to build investment tool to analyze and predict stock's reasonable price based on predicted future value is a good starting point for practicd. I start to build 1st version , mainly refer to  Vincent's project. 
 ( You can go to [Vincent Tatan's blog and GitHub project ](https://towardsdatascience.com/value-investing-dashboard-with-python-beautiful-soup-and-dash-python-43002f6a97ca) to get more information. )
  
 After 1st version , I migrate web framework , redesign  UI , improve performance, add technical analysis charts , try to make this tool more easy to use. ]
@@ -110,4 +110,4 @@ What's new or fixed issues:
 1. Refactor code to prevent from invoking duplicated requests to access same stock data from outside website  
 
 2024-08-08
-1. Close the demo site. In an era of AI rising, the methods and tools for software development are so different. We can do better design and work more efficiency and learn more quickly through AI tools' help. This project becomes less helpful for learning reference, so does the demo site. This project's demo site is closed now leave resource fo more effective usage.
+1. Close the demo site. In an era of AI rising, the methods and tools for software development are so different. We can do better design and work more efficiency and learn more quickly through AI tools' help. This project becomes less helpful for learning reference, so does the demo site. This project's demo site is closed now to leave resource fo more effective usage.
